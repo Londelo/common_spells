@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "bin": {
-    // "narratives": "./dist/frontend/cli/narratives.js"
+    "fusrodah": "./dist/git/forcePush.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -19,28 +19,26 @@
   },
   "author": "Brodie Balser",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/uumoss-bb/common_spells.git/issues"
-  },
-  "homepage": "https://github.com/uumoss-bb/common_spells.git#readme",
   "dependencies": {
+    "@types/chalk": "^0.4.31",
     "@types/node": "^20",
     "@types/shelljs": "^0.8.15",
-    "shelljs": "^0.8.5",
-    "typescript": "^5"
+    "chalk": "^4.0.0",
+    "shelljs": "^0.8.5"
   },
   "devDependencies": {
-    "eslint": "^8",
-    "eslint-config-next": "14.2.5",
-    "@babel/plugin-proposal-do-expressions": "^7.24.7",
-    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/cli": "^7.25.9",
     "@babel/core": "^7.26.0",
+    "@babel/plugin-proposal-do-expressions": "^7.24.7",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/plugin-transform-runtime": "^7.24.7",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.26.0",
     "@babel/runtime": "^7.25.0",
-    "@types/jest": "^29.5.12"
+    "@types/jest": "^29.5.12",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "typescript": "^5"
   }
 }
