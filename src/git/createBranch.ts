@@ -34,7 +34,7 @@ const createBranch = async () => {
     exec('git pull')
     echo(chalk.yellow.italic(`creating new branch: `) + chalk.italic(newBranch))
     exec(`git checkout -b ${newBranch}`)
-    echo(chalk.green.italic('New Branch Built'))
+    echo(chalk.green.italic('\nNew Branch Built'))
   } catch(err) {
     echo(chalk.red.italic(`FAILED to build new branch: "${newBranch}"`))
     exit(1)
