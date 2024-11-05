@@ -6,7 +6,8 @@
   "type": "commonjs",
   "bin": {
     "fusrodah": "./dist/git/forcePush.js",
-    "commit": "./dist/git/fullCommit.js"
+    "commit": "./dist/git/fullCommit.js",
+    "branch": "./dist/git/createBranch.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
