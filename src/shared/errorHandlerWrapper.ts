@@ -12,6 +12,7 @@ const errorHandlerWrapper = async (func: () => void, errorMessage: string) => {
       exit(1)
     }
     echo(chalk.red.italic(errorMessage))
+    echo(message)
     exit(1)
   }
 }

@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 import chalk from 'chalk'
 import { exec, echo, config, exit } from 'shelljs'
+import errorHandlerWrapper from '../shared/errorHandlerWrapper'
 
 const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
+const errorMessage = 'FAILED to commit message'
 
 const fullCommit = async () => {
   config.fatal = true
@@ -21,19 +23,14 @@ const fullCommit = async () => {
 
   const commitMessage = `${currentBranch}: ${message}`
 
-  try {
-    echo(chalk.yellow.italic('git add .'))
-    exec('git add .')
-    echo(chalk.yellow.italic(`git commit -m "${commitMessage}"`))
-    exec(`git commit -m "${commitMessage}"`)
-    echo(chalk.yellow.italic('git push'))
-    exec('git push')
-  } catch(err) {
-    echo(chalk.red.italic(`FAILED to commit message: "${commitMessage}"`))
-    exit(1)
-  }
+  echo(chalk.yellow.italic('git add .'))
+  exec('git add .')
+  echo(chalk.yellow.italic(`git commit -m "${commitMessage}"`))
+  exec(`git commit -m "${commitMessage}"`)
+  echo(chalk.yellow.italic('git push'))
+  exec('git push')
 
   echo(chalk.green.italic("\nCommit Complete."))
 }
 
-(async () => await fullCommit())();
+(async () => await errorHandlerWrapper(fullCommit, errorMessage))();

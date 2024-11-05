@@ -25,6 +25,7 @@ async function selectBranch() {
 }
 
 function switchBranch(branchName: string) {
+  console.log(`git checkout ${branchName}`)
   exec(`git checkout ${branchName}`)
   echo(chalk.green.italic("Switched"))
 }
@@ -38,6 +39,7 @@ const checkOut = async () => {
   }
 
   branchName = await selectBranch()
+  console.log(branchName)
   switchBranch(branchName)
 }
 
