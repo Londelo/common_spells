@@ -2,7 +2,7 @@
 import chalk from 'chalk'
 import { exec, echo } from 'shelljs'
 
-const fusrodah = async () => {
+const forcePush = async () => {
   echo(chalk.green.bold('FUS-RO-DAAAAAHHH!'))
   const result = await exec('git push --force --no-verify')
   const error = result.code !== 0
@@ -12,4 +12,4 @@ const fusrodah = async () => {
   }
 }
 
-(async () => await fusrodah())();
+(async () => await forcePush())();
