@@ -5,7 +5,6 @@ import { exec, echo, config, exit } from 'shelljs'
 const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
 
 const fullCommit = async () => {
-  config.silent = true
   config.fatal = true
 
   const currentBranch = exec("git branch --show-current").stdout
