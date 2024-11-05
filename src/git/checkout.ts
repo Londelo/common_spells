@@ -2,6 +2,9 @@
 import chalk from 'chalk'
 import { exec, echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
+import errorHandlerWrapper from '../shared/errorHandlerWrapper';
+
+const errorMessage = `FAILED to switch branches`
 
 async function selectBranch() {
   const branchNames = exec('git branch').stdout
@@ -27,22 +30,15 @@ function switchBranch(branchName: string) {
 }
 
 const checkOut = async () => {
-  config.fatal = true
   config.silent = true
 
-  try {
-    let branchName = process.argv[2]
-    if(branchName) {
-      switchBranch(branchName)
-    }
-
-    branchName = await selectBranch()
+  let branchName = process.argv[2]
+  if(branchName) {
     switchBranch(branchName)
-  } catch (error) {
-    echo(chalk.red.italic(`FAILED to switch branches`))
-    exit(1)
   }
 
+  branchName = await selectBranch()
+  switchBranch(branchName)
 }
 
-(async () => await checkOut())();
+(async () => await errorHandlerWrapper(checkOut, errorMessage))();
