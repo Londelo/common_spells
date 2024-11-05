@@ -23,8 +23,8 @@ const fullCommit = async () => {
   exec(`git commit -m "${commitMessage}"`)
   exec('git push')
 
-  echo(chalk.green.bold("Commit Complete."))
-  echo(chalk.green(commitMessage))
+  echo(chalk.green.italic("Commit Complete."))
+  echo(chalk.white.italic(commitMessage))
 }
 
 (async () => await fullCommit())();
