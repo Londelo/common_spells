@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import chalk from 'chalk'
-import { exec, echo, config } from 'shelljs'
+import { exec, echo, config, exit } from 'shelljs'
 
 const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
 
@@ -24,7 +24,8 @@ const fullCommit = async () => {
     exec(`git commit -m "${commitMessage}"`)
     exec('git push')
   } catch(err) {
-    console.log(err)
+    echo(chalk.red.italic(`FAILED to commit message: "${commitMessage}"`))
+    exit(1)
   }
 
   echo(chalk.green.italic("Commit Complete."))
