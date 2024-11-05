@@ -34,7 +34,7 @@ const fullCommit = async () => {
   }
 
   echo(chalk.green.italic("\nCommit Complete."))
-  echo(chalk.italic(`\tmessage: "${commitMessage}"`))
+  echo(chalk.italic(`message: "${commitMessage}"`))
 }
 
 (async () => await fullCommit())();
