@@ -19,9 +19,13 @@ const fullCommit = async () => {
 
   const commitMessage = `${currentBranch}: ${message}`
 
-  exec('git add .')
-  exec(`git commit -m "${commitMessage}"`)
-  exec('git push')
+  try {
+    exec('git add .')
+    exec(`git commit -m "${commitMessage}"`)
+    exec('git push')
+  } catch(err) {
+    console.log(err)
+  }
 
   echo(chalk.green.italic("Commit Complete."))
   echo(chalk.italic(`message: "${commitMessage}"`))
