@@ -3,7 +3,6 @@ import chalk from 'chalk'
 import { exec, echo, config, exit } from 'shelljs'
 
 const createBranch = async () => {
-  // config.silent = true
   config.fatal = true
 
   const defaultBranch = exec(
