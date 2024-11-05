@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "commonjs",
   "bin": {
-    "fusrodah": "./dist/git/forcePush.js"
+    "fusrodah": "./dist/git/forcePush.js",
+    "commit": "./dist/git/fullCommit.js"
   },
   "scripts": {
     "clean": "rm -rf dist",

@@ -2,14 +2,29 @@
 import chalk from 'chalk'
 import { exec, echo, config } from 'shelljs'
 
+const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
+
 const fullCommit = async () => {
+  config.silent = true
   config.fatal = true
 
-  // get current branch "git branch --show-current"
-  // account for no message
-  // git add .
-  // git commit -m
-  // git push
+  const currentBranch = exec("git branch --show-current").stdout
+    .replace('\n', '')
+    .toUpperCase()
+
+  let message = process.argv.slice(2).join(' ')
+  if(!message) {
+    message = DEFAULT_MESSAGE
+  }
+
+  const commitMessage = `${currentBranch}: ${message}`
+
+  exec('git add .')
+  exec(`git commit -m "${commitMessage}"`)
+  exec('git push')
+
+  echo(chalk.green.bold("Commit Complete."))
+  echo(chalk.green(commitMessage))
 }
 
 (async () => await fullCommit())();
