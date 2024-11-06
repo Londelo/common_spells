@@ -8,13 +8,14 @@
     "fusrodah": "./dist/git/forcePush.js",
     "commit": "./dist/git/fullCommit.js",
     "branch": "./dist/git/createBranch.js",
-    "switch": "./dist/git/checkout.js"
+    "switch": "./dist/git/checkout.js",
+    "feature": "./dist/tm/testFeature.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && babel src --out-dir dist --extensions '.ts,.tsx'",
     "link": "npm link && npm link common_spells",
-    "permissions": "chmod +x ./dist/git/*",
+    "permissions": "chmod +x ./dist/**/*",
     "update": "npm run build && npm run link && npm run permissions",
     "type-check": "tsc --noEmit"
   },
