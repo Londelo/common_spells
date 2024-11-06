@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "bin": {
+    "spells": "./dist/help/displayCommands.js",
     "fusrodah": "./dist/git/forcePush.js",
     "commit": "./dist/git/fullCommit.js",
     "branch": "./dist/git/createBranch.js",
@@ -16,7 +17,7 @@
     "build": "npm run clean && babel src --out-dir dist --extensions '.ts,.tsx'",
     "link": "npm link && npm link common_spells",
     "permissions": "chmod +x ./dist/**/*",
-    "update": "npm run build && npm run link && npm run permissions",
+    "local:install": "npm run build && npm run link && npm run permissions",
     "type-check": "tsc --noEmit"
   },
   "repository": {
