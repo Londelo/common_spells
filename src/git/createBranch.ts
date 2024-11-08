@@ -2,11 +2,11 @@
 import chalk from 'chalk'
 import { exec, echo, config, exit } from 'shelljs'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper'
+import fullUpdate from './fullUpdate'
 
 const errorMessage = 'FAILED to build new branch'
 
 const createBranch = async () => {
-  config.fatal = true
 
   const defaultBranch = exec(
     "git remote show origin | grep 'HEAD branch' | awk '{print $NF}'",
@@ -26,16 +26,11 @@ const createBranch = async () => {
     exit(1)
   }
 
-  if(currentBranch !== defaultBranch) {
-    echo(chalk.yellow.italic(`moving to default branch: `) + chalk.italic(defaultBranch))
-    exec(`git checkout ${defaultBranch}`, {silent:true})
-  }
-  echo(chalk.yellow.italic('updating local branch'))
-  exec('git fetch')
-  exec('git pull')
+  const checkoutBranch = currentBranch !== defaultBranch ? defaultBranch : null
+  fullUpdate(checkoutBranch)
   echo(chalk.yellow.italic(`creating new branch: `) + chalk.italic(newBranch))
   exec(`git checkout -b ${newBranch}`)
-  echo(chalk.green.italic('\nNew Branch Built'))
+  echo(chalk.green.italic('New Branch Built'))
 }
 
 (async () => await errorHandlerWrapper(createBranch, errorMessage))();

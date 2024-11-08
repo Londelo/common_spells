@@ -10,6 +10,7 @@
     "commit": "./dist/git/fullCommit.js",
     "branch": "./dist/git/createBranch.js",
     "switch": "./dist/git/checkout.js",
+    "pull": "./dist/git/fullUpdate.js",
     "feature": "./dist/tm/testFeature.js"
   },
   "scripts": {

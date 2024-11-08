@@ -18,6 +18,9 @@ const displayCommands = async () => {
   echo(chalk.yellow.underline.italic('\ncommit') + chalk.italic(' how to: "commit" or "commit [message]"'))
     echo(chalk.italic('\t- this will run "git add .", "git commit -m [message]", then "git push"' ))
 
+  echo(chalk.yellow.underline.italic('\pull') + chalk.italic(' how to: "pull" or "pull [branch name]"'))
+    echo(chalk.italic('\t- this will run "git checkout" (if given a branch), "git fetch", then "git pull"' ))
+
   echo(chalk.yellow.underline.italic('\nfeature') + chalk.italic(' how to: "feature" or "feature [feature tag]"'))
     echo(chalk.italic('\t- this will run "npx run features:tags [tag]" or "npx run features:tags [tag]" if the other does not work' ))
     echo(chalk.italic('\t- if no tag was given it will have you select from the available tags' ))

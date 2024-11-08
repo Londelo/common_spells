@@ -3,14 +3,23 @@ import chalk from 'chalk'
 import { exec, echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper';
+import getDefaultBranch from '../shared/getDefaultBranch';
 
 const errorMessage = `FAILED to switch branches`
 
 async function selectBranch() {
+  const defaultBranch = getDefaultBranch()
+
   const branchNames = exec('git branch').stdout
   .split('\n')
   .slice(0, -1)
   .map(name => name.trim())
+  .map(name => {
+    if(name === defaultBranch) {
+      return `${name} (default))`
+    }
+    return name
+  })
 
   const answers = await inquirer.prompt([
     {

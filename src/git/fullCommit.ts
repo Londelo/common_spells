@@ -7,8 +7,6 @@ const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
 const errorMessage = 'FAILED to commit message'
 
 const fullCommit = async () => {
-  config.fatal = true
-
   const currentBranch = exec(
     "git branch --show-current",
     {silent:true}
@@ -30,7 +28,7 @@ const fullCommit = async () => {
   echo(chalk.yellow.italic('git push'))
   exec('git push')
 
-  echo(chalk.green.italic("\nCommit Complete."))
+  echo(chalk.green.italic("Commit Complete."))
 }
 
 (async () => await errorHandlerWrapper(fullCommit, errorMessage))();
