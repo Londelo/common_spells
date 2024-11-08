@@ -15,7 +15,7 @@ async function selectBranch() {
   .slice(0, -1)
   .map(name => name.trim())
   .map(name => {
-    if(name === defaultBranch) {
+    if(name.includes(defaultBranch)) {
       return `${name} (default)`
     }
     return name
