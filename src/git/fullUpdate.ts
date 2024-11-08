@@ -4,7 +4,7 @@ import { exec, echo } from 'shelljs'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper'
 import { selectCurrentBranch } from '../shared/selectors'
 
-const errorMessage = 'FAILED to commit message'
+const errorMessage = 'FAILED to update branch'
 
 const fullUpdate = async (checkoutBranch:string|null = null) => {
   if(checkoutBranch) {
@@ -15,7 +15,7 @@ const fullUpdate = async (checkoutBranch:string|null = null) => {
   const currentBranch = selectCurrentBranch()
   echo(chalk.yellow.italic('updating local branch'))
   exec('git fetch')
-  exec(`git pull origin ${currentBranch}`)
+  exec(`git pull`)
 
   echo(chalk.green.italic("Update Complete."))
 }
