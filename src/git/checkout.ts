@@ -16,7 +16,7 @@ async function selectBranch() {
   .map(name => name.trim())
   .map(name => {
     if(name === defaultBranch) {
-      return `${name} (default))`
+      return `${name} (default)`
     }
     return name
   })
@@ -30,7 +30,9 @@ async function selectBranch() {
     }
   ]);
 
-  return answers.branch.replace('* ', '')
+  return answers.branch
+    .replace('* ', '')
+    .replace(' (default)', '')
 }
 
 function switchBranch(branchName: string) {

@@ -3,16 +3,13 @@ import chalk from 'chalk'
 import { exec, echo, config, exit } from 'shelljs'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper'
 import fullUpdate from './fullUpdate'
+import getDefaultBranch from '../shared/getDefaultBranch'
 
 const errorMessage = 'FAILED to build new branch'
 
 const createBranch = async () => {
 
-  const defaultBranch = exec(
-    "git remote show origin | grep 'HEAD branch' | awk '{print $NF}'",
-    {silent:true}
-  ).stdout
-  .replace('\n', '')
+  const defaultBranch = getDefaultBranch()
 
   const currentBranch = exec(
     "git branch --show-current",
