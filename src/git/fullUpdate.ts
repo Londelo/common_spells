@@ -8,9 +8,9 @@ const errorMessage = 'FAILED to update branch'
 
 const fullUpdate = async () => {
   echo(chalk.yellow.italic('git fetch'))
-  exec('git fetch')
+  await exec('git fetch')
   echo(chalk.yellow.italic('git pull'))
-  exec(`git pull`)
+  await exec(`git pull`)
   echo(chalk.green.italic("Update Complete."))
 }
 
