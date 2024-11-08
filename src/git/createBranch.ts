@@ -18,8 +18,11 @@ const createBranch = async () => {
     exit(1)
   }
 
-  const checkoutBranch = currentBranch !== defaultBranch ? defaultBranch : null
-  await fullUpdate(checkoutBranch)
+  if(currentBranch !== defaultBranch ) {
+    echo(chalk.yellow.italic(`moving to default branch: `) + chalk.italic(defaultBranch))
+    await exec(`git checkout ${defaultBranch}`, {silent:true})
+  }
+  fullUpdate()
   echo(chalk.yellow.italic(`creating new branch: `) + chalk.italic(newBranch))
   exec(`git checkout -b ${newBranch}`)
   echo(chalk.green.italic('New Branch Built'))
