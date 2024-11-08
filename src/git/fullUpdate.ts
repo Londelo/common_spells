@@ -9,7 +9,7 @@ const errorMessage = 'FAILED to commit message'
 const fullUpdate = async (checkoutBranch:string|null = null) => {
   if(checkoutBranch) {
     echo(chalk.yellow.italic(`moving to default branch: `) + chalk.italic(checkoutBranch))
-    exec(`git checkout ${checkoutBranch}`, {silent:true})
+    await exec(`git checkout ${checkoutBranch}`, {silent:true})
   }
 
   const currentBranch = selectCurrentBranch()
