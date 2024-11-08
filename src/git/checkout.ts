@@ -3,12 +3,12 @@ import chalk from 'chalk'
 import { exec, echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper';
-import getDefaultBranch from '../shared/getDefaultBranch';
+import { selectDefaultBranch } from '../shared/selectors';
 
 const errorMessage = `FAILED to switch branches`
 
 async function selectBranch() {
-  const defaultBranch = getDefaultBranch()
+  const defaultBranch = selectDefaultBranch()
 
   const branchNames = exec('git branch').stdout
   .split('\n')
