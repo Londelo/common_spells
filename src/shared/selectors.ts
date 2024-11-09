@@ -2,14 +2,14 @@ import { exec } from "shelljs"
 
 const selectTruthyItems = (item: unknown) => !!item
 
-const selectDefaultBranch = () =>
+const selectDefaultBranch = async () =>
   exec(
     "git remote show origin | grep 'HEAD branch' | awk '{print $NF}'",
     {silent:true}
   ).stdout
   .replace('\n', '')
 
-const selectCurrentBranch = () =>
+const selectCurrentBranch = async () =>
   exec(
     "git branch --show-current",
     {silent:true}

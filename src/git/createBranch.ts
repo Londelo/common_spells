@@ -9,8 +9,8 @@ const errorMessage = 'FAILED to build new branch'
 
 const createBranch = async () => {
 
-  const defaultBranch = selectDefaultBranch()
-  const currentBranch = selectCurrentBranch()
+  const defaultBranch = await selectDefaultBranch()
+  const currentBranch = await selectCurrentBranch()
 
   const newBranch = process.argv[2]
   if(!newBranch) {
@@ -22,7 +22,7 @@ const createBranch = async () => {
     echo(chalk.yellow.italic(`moving to default branch: `) + chalk.italic(defaultBranch))
     await exec(`git checkout ${defaultBranch}`, {silent:true})
   }
-  fetchAndPull()
+  await fetchAndPull(defaultBranch)
   echo(chalk.yellow.italic(`creating new branch: `) + chalk.italic(newBranch))
   exec(`git checkout -b ${newBranch}`)
   echo(chalk.green.italic('New Branch Built'))

@@ -4,11 +4,12 @@ import { exec, echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper';
 import { selectDefaultBranch } from '../shared/selectors';
+import fetchAndPull from '../shared/fetchAndPull';
 
 const errorMessage = `FAILED to switch branches`
 
 async function selectBranch() {
-  const defaultBranch = selectDefaultBranch()
+  const defaultBranch = await selectDefaultBranch()
 
   const branchNames = exec('git branch').stdout
   .split('\n')
@@ -35,8 +36,9 @@ async function selectBranch() {
     .replace(' (default)', '')
 }
 
-function switchBranch(branchName: string) {
-  exec(`git checkout ${branchName}`)
+async function switchBranch(branchName: string) {
+  echo(chalk.yellow.italic(`git checkout ${branchName}`))
+  await exec(`git checkout ${branchName}`)
   echo(chalk.green.italic("Switched"))
   exit(0)
 }
@@ -46,11 +48,11 @@ const checkOut = async () => {
 
   let branchName = process.argv[2]
   if(branchName) {
-    switchBranch(branchName)
+    await switchBranch(branchName)
   }
 
   branchName = await selectBranch()
-  switchBranch(branchName)
+  await switchBranch(branchName)
 }
 
 (async () => await errorHandlerWrapper(checkOut, errorMessage))();
