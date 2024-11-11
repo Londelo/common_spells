@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import chalk from 'chalk'
-import { exec, echo, config, exit } from 'shelljs'
+import { exec, echo } from 'shelljs'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper'
 import { selectCurrentBranch } from '../shared/selectors'
 

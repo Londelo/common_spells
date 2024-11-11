@@ -4,7 +4,6 @@ import { exec, echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper';
 import { selectDefaultBranch } from '../shared/selectors';
-import fetchAndPull from '../shared/fetchAndPull';
 
 const errorMessage = `FAILED to switch branches`
 
