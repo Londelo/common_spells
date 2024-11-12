@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 import chalk from 'chalk'
 import { exec, echo, exit } from 'shelljs'
-import errorHandlerWrapper from '../shared/errorHandlerWrapper'
-import { selectTruthyItems } from '../shared/selectors'
+import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import inquirer from 'inquirer'
 
 const errorMessage = 'FAIL to run test'

@@ -5,19 +5,19 @@
   "main": "index.js",
   "type": "commonjs",
   "bin": {
-    "spells": "./dist/help/displayCommands.js",
-    "fusrodah": "./dist/git/forcePush.js",
-    "commit": "./dist/git/fullCommit.js",
-    "branch": "./dist/git/createBranch.js",
-    "switch": "./dist/git/checkout.js",
-    "pull": "./dist/git/fullUpdate.js",
-    "feature": "./dist/tm/testFeature.js"
+    "spells": "./dist/spells/help.js",
+    "fusrodah": "./dist/spells/git/forcePush.js",
+    "commit": "./dist/spells/git/fullCommit.js",
+    "branch": "./dist/spells/git/createBranch.js",
+    "switch": "./dist/spells/git/checkout.js",
+    "pull": "./dist/spells/git/fullUpdate.js",
+    "feature": "./dist/spells/tm/testFeature.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && babel src --out-dir dist --extensions '.ts,.tsx'",
     "link": "npm link && npm link common_spells",
-    "permissions": "chmod +x ./dist/**/*",
+    "permissions": "chmod +x ./dist/spells/**/*",
     "local:install": "npm run build && npm run link && npm run permissions",
     "type-check": "tsc --noEmit"
   },

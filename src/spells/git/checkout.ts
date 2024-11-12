@@ -2,24 +2,37 @@
 import chalk from 'chalk'
 import { exec, echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
-import errorHandlerWrapper from '../shared/errorHandlerWrapper';
-import { selectDefaultBranch } from '../shared/selectors';
+import errorHandlerWrapper from '../../shared/errorHandlerWrapper';
+import { selectDefaultBranch, selectTruthyItems } from '../../shared/selectors';
 
 const errorMessage = `FAILED to switch branches`
 
 async function selectBranch() {
   const defaultBranch = await selectDefaultBranch()
 
-  const branchNames = exec('git branch').stdout
+  const branchNames = exec('git branch -vv').stdout
   .split('\n')
   .slice(0, -1)
-  .map(name => name.trim())
   .map(name => {
-    if(name.includes(defaultBranch)) {
-      return `${name} (default)`
+    if(name.includes('*')) {
+      return ''
     }
-    return name
+
+    const splitName = name.trim().split(' ').filter(selectTruthyItems)
+    const newName = splitName.map((part, index) => {
+      if(part.includes(defaultBranch)) {
+        return `${chalk.green('(default)')} ${part}    `
+      }
+      if(index === 0) {
+        return `${part}    `
+      }
+
+      return chalk.yellow.dim.italic(part)
+    })
+
+    return newName.join(' ')
   })
+  .filter(selectTruthyItems)
 
   const answers = await inquirer.prompt([
     {
@@ -31,8 +44,8 @@ async function selectBranch() {
   ]);
 
   return answers.branch
-    .replace('* ', '')
-    .replace(' (default)', '')
+    .replace('(default) ', '')
+    .split(' ')[0]
 }
 
 async function switchBranch(branchName: string) {

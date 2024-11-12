@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import chalk from 'chalk'
 import { exec, echo } from 'shelljs'
-import errorHandlerWrapper from '../shared/errorHandlerWrapper'
+import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 
 const errorMessage = 'you are not a true dragon born.'
 

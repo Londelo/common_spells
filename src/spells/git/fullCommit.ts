@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import chalk from 'chalk'
 import { exec, echo } from 'shelljs'
-import errorHandlerWrapper from '../shared/errorHandlerWrapper'
-import { selectCurrentBranch } from '../shared/selectors'
+import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
+import { selectCurrentBranch } from '../../shared/selectors'
 
 const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
 const errorMessage = 'FAILED to commit message'
