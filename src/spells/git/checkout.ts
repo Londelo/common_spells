@@ -7,31 +7,35 @@ import { selectDefaultBranch, selectTruthyItems } from '../../shared/selectors';
 
 const errorMessage = `FAILED to switch branches`
 
+const NormalizeBranchNames = (defaultBranch: string) => (name: string) => {
+  const isCurrentBranch = name.includes('*')
+  if(isCurrentBranch) {
+    return ''
+  }
+
+  const splitName = name.trim().split(' ').filter(selectTruthyItems)
+  const newName = splitName.map((part, index) => {
+    const isBranchName = index === 0
+    if(isBranchName) {
+      if(part.includes(defaultBranch)) {
+        return `${part} ${chalk.green.dim.italic('(default)')}`
+      }
+      return `${part}    `
+    }
+
+    return chalk.yellow.dim.italic(part)
+  })
+
+  return newName.join(' ')
+}
+
 async function selectBranch() {
   const defaultBranch = await selectDefaultBranch()
 
   const branchNames = exec('git branch -vv').stdout
   .split('\n')
   .slice(0, -1)
-  .map(name => {
-    if(name.includes('*')) {
-      return ''
-    }
-
-    const splitName = name.trim().split(' ').filter(selectTruthyItems)
-    const newName = splitName.map((part, index) => {
-      if(part.includes(defaultBranch)) {
-        return `${chalk.green('(default)')} ${part}    `
-      }
-      if(index === 0) {
-        return `${part}    `
-      }
-
-      return chalk.yellow.dim.italic(part)
-    })
-
-    return newName.join(' ')
-  })
+  .map(NormalizeBranchNames(defaultBranch))
   .filter(selectTruthyItems)
 
   const answers = await inquirer.prompt([
@@ -44,7 +48,7 @@ async function selectBranch() {
   ]);
 
   return answers.branch
-    .replace('(default) ', '')
+    .replace(' (default)', '')
     .split(' ')[0]
 }
 
