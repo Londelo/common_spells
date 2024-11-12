@@ -23,8 +23,8 @@ const createBranch = async () => {
     await exec(`git checkout ${defaultBranch}`, {silent:true})
   }
   await fetchAndPull(defaultBranch)
-  echo(chalk.yellow.italic(`creating new branch: `) + chalk.italic(newBranch))
-  exec(`git checkout -b ${newBranch} origin/${newBranch}`)
+  echo(chalk.yellow.italic(`git checkout -b ${newBranch}`))
+  exec(`git checkout -b ${newBranch}`)
   echo(chalk.green.italic('New Branch Built'))
 }
 
