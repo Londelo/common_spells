@@ -1,6 +1,6 @@
 # All The Commons Spells a Tech Wizard Needs
 
-## How to:
+## How to setup locally:
 - npm i
 - npm run local:install
   - this will "install" this package locally by using "npm link"

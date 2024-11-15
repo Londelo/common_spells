@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import chalk from 'chalk'
 import { exec, echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper';
 import { selectDefaultBranch, selectTruthyItems } from '../../shared/selectors';
+import { green, yellow } from '../../shared/colors';
 
 const errorMessage = `FAILED to switch branches`
 
@@ -18,12 +18,12 @@ const NormalizeBranchNames = (defaultBranch: string) => (name: string) => {
     const isBranchName = index === 0
     if(isBranchName) {
       if(part.includes(defaultBranch)) {
-        return `${part} ${chalk.green.dim.italic('(default)')}`
+        return `${part} ${green('(default)').dim}`
       }
       return `${part}    `
     }
 
-    return chalk.yellow.dim.italic(part)
+    return yellow(part).dim
   })
 
   return newName.join(' ')
@@ -53,9 +53,9 @@ async function selectBranch() {
 }
 
 async function switchBranch(branchName: string) {
-  echo(chalk.yellow.italic(`git checkout ${branchName}`))
+  echo(yellow(`git checkout ${branchName}`))
   await exec(`git checkout ${branchName}`)
-  echo(chalk.green.italic("Switched"))
+  echo(green("Switched"))
   exit(0)
 }
 

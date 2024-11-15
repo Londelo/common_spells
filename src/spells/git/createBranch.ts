@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import chalk from 'chalk'
 import { exec, echo, exit } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { selectDefaultBranch, selectCurrentBranch } from '../../shared/selectors'
 import fetchAndPull from '../../shared/fetchAndPull'
+import { green, red, yellow } from '../../shared/colors'
 
 const errorMessage = 'FAILED to build new branch'
 
@@ -14,18 +14,18 @@ const createBranch = async () => {
 
   const newBranch = process.argv[2]
   if(!newBranch) {
-    echo(chalk.red.italic('please provide a branch name: "branch [new branch name]"'))
+    echo(red('please provide a branch name: "branch [new branch name]"'))
     exit(1)
   }
 
   if(currentBranch !== defaultBranch ) {
-    echo(chalk.yellow.italic(`moving to default branch: `) + chalk.italic(defaultBranch))
+    echo(yellow(`moving to default branch: `) + defaultBranch)
     await exec(`git checkout ${defaultBranch}`, {silent:true})
   }
   await fetchAndPull(defaultBranch)
-  echo(chalk.yellow.italic(`git checkout -b ${newBranch}`))
+  echo(yellow(`git checkout -b ${newBranch}`))
   exec(`git checkout -b ${newBranch}`)
-  echo(chalk.green.italic('New Branch Built'))
+  echo(green('New Branch Built'))
 }
 
 (async () => await errorHandlerWrapper(createBranch, errorMessage))();

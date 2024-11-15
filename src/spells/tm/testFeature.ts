@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import chalk from 'chalk'
 import { exec, echo, exit } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import inquirer from 'inquirer'
+import { green, red, yellow } from '../../shared/colors'
 
 const errorMessage = 'FAIL to run test'
 
@@ -30,7 +30,7 @@ async function selectTag() {
   const tags = getAllTags()
 
   if(!tags.length) {
-    echo(chalk.red.italic('I could not find any test tags for you.'))
+    echo(red('I could not find any test tags for you.'))
     exit(1)
   }
 
@@ -48,13 +48,13 @@ async function selectTag() {
 
 const runTest = (testCommand: string) => {
   try {
-    echo(chalk.yellow.italic(testCommand))
+    echo(yellow(testCommand))
     exec(testCommand)
-    echo(chalk.green.italic('All tests are complete.'))
+    echo(green('All tests are complete.'))
     exit(0)
   } catch(err: any) {
     if(err.message.includes('minimatch')) {
-      echo(chalk.red.italic('You cant run tests here.'))
+      echo(red('You cant run tests here.'))
       exit(1)
     }
 
@@ -62,7 +62,7 @@ const runTest = (testCommand: string) => {
       runTest(testCommand.replace('features', 'tests'))
     }
 
-    echo(chalk.yellow.italic(err.message))
+    echo(yellow(err.message))
     exit(1)
   }
 }

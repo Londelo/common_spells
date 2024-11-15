@@ -1,5 +1,6 @@
-import chalk from 'chalk'
+
 import { config, echo, exit } from 'shelljs'
+import { red, yellow } from './colors'
 
 const errorHandlerWrapper = async (func: () => void, errorMessage: string) => {
   config.fatal = true
@@ -8,10 +9,10 @@ const errorHandlerWrapper = async (func: () => void, errorMessage: string) => {
     await func()
   } catch({ message }: any) {
     if(message.includes('User force closed the prompt')) {
-      echo(chalk.yellow.italic('canceled'))
+      echo(yellow('canceled'))
       exit(1)
     }
-    echo(chalk.red.italic(errorMessage))
+    echo(red(errorMessage))
     echo(message)
     exit(1)
   }
