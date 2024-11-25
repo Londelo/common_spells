@@ -38,6 +38,7 @@ async function selectBranch() {
   .map(NormalizeBranchNames(defaultBranch))
   .filter(selectTruthyItems)
 
+
   const answers = await inquirer.prompt([
     {
       type: 'list',
