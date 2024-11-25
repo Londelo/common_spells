@@ -23,7 +23,7 @@ type CollectionOfBranches = { [key in string]: BranchDetails }
 const collectBranchDetails = (collection: CollectionOfBranches, name: string) => {
   const branchName = name.trim().replace('*','').split(' ').filter(selectTruthyItems)[0]
   const isLocal = !branchName.includes('remotes/')
-  const isRemote = branchName.includes('remotes/origin/')
+  const isRemote = branchName.includes('remotes/origin/') && !branchName.includes('HEAD')
 
   if(isLocal) {
     const isStale = isBranchStale(branchName)
