@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { exec, echo } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
-import { selectCurrentBranch } from '../../shared/selectors'
+import { selectAllArgs, selectCurrentBranch } from '../../shared/selectors'
 import { green, yellow } from '../../shared/colors'
 
 const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
@@ -10,7 +10,7 @@ const errorMessage = 'FAILED to commit message'
 const fullCommit = async () => {
   const currentBranch = (await selectCurrentBranch()).toUpperCase()
 
-  let message = process.argv.slice(2).join(' ')
+  let message = selectAllArgs()
   if(!message) {
     message = DEFAULT_MESSAGE
   }

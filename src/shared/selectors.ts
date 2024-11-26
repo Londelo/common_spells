@@ -1,5 +1,7 @@
 import { exec } from "shelljs"
 
+let selectAllArgs = () => process.argv.slice(2).join(' ')
+
 const selectTruthyItems = (item: unknown) => !!item
 
 const selectDefaultBranch = async () =>
@@ -19,5 +21,6 @@ const selectCurrentBranch = async () =>
 export {
   selectTruthyItems,
   selectCurrentBranch,
-  selectDefaultBranch
+  selectDefaultBranch,
+  selectAllArgs
 }

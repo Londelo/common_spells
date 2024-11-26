@@ -3,6 +3,7 @@ import { exec, echo, exit } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import inquirer from 'inquirer'
 import { green, red, yellow } from '../../shared/colors'
+import { selectAllArgs } from '../../shared/selectors'
 
 const errorMessage = 'FAIL to run test'
 
@@ -69,7 +70,7 @@ const runTest = (testCommand: string) => {
 
 const testFeature = async () => {
 
-  let testParams = process.argv.slice(2).join(' ')
+  let testParams = selectAllArgs()
   if(testParams) {
     runTest(`npx run features:tags ${testParams}`)
   }

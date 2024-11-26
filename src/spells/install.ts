@@ -2,15 +2,16 @@
 import { exec, echo } from 'shelljs'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper'
 import { green, yellow } from '../shared/colors'
+import { selectAllArgs } from '../shared/selectors'
 
 const errorMessage = 'FAILED to install'
 const findNpmLockFile = 'find . -path ./package-lock.json'
 const findYarnLockFile = 'find . -path ./yarn.lock'
 
 const install = async () => {
-  const npmLockFile = exec(findNpmLockFile).stdout
-  const yarnLockFile = exec(findYarnLockFile).stdout
-  const installParams = process.argv.slice(2).join(' ') || ''
+  const npmLockFile = exec(findNpmLockFile, {silent: true}).stdout
+  const yarnLockFile = exec(findYarnLockFile, {silent: true}).stdout
+  const installParams = selectAllArgs() || ''
   let installCommand = ''
 
   if(npmLockFile) {
