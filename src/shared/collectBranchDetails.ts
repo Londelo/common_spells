@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 import { exec } from 'shelljs'
-import { selectTruthyItems } from './selectors'
+import { convertDate, selectTruthyItems } from './selectors'
 
-function isBranchStale(branchName: string): boolean {
-  const lastCommitDate = exec(`git log -1 --format='%ci' ${branchName}`, { silent: true }).stdout
+const selectLastCommitDate = (branchName: string) => {
+  const date = exec(`git log -1 --format='%ci' ${branchName}`, { silent: true }).stdout
+  return convertDate.full(date)
+}
 
+function isBranchStale(lastCommitDate: string): boolean {
   const givenDate = new Date(lastCommitDate);
   const threeMonthsAgo = new Date();
 
@@ -13,22 +16,24 @@ function isBranchStale(branchName: string): boolean {
   return givenDate < threeMonthsAgo;
 }
 
-export type BranchDetails = { name: string, isStale: boolean, location: 'local'|'remote'}
+export type BranchDetails = { name: string, isStale: boolean, location: 'local'|'remote', lastCommitDate: string }
 export type CollectionOfBranches = { [key in string]: BranchDetails }
 export type AllBranchDetails = BranchDetails[]
 
-const collectBranchDetails = (collection: CollectionOfBranches, name: string) => {
-  const branchName = name.trim().replace('*','').split(' ').filter(selectTruthyItems)[0]
+const collectBranchDetails = (collection: CollectionOfBranches, details: string) => {
+  const branchName = details.trim().replace('*','').split(' ').filter(selectTruthyItems)[0]
   const isLocal = !branchName.includes('remotes/')
   const isRemote = branchName.includes('remotes/origin/') && !branchName.includes('HEAD')
+  const lastCommitDate = selectLastCommitDate(branchName)
 
   if(isLocal) {
-    const isStale = isBranchStale(branchName)
+    const isStale = isBranchStale(lastCommitDate)
 
     const branchDetails: BranchDetails = {
       name: branchName,
       isStale,
-      location: 'local'
+      location: 'local',
+      lastCommitDate
     }
 
     return {
@@ -49,7 +54,8 @@ const collectBranchDetails = (collection: CollectionOfBranches, name: string) =>
     const branchDetails: BranchDetails = {
       name: normalizedName,
       isStale,
-      location: 'remote'
+      location: 'remote',
+      lastCommitDate
     }
 
     return {

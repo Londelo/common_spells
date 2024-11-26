@@ -2,42 +2,35 @@
 import { exec, echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper';
-import { selectDefaultBranch, selectTruthyItems } from '../../shared/selectors';
-import { green, yellow } from '../../shared/colors';
+import { selectCurrentBranch, selectDefaultBranch, selectTruthyItems } from '../../shared/selectors';
+import { green, red, yellow } from '../../shared/colors';
+import collectAllBranchDetails, { BranchDetails } from '../../shared/collectBranchDetails';
 
 const errorMessage = `FAILED to switch branches`
 
-const NormalizeBranchNames = (defaultBranch: string) => (name: string) => {
-  const isCurrentBranch = name.includes('*')
-  if(isCurrentBranch) {
-    return ''
-  }
-
-  const splitName = name.trim().split(' ').filter(selectTruthyItems)
-  const newName = splitName.map((part, index) => {
-    const isBranchName = index === 0
-    if(isBranchName) {
-      if(part.includes(defaultBranch)) {
-        return `${part} ${green('(default)').dim}`
-      }
-      return `${part}    `
+const NormalizeBranchNames = (defaultBranch: string, currentBranch: string) =>
+  (collection: string[], { name, isStale, lastCommitDate }: BranchDetails ) => {
+    const isCurrentBranch = currentBranch === name
+    if(isCurrentBranch) {
+      return collection
     }
 
-    return yellow(part).dim
-  })
+    const defaultTag = defaultBranch === name ? green('default') : ''
+    const staleTag = isStale ? red('stale') : yellow('not-stale').dim
+    const lastUpdated = yellow(`last-updated: ${lastCommitDate}`).dim
 
-  return newName.join(' ')
-}
+    return [
+      ...collection,
+      `${name} ${lastUpdated} ${staleTag} ${defaultTag}`
+    ]
+  }
 
 async function selectBranch() {
   const defaultBranch = await selectDefaultBranch()
+  const currentBranch = await selectCurrentBranch()
 
-  const branchNames = exec('git branch -vv').stdout
-  .split('\n')
-  .slice(0, -1)
-  .map(NormalizeBranchNames(defaultBranch))
-  .filter(selectTruthyItems)
-
+  const branchNames = (await collectAllBranchDetails())
+    .reduce(NormalizeBranchNames(defaultBranch, currentBranch), [] as string[])
 
   const answers = await inquirer.prompt([
     {
@@ -48,9 +41,7 @@ async function selectBranch() {
     }
   ]);
 
-  return answers.branch
-    .replace(' (default)', '')
-    .split(' ')[0]
+  return answers.branch.split(' ')[0]
 }
 
 async function switchBranch(branchName: string) {

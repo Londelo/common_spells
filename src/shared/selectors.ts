@@ -1,5 +1,17 @@
 import { exec } from "shelljs"
 
+const dateOptions: any = {
+  weekday: 'short',
+  year: 'numeric',
+  month: 'long',
+  day: "2-digit",
+};
+
+const convertDate = {
+  'milliseconds': (date: number|string) => new Date(date).getTime(),
+  'full': (date: number|string) => new Date(date).toLocaleDateString('en-us', dateOptions)
+}
+
 let selectAllArgs = () => process.argv.slice(2).join(' ')
 
 const selectTruthyItems = (item: unknown) => !!item
@@ -22,5 +34,6 @@ export {
   selectTruthyItems,
   selectCurrentBranch,
   selectDefaultBranch,
-  selectAllArgs
+  selectAllArgs,
+  convertDate
 }
