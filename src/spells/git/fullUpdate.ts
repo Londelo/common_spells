@@ -4,7 +4,8 @@ import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import fetchAndPull from '../../shared/fetchAndPull'
 import { selectAllArgs, selectCurrentBranch, selectTruthyItems } from '../../shared/selectors'
 import { green, yellow } from '../../shared/colors'
-import collectAllBranchDetails, { AllBranchDetails } from '../../shared/collectBranchDetails'
+import getBranchDetails, { AllBranchDetails } from '../../shared/getBranchDetails'
+
 
 const errorMessage = 'FAILED to update branch'
 
@@ -12,9 +13,9 @@ const errorMessage = 'FAILED to update branch'
 async function connectToActiveRemoteBranches(branchDetails: AllBranchDetails) {
   for (let index = 0; index < branchDetails.length; index++) {
     const {name, isStale, location} = branchDetails[index];
-    if(isStale && location === 'local') {
-      echo(yellow(`git branch -D ${name}`))
-      await exec(`git branch -D ${name}`)
+    if(!isStale && location === 'remote') {
+      echo(yellow(`\n(link) git branch ${name} origin/${name}`))
+      await exec(`git branch ${name} origin/${name}`)
     }
   }
 }
@@ -22,9 +23,9 @@ async function connectToActiveRemoteBranches(branchDetails: AllBranchDetails) {
 async function purgeStaleLocalBranches(branchDetails: AllBranchDetails) {
   for (let index = 0; index < branchDetails.length; index++) {
     const {name, isStale, location} = branchDetails[index];
-    if(!isStale && location === 'remote') {
-      echo(yellow(`git branch ${name} origin/${name}`))
-      await exec(`git branch ${name} origin/${name}`)
+    if(isStale && location === 'local') {
+      echo(yellow(`\n(delete) git branch -D ${name}`))
+      await exec(`git branch -D ${name}`)
     }
   }
 }
@@ -32,9 +33,11 @@ async function purgeStaleLocalBranches(branchDetails: AllBranchDetails) {
 const fullUpdate = async () => {
   const currentBranch = await selectCurrentBranch()
   await fetchAndPull(currentBranch)
+
   const args = selectAllArgs()
   if(args.includes('--purge')) {
-    const allBranchDetails = await collectAllBranchDetails()
+    echo(yellow('\nPreparing to Purge Foul Branches...'))
+    const allBranchDetails = await getBranchDetails()
     await purgeStaleLocalBranches(allBranchDetails)
     await connectToActiveRemoteBranches(allBranchDetails)
   }

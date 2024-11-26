@@ -4,7 +4,7 @@ import inquirer from 'inquirer'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper';
 import { selectCurrentBranch, selectDefaultBranch, selectTruthyItems } from '../../shared/selectors';
 import { green, red, yellow } from '../../shared/colors';
-import collectAllBranchDetails, { BranchDetails } from '../../shared/collectBranchDetails';
+import getBranchDetails, { BranchDetails } from '../../shared/getBranchDetails';
 
 const errorMessage = `FAILED to switch branches`
 
@@ -15,13 +15,13 @@ const NormalizeBranchNames = (defaultBranch: string, currentBranch: string) =>
       return collection
     }
 
-    const defaultTag = defaultBranch === name ? green('default') : ''
-    const staleTag = isStale ? red('stale') : yellow('not-stale').dim
+    const defaultTag = defaultBranch === name ? green('(default)') : ''
+    const staleTag = isStale ? red('(stale)') : yellow('(not-stale)').dim
     const lastUpdated = yellow(`last-updated: ${lastCommitDate}`).dim
 
     return [
       ...collection,
-      `${name} ${lastUpdated} ${staleTag} ${defaultTag}`
+      `${name} ${defaultTag} ${staleTag} ${lastUpdated}`
     ]
   }
 
@@ -29,7 +29,7 @@ async function selectBranch() {
   const defaultBranch = await selectDefaultBranch()
   const currentBranch = await selectCurrentBranch()
 
-  const branchNames = (await collectAllBranchDetails())
+  const branchNames = (await getBranchDetails(false))
     .reduce(NormalizeBranchNames(defaultBranch, currentBranch), [] as string[])
 
   const answers = await inquirer.prompt([

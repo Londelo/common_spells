@@ -11,7 +11,7 @@ function isBranchStale(lastCommitDate: string): boolean {
   const givenDate = new Date(lastCommitDate);
   const threeMonthsAgo = new Date();
 
-  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 6);
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
   return givenDate < threeMonthsAgo;
 }
@@ -45,7 +45,7 @@ const collectBranchDetails = (collection: CollectionOfBranches, details: string)
   if(isRemote) {
     const normalizedName: string = branchName.replace('remotes/origin/','')
     const collectedAlready = collection[normalizedName]
-    const isStale = isBranchStale(`origin/${normalizedName}`)
+    const isStale = isBranchStale(lastCommitDate)
 
     if(collectedAlready) {
       return collection
@@ -67,8 +67,9 @@ const collectBranchDetails = (collection: CollectionOfBranches, details: string)
   return collection
 }
 
-const collectAllBranchDetails = async (): Promise<AllBranchDetails> => {
-  const allBranchDetails = await exec('git branch -a -vv', { silent: true }).stdout
+const getBranchDetails = async (all = true): Promise<AllBranchDetails> => {
+  const getBranchCommand = all ? 'git branch -a -vv' : 'git branch -vv'
+  const allBranchDetails = await exec(getBranchCommand, { silent: true }).stdout
   .split('\n')
   .slice(0, -1)
   .reduce(collectBranchDetails, {} as CollectionOfBranches)
@@ -76,4 +77,4 @@ const collectAllBranchDetails = async (): Promise<AllBranchDetails> => {
   return Object.values(allBranchDetails)
 }
 
-export default collectAllBranchDetails
+export default getBranchDetails
