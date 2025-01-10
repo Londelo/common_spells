@@ -10,7 +10,6 @@ const selectLastCommitDate = (branchName: string) => {
 function isBranchStale(lastCommitDate: string): boolean {
   const givenDate = new Date(lastCommitDate);
   const threeMonthsAgo = new Date();
-
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
   return givenDate < threeMonthsAgo;

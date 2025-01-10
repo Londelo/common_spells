@@ -33,7 +33,7 @@ async function purgeStaleLocalBranches(branchDetails: AllBranchDetails) {
 const fullUpdate = async () => {
   const currentBranch = await selectCurrentBranch()
   await fetchAndPull(currentBranch)
-
+  //TODO: if the default branch is too old it wont be on the list
   const args = selectAllArgs()
   if(args.includes('--purge')) {
     echo(yellow('\nPreparing to Purge Foul Branches...'))

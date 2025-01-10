@@ -69,8 +69,8 @@ const runTest = (testCommand: string) => {
 }
 
 const testFeature = async () => {
-
   let testParams = selectAllArgs()
+  // TODO: Id like to be able to put in partial test params and filter by that
   if(testParams) {
     runTest(`npx run features:tags ${testParams}`)
   }
