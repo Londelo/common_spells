@@ -20,4 +20,6 @@ const gitLogOneLine = async () => {
 
 export default gitLogOneLine
 
-export const gitLogTriggers = ['-l', '--log']
+export type GitLogTriggers = '-l' | '--log'
+
+export const gitLogTriggers: GitLogTriggers[] = ['-l', '--log']
