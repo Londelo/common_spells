@@ -9,6 +9,7 @@
     "nstall": "./dist/spells/install.js",
     "fusrodah": "./dist/spells/git/forcePush.js",
     "commit": "./dist/spells/git/fullCommit.js",
+    "rebase": "./dist/spells/git/rebaseCommits.js",
     "branch": "./dist/spells/git/createBranch.js",
     "switch": "./dist/spells/git/checkout.js",
     "pull": "./dist/spells/git/fullUpdate.js",
