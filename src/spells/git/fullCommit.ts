@@ -3,6 +3,7 @@ import { exec, echo } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { selectAllArgs, selectCurrentBranch } from '../../shared/selectors'
 import { green, yellow } from '../../shared/colors'
+import gitLogOneLine, { gitLogTriggers } from '../../shared/gitLogOneLine';
 
 const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
 const errorMessage = 'FAILED to commit message'
@@ -13,6 +14,12 @@ const fullCommit = async () => {
   let message = selectAllArgs()
   if(!message) {
     message = DEFAULT_MESSAGE
+  }
+
+  if(gitLogTriggers.includes(message)) {
+    await gitLogOneLine()
+    echo(green('logged commits only'))
+    return
   }
 
   const commitMessage = `${currentBranch}: ${message}`
