@@ -10,6 +10,7 @@
 
 
 ## TODO:
+- create a way to easialy navigate through all TM repos
 - automate workers template updates
   - this should automatically update all workers that use the workers template
   - create new branchs to make these updates
