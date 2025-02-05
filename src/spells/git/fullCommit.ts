@@ -7,6 +7,9 @@ import gitLogOneLine, { gitLogTriggers, GitLogTriggers } from '../../shared/gitL
 
 const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
 const errorMessage = 'FAILED to commit message'
+const skipAddArg = '-sa'
+const skipAddArgFull = '--skip-add'
+
 
 const fullCommit = async () => {
   const currentBranch = (await selectCurrentBranch()).toUpperCase()
@@ -16,21 +19,19 @@ const fullCommit = async () => {
     message = DEFAULT_MESSAGE
   }
 
-  const onlyLogCommits = gitLogTriggers.includes(message as GitLogTriggers)
-  if(onlyLogCommits) {
-    await gitLogOneLine()
-    echo(green('Logged commits only'))
-    return
-  }
-
-  const skipGitAdd = ['-sa', '--skip-add'].includes(message)
+  const skipGitAdd = message.includes(skipAddArg) || message.includes(skipAddArgFull)
   if(!skipGitAdd) {
     echo(yellow('git add .'))
     await exec('git add .')
+  } else {
+    message = message
+      .replace(skipAddArg, '')
+      .replace(skipAddArgFull, '')
+      .trim()
   }
 
   const commitMessage = `${currentBranch}: ${message}`
-
+  console.log(commitMessage)
   echo(yellow(`git commit -m "${commitMessage}"`))
   await exec(`git commit -m "${commitMessage}"`)
   echo(yellow('git push'))

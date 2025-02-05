@@ -3,13 +3,14 @@ import { exec, echo } from 'shelljs'
 import { yellow } from './colors'
 import inquirer from 'inquirer'
 
-const stylizeLogs = (logs: string) =>
+const formatLogs = (logs: string, showAll: boolean) =>
   logs.split('\n')
   .map(log => {
     const logParts = log.split(' ')
     logParts[0] = `  ${yellow(logParts[0])}`
     return logParts.join(' ')
   })
+  .slice(0, showAll ? -1 : 10)
   .join('\n')
 
 const selectCommitTag = (answer: {log:string}) => answer.log.split(' ')[0]
@@ -29,16 +30,17 @@ async function selectLog(logs: string) {
   return selectCommitTag(answers)
 }
 
-const gitLogOneLine = async (select: boolean = false) => {
+const gitLogOneLine = async (select: boolean = false, showAll: boolean = false) => {
   const logCommand = 'git log --oneline \n'
   echo(yellow(logCommand))
-  const logs = await exec(logCommand, { silent: true }).stdout
+  const unformattedLogs = await exec(logCommand, { silent: true }).stdout
+  const logs = formatLogs(unformattedLogs, showAll)
 
   if(select) {
     return await selectLog(logs)
   }
 
-  echo(stylizeLogs(logs))
+  echo(logs)
 }
 
 export default gitLogOneLine
