@@ -16,5 +16,4 @@
   - create new branchs to make these updates
   - create MR's for these update?
   - ignore merge issues and let other do it if they see it in a MR
-
 - automate releases

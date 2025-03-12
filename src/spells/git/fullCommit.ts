@@ -10,7 +10,6 @@ const errorMessage = 'FAILED to commit message'
 const skipAddArg = '-sa'
 const skipAddArgFull = '--skip-add'
 
-
 const fullCommit = async () => {
   const currentBranch = (await selectCurrentBranch()).toUpperCase()
 
