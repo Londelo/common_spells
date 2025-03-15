@@ -45,6 +45,9 @@ async function selectBranch() {
 }
 
 async function switchBranch(branchName: string) {
+  if(branchName === 'default') {
+    branchName = await selectDefaultBranch()
+  }
   echo(yellow(`git checkout ${branchName}`))
   await exec(`git checkout ${branchName}`)
   echo(green("Switched"))
