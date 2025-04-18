@@ -2,10 +2,9 @@
 import { echo, exec } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import fetchAndPull from '../../shared/fetchAndPull'
-import { selectAllArgs, selectCurrentBranch, selectTruthyItems } from '../../shared/selectors'
+import { selectAllArgs, selectCurrentBranch, selectDefaultBranch } from '../../shared/selectors'
 import { green, yellow } from '../../shared/colors'
 import getBranchDetails, { AllBranchDetails } from '../../shared/getBranchDetails'
-
 
 const errorMessage = 'FAILED to update branch'
 
@@ -21,9 +20,11 @@ async function connectToActiveRemoteBranches(branchDetails: AllBranchDetails) {
 }
 
 async function purgeStaleLocalBranches(branchDetails: AllBranchDetails) {
+  const defaultBranch = await selectDefaultBranch()
+
   for (let index = 0; index < branchDetails.length; index++) {
     const {name, isStale, location} = branchDetails[index];
-    if(isStale && location === 'local') {
+    if(isStale && location === 'local' && name !== defaultBranch) {
       echo(yellow(`\n(delete) git branch -D ${name}`))
       await exec(`git branch -D ${name}`)
     }
@@ -33,7 +34,7 @@ async function purgeStaleLocalBranches(branchDetails: AllBranchDetails) {
 const fullUpdate = async () => {
   const currentBranch = await selectCurrentBranch()
   await fetchAndPull(currentBranch)
-  //TODO: if the default branch is too old it wont be on the list
+
   const args = selectAllArgs()
   if(args.includes('--purge')) {
     echo(yellow('\nPreparing to Purge Foul Branches...'))
