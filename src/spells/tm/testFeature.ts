@@ -27,8 +27,7 @@ const getAllTags = () => {
   return tags
 }
 
-async function selectTag() {
-  const tags = getAllTags()
+async function selectTag(tags: string[]) {
 
   if(!tags.length) {
     echo(red('I could not find any test tags for you.'))
@@ -68,14 +67,51 @@ const runTest = (testCommand: string) => {
   }
 }
 
+const checkPartialMatches = (tags: string[], testParams: string) => {
+  let exactMatch = ''
+
+  const partialMatches: string[] = []
+
+  const firstLetter = testParams[0]
+  const firstLetterMatches: string[] = []
+
+  tags.forEach(tag => {
+
+    if(tag === testParams) {
+      exactMatch = tag
+    }
+
+    if(tag.includes(testParams)) {
+      partialMatches.push(tag)
+    }
+
+    if(tag.includes(firstLetter)) {
+      firstLetterMatches.push(tag)
+    }
+  })
+
+  return {
+    exactMatch,
+    matches: partialMatches.length ? partialMatches : firstLetterMatches
+  }
+}
+
 const testFeature = async () => {
   let testParams = selectAllArgs()
-  // TODO: Id like to be able to put in partial test params and filter by that
+  const tags = getAllTags()
+
   if(testParams) {
-    runTest(`npx run features:tags ${testParams}`)
+    const { exactMatch,  matches } = checkPartialMatches(tags, testParams)
+
+    if(exactMatch) {
+      runTest(`npx run features:tags ${exactMatch}`)
+    }
+
+    const tag = await selectTag(matches)
+    runTest(`npx run features:tags ${tag}`)
   }
 
-  const tag = await selectTag()
+  const tag = await selectTag(tags)
   runTest(`npx run features:tags ${tag}`)
 }
 
