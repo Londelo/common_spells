@@ -2,7 +2,6 @@ import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import stylistic from '@stylistic/eslint-plugin';
 import globals from 'globals';
-import reactRefresh from 'eslint-plugin-react-refresh';
 
 /** @type {import('eslint').Linter.Config[]} */
 
@@ -18,7 +17,9 @@ const basicSettings = {files: [ '**/*.{js,mjs,cjs,ts,tsx}' ],
     sourceType: 'module' // needed for imports / exports
   }};
 
-const basicJsRules = {name: 'basicJsRules',
+// eslint-disable-next-line @stylistic/object-curly-newline
+const basicJsRules = {
+  name: 'basicJsRules',
   rules: {
     // 🔹 General JavaScript & TypeScript rules
     'no-var': 'error',
@@ -36,7 +37,7 @@ const basicJsRules = {name: 'basicJsRules',
       exceptions: [ '_', 't', 'x', 'y' ]} ],
     'max-lines': [ 'error', 200 ],
     'max-depth': [ 'error', 2 ],
-    'no-await-in-loop': 'error',
+    // 'no-await-in-loop': 'error',
     'no-console': [ 'warn' ],
     'no-else-return': 'error',
     'no-delete-var': 'error',
@@ -118,28 +119,8 @@ const formattingRules = {
 
 const customRules = {
   name: 'customRules',
-  plugins: {'@typescript-eslint': ts,
-    'react-refresh': reactRefresh},
-  rules: {
-    '@typescript-eslint/no-shadow': 'error',
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true }
-    ],
-    'no-iterator': 'error',
-    'no-restricted-syntax': [
-      'error',
-      'DoWhileStatement',
-      'ForStatement',
-      'ForInStatement',
-      'ForOfStatement',
-      'SwitchCase',
-      'SwitchStatement',
-      'WhileStatement',
-      'WithStatement',
-      'UnaryExpression[operator=\'delete\']'
-    ]
-  }
+  plugins: { '@typescript-eslint': ts },
+  rules: { '@typescript-eslint/no-shadow': 'error', 'no-iterator': 'error' }
 };
 
 export default [

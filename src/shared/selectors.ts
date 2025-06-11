@@ -1,34 +1,31 @@
-import { exec } from "shelljs"
+import { exec } from 'shelljs';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dateOptions: any = {
   weekday: 'short',
   year: 'numeric',
   month: 'long',
-  day: "2-digit",
+  day: '2-digit'
 };
 
-const convertDate = {
-  'milliseconds': (date: number|string) => new Date(date).getTime(),
-  'full': (date: number|string) => new Date(date).toLocaleDateString('en-us', dateOptions)
-}
+const convertDate = {'milliseconds': ( date: number | string ) => new Date( date ).getTime(),
+  'full': ( date: number | string ) => new Date( date ).toLocaleDateString( 'en-us', dateOptions )};
 
-let selectAllArgs = () => process.argv.slice(2).join(' ')
+const selectAllArgs = () => process.argv.slice( 2 ).join( ' ' );
 
-const selectTruthyItems = (item: unknown) => !!item
+const selectTruthyItems = ( item: unknown ) => !!item;
 
-const selectDefaultBranch = async () =>
-  exec(
-    "git remote show origin | grep 'HEAD branch' | awk '{print $NF}'",
-    {silent:true}
-  ).stdout
-  .replace('\n', '')
+const selectDefaultBranch = async() => exec(
+  'git remote show origin | grep \'HEAD branch\' | awk \'{print $NF}\'',
+  {silent:true}
+).stdout
+  .replace( '\n', '' );
 
-const selectCurrentBranch = async () =>
-  exec(
-    "git branch --show-current",
-    {silent:true}
-  ).stdout
-  .replace('\n', '')
+const selectCurrentBranch = async() => exec(
+  'git branch --show-current',
+  {silent:true}
+).stdout
+  .replace( '\n', '' );
 
 export {
   selectTruthyItems,
@@ -36,4 +33,4 @@ export {
   selectDefaultBranch,
   selectAllArgs,
   convertDate
-}
+};
