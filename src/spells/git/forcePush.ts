@@ -7,7 +7,7 @@ const errorMessage = 'you are not a true dragon born.'
 
 const forcePush = async () => {
   echo(green('FUS-RO-DAAAAAHHH!'))
-  exec('git push --force --no-verify')
+  exec('git push --force-with-lease --no-verify')
 }
 
 (async () => await errorHandlerWrapper(forcePush, errorMessage))();
