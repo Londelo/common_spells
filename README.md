@@ -10,10 +10,10 @@
 
 
 ## TODO:
-- create a way to easily navigate through all TM repos
 - automate workers template updates
   - this should automatically update all workers that use the workers template
   - create new branches to make these updates
   - create MR's for these update?
   - ignore merge issues and let other do it if they see it in a MR
 - automate releases
+- create a kubectl tool for common tasks

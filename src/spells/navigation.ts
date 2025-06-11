@@ -1,96 +1,134 @@
 #!/usr/bin/env node
-/* eslint-disable id-length */
-/* eslint-disable no-restricted-syntax */
+
 /* eslint-disable max-depth */
-import { exec, echo } from 'shelljs';
+import {
+  exec, echo, cd 
+} from 'shelljs';
 import inquirer from 'inquirer';
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
 import errorHandlerWrapper from '../shared/errorHandlerWrapper';
 import {
   yellow, red, green
 } from '../shared/colors';
+import { getConfig, setConfig } from '../shared/spellConfigs';
+import { selectAllArgs } from '../shared/selectors';
 
-const SPELLS_CONFIG = path.join( os.homedir(), '.spells' );
 const NAV_KEY = 'navDir';
 const errorMessage = '\'Navigation failed.\'';
-
-function getConfig() {
-  if ( !fs.existsSync( SPELLS_CONFIG ) ) { return {}; }
-  const content = fs.readFileSync( SPELLS_CONFIG, 'utf8' );
-  return Object.fromEntries( content.split( '\n' ).filter( Boolean ).map( ( line ) => line.split( '=' ) ) );
-}
-
-function setConfig( key: string, value: string ) {
-  const config = getConfig();
-  config[key] = value;
-  const newContent = Object.entries( config ).map( ( [ k, v ] ) => `${k}=${v}` ).join( '\n' );
-  fs.writeFileSync( SPELLS_CONFIG, newContent );
-}
+const CONFIG_PARAM = '--config';
+const OPEN_PARAM_SHORT = '-o';
+const OPEN_PARAM_LONG = '--open';
 
 function getNavDir() {
   const config = getConfig();
   return config[NAV_KEY];
 }
 
-async function findDirs( base: string, keyword?: string ): Promise<string[]> {
-  const results: string[] = [];
+function isGitRepo( dir: string ): boolean {
+  return fs.existsSync( path.join( dir, '.git' ) );
+}
+
+async function findDirs( base: string, keyword: string = '' ) {
+  const paths: string[] = [];
+  const dirNames: string[] = [];
+  let exactMatch: { name: string; path: string } | null = null;
+
   function walk( dir: string ) {
     const entries = fs.readdirSync( dir, { withFileTypes: true } );
     for ( const entry of entries ) {
       if ( entry.isDirectory() ) {
         const fullPath = path.join( dir, entry.name );
-        if ( !keyword || entry.name.toLowerCase().includes( keyword.toLowerCase() ) ) {
-          results.push( fullPath );
+
+        if ( isGitRepo( fullPath ) ) {
+          const isPartialMatch = entry.name.toLowerCase().includes( keyword.toLowerCase() );
+
+          if ( !keyword || isPartialMatch ) {
+            paths.push( fullPath );
+            paths.push( dir );
+            dirNames.push( entry.name );
+          }
+
+          if ( keyword === entry.name ) {
+            exactMatch = { name: entry.name, path: fullPath };
+          }
+        } else {
+          walk( fullPath );
         }
-        walk( fullPath );
       }
     }
   }
+
   walk( base );
-  return results;
+  return {
+    paths, dirNames, exactMatch
+  };
+}
+
+function executeConfigCommand( args: string ): void {
+  const baseDir = args.replace( CONFIG_PARAM, '' ).trim();
+  if ( !baseDir ) {
+    echo( red( `Missing the base nav search directory. Please run: nav ${CONFIG_PARAM} [base nav search directory]` ) );
+    return;
+  }
+  setConfig( NAV_KEY, baseDir );
+  echo( green( `Navigation base directory set to: ${baseDir}` ) );
+}
+
+function shouldOpenAfter( args: string ): boolean {
+  return args.includes( OPEN_PARAM_SHORT ) || args.includes( OPEN_PARAM_LONG );
+}
+
+async function executeChangeDirectory( chosen: string, chosenPath?: string ) {
+  await cd( chosenPath );
+  echo( green( `Navigated to: ${chosen}` ) );
 }
 
 async function nav() {
-  const args = process.argv.slice( 2 );
-  if ( args[0] === '--config' && args[1] ) {
-    setConfig( NAV_KEY, args[1] );
-    echo( green( `Navigation base directory set to: ${args[1]} "bob"` ) );
+  const args = selectAllArgs();
+  const isConfigCommand = args.includes( CONFIG_PARAM );
+  if ( isConfigCommand ) {
+    executeConfigCommand( args );
     return;
   }
 
   const navDir = getNavDir();
   if ( !navDir ) {
-    echo( red( 'No base navigation directory set. Please run: nav --config [base nav search directory]' ) );
+    echo( red( `No base navigation directory set. Please run: nav ${CONFIG_PARAM} [base nav search directory]` ) );
     return;
   }
 
-  let openAfter = false;
-  let keyword = '';
-  for ( let i = 0; i < args.length; i++ ) {
-    if ( args[i] === '-o' || args[i] === '--open' ) { openAfter = true; } else { keyword = args[i]; }
-  }
+  const openAfter = shouldOpenAfter( args );
 
-  const matches = await findDirs( navDir, keyword );
-  if ( matches.length === 0 ) {
+  const keyword = args
+    .replace( OPEN_PARAM_LONG, '' )
+    .replace( OPEN_PARAM_SHORT, '' )
+    .trim();
+
+  const {
+    paths, dirNames, exactMatch
+  } = await findDirs( navDir, keyword );
+
+  if ( paths.length === 0 ) {
     echo( red( 'No matching directories found.' ) );
     return;
   }
-  let chosen = matches[0];
-  if ( matches.length > 1 ) {
-    const answer = await inquirer.prompt( [
-      {
-        type: 'list',
-        name: 'dir',
-        message: 'Select a directory:',
-        choices: matches
-      }
-    ] );
-    chosen = answer.dir;
-  }
-  process.chdir( chosen );
-  echo( green( `Navigated to: ${chosen}` ) );
+
+  // if ( exactMatch ) {
+  //   await executeChangeDirectory( exactMatch.name, exactMatch.path );
+  // }
+
+  const answer = await inquirer.prompt( [
+    {
+      type: 'list',
+      name: 'dir',
+      message: 'Select a directory:',
+      choices: dirNames
+    }
+  ] );
+  const chosen = answer.dir;
+  const chosenPath = paths.find( ( _path ) => _path.includes( chosen ) );
+  await executeChangeDirectory( chosen, chosenPath );
   if ( openAfter ) {
     echo( yellow( 'Opening in VS Code...' ) );
     exec( 'code .' );
