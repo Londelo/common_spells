@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "bin": {
+    "nav": "./dist/spells/navigations.js",
     "spells": "./dist/spells/help.js",
     "nstall": "./dist/spells/install.js",
     "fusrodah": "./dist/spells/git/forcePush.js",
