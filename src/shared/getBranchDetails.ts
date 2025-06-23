@@ -3,7 +3,7 @@ import { exec } from 'shelljs'
 import { convertDate, selectTruthyItems } from './selectors'
 
 const selectLastCommitDate = (branchName: string) => {
-  const date = exec(`git log -1 --format='%ci' ${branchName}`, { silent: true }).stdout
+  const date = exec(`git log -1 --format='%ci' "${branchName}"`, { silent: true }).stdout
   return convertDate.full(date)
 }
 
