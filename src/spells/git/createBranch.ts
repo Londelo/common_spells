@@ -17,22 +17,21 @@ const createBranch = async () => {
   const allArguments = selectAllArgs()
   const stayOnCurrentBranch = allArguments.includes(branchFromCurrent) || allArguments.includes(branchFromCurrentFull)
 
-  if(!stayOnCurrentBranch && currentBranch !== defaultBranch) {
-    echo(yellow(`moving to default branch: `) + defaultBranch)
-    await exec(`git checkout ${defaultBranch}`, {silent:true})
-    await fetchAndPull(defaultBranch)
-  }
-
   const newBranch = allArguments
-      .replace(branchFromCurrent, '')
-      .replace(branchFromCurrentFull, '')
-      .trim()
+    .replace(branchFromCurrent, '')
+    .replace(branchFromCurrentFull, '')
+    .trim()
 
   if(!newBranch) {
     echo(red('please provide a branch name: "branch [new branch name]"'))
     exit(1)
   }
 
+  if(!stayOnCurrentBranch && currentBranch !== defaultBranch) {
+    echo(yellow(`moving to default branch: `) + defaultBranch)
+    await exec(`git checkout ${defaultBranch}`, {silent:true})
+    await fetchAndPull(defaultBranch)
+  }
   echo(yellow(`git checkout -b ${newBranch}`))
   exec(`git checkout -b ${newBranch}`)
   echo(green('New Branch Built'))
