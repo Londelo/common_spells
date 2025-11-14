@@ -3,10 +3,10 @@ import { echo } from 'shelljs'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper'
 import { yellow } from '../shared/colors'
 
-const errorMessage = 'you are not a true dragon born.'
+const errorMessage = 'Failed to display docs on spells'
 
 const displayCommands = async () => {
-  echo(yellow('fusrodah').underline + '  →  fusrodah')
+  echo(yellow('fusrodah').underline)
   echo('\t- Force pushes your current branch to the remote using "git push --force-with-lease --no-verify".')
   echo('\t- Note: Using --force-with-lease is generally safer than --force, as it checks that the remote branch has not been updated by others before pushing. This command uses --force, which does NOT perform this safety check.')
 
@@ -20,13 +20,25 @@ const displayCommands = async () => {
   echo('\t- Adds all changes, commits with the message (defaults to a template if omitted), and pushes. Use -sa/--skip-add to skip "git add .".')
 
   echo(yellow('\npull').underline + '  →  pull [--purge]')
-  echo('\t- Fetches and pulls the latest changes for your current branch. Use --purge to delete stale local branches and reconnect active remotes.')
+  echo('\t- Fetches and pulls the latest changes for your current branch. Use --purge to delete stale local branches and pull in remotes branches.')
 
   echo(yellow('\nfeature').underline + '  →  feature [feature tag]')
   echo('\t- Runs tests for the specified feature tag. If no tag is given, interactively select from available tags. Partial matches are supported.')
 
-  echo(yellow('\ninstall').underline + '  →  nstall [package(s)]')
+  echo(yellow('\nnstall').underline + '  →  nstall [package name(s)]')
   echo('\t- Installs dependencies using npm or yarn, depending on lockfile. Pass package names to add them.')
+
+  echo(yellow('\nrelease').underline)
+  echo('\t- Lists recent releases, generates release notes from git shortlog, prompts for new tag, creates the release with glab, then opens the browser to the new release')
+
+  echo(yellow('\ncomments').underline)
+  echo('\t- Fetches all comments from the current branch\'s merge request, displays then and copies them to clipboard.')
+
+  echo(yellow('\ndiffs').underline + '  →  diffs [-c|--current]')
+  echo('\t- Shows the diff for a merge request. By default, lets you select from available MRs. Use -c/--current to get the diff for the current branch\'s MR. Lastly it copies diff to clipboard.')
+
+  echo(yellow('\nvars').underline)
+  echo('\t- Lists all CI/CD variables for the current GitLab project. Displays variable keys and values.')
 }
 
 (async () => await errorHandlerWrapper(displayCommands, errorMessage))();

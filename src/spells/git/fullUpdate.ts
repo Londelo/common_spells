@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 import { echo, exec } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
-import fetchAndPull from '../../shared/fetchAndPull'
+import fetchAndPull from '../../shared/git/fetchAndPull'
 import { selectAllArgs, selectCurrentBranch, selectDefaultBranch } from '../../shared/selectors'
 import { green, yellow } from '../../shared/colors'
-import getBranchDetails, { AllBranchDetails } from '../../shared/getBranchDetails'
+import getBranchDetails, { AllBranchDetails } from '../../shared/git/getBranchDetails'
 
 const errorMessage = 'FAILED to update branch'
-
 
 async function connectToActiveRemoteBranches(branchDetails: AllBranchDetails) {
   for (let index = 0; index < branchDetails.length; index++) {
