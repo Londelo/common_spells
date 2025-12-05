@@ -1,9 +1,13 @@
 #!/usr/bin/env node
-import { exec } from 'shelljs'
+import { echo } from 'shelljs'
 import { convertDate, selectTruthyItems } from '../selectors'
+import { yellow } from '../colors'
+import { execute } from '../shell'
 
-const selectLastCommitDate = (branchName: string) => {
-  const date = exec(`git log -1 --format='%ci' "${branchName}"`, { silent: true }).stdout
+const selectLastCommitDate = async (branchName: string) => {
+  const command = `git log -1 --format='%ci' "${branchName}"`
+  echo(yellow(`${command} (gets last commit date for branch)`))
+  const date = await execute(command, 'Failed to selectLastCommitDate')
   return convertDate.full(date)
 }
 
@@ -19,11 +23,11 @@ export type BranchDetails = { name: string, isStale: boolean, location: 'local'|
 export type CollectionOfBranches = { [key in string]: BranchDetails }
 export type AllBranchDetails = BranchDetails[]
 
-const collectBranchDetails = (collection: CollectionOfBranches, details: string) => {
+const collectBranchDetails = async (collection: CollectionOfBranches, details: string) => {
   const branchName = details.trim().replace('*','').split(' ').filter(selectTruthyItems)[0]
   const isLocal = !branchName.includes('remotes/')
   const isRemote = branchName.includes('remotes/origin/') && !branchName.includes('HEAD')
-  const lastCommitDate = selectLastCommitDate(branchName)
+  const lastCommitDate = await selectLastCommitDate(branchName)
 
   if(isLocal) {
     const isStale = isBranchStale(lastCommitDate)
@@ -68,7 +72,8 @@ const collectBranchDetails = (collection: CollectionOfBranches, details: string)
 
 const getBranchDetails = async (all = true): Promise<AllBranchDetails> => {
   const getBranchCommand = all ? 'git branch -a -vv' : 'git branch -vv'
-  const allBranchDetails = await exec(getBranchCommand, { silent: true }).stdout
+  echo(yellow(getBranchCommand))
+  const allBranchDetails = (await execute(getBranchCommand, 'Failed to get branches'))
   .split('\n')
   .slice(0, -1)
   .reduce(collectBranchDetails, {} as CollectionOfBranches)
