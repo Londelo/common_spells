@@ -37,7 +37,7 @@ async function selectBranch() {
     {
       type: 'list',
       name: 'branch',
-      message: 'Choose your destination, my love.',
+      message: 'Choose your destination.',
       choices: branchNames
     }
   ]);

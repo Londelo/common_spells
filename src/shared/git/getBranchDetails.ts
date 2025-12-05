@@ -1,13 +1,15 @@
 #!/usr/bin/env node
-import { echo } from 'shelljs'
+import { echo, exec } from 'shelljs'
 import { convertDate, selectTruthyItems } from '../selectors'
 import { yellow } from '../colors'
 import { execute } from '../shell'
 
-const selectLastCommitDate = async (branchName: string) => {
+//TODO: only used execute
+
+const selectLastCommitDate = (branchName: string) => {
   const command = `git log -1 --format='%ci' "${branchName}"`
   echo(yellow(`${command} (gets last commit date for branch)`))
-  const date = await execute(command, 'Failed to selectLastCommitDate')
+  const date = exec(command).stdout
   return convertDate.full(date)
 }
 
@@ -23,11 +25,11 @@ export type BranchDetails = { name: string, isStale: boolean, location: 'local'|
 export type CollectionOfBranches = { [key in string]: BranchDetails }
 export type AllBranchDetails = BranchDetails[]
 
-const collectBranchDetails = async (collection: CollectionOfBranches, details: string) => {
+const collectBranchDetails = (collection: CollectionOfBranches, details: string) => {
   const branchName = details.trim().replace('*','').split(' ').filter(selectTruthyItems)[0]
   const isLocal = !branchName.includes('remotes/')
   const isRemote = branchName.includes('remotes/origin/') && !branchName.includes('HEAD')
-  const lastCommitDate = await selectLastCommitDate(branchName)
+  const lastCommitDate = selectLastCommitDate(branchName)
 
   if(isLocal) {
     const isStale = isBranchStale(lastCommitDate)
