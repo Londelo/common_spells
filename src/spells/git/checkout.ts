@@ -2,9 +2,9 @@
 import { exec, echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper';
-import { selectCurrentBranch, selectDefaultBranch, selectTruthyItems } from '../../shared/selectors';
+import { selectCurrentBranch, selectDefaultBranch } from '../../shared/selectors';
 import { green, red, yellow } from '../../shared/colors';
-import getBranchDetails, { BranchDetails } from '../../shared/getBranchDetails';
+import getBranchDetails, { BranchDetails } from '../../shared/git/getBranchDetails';
 
 const errorMessage = `FAILED to switch branches`
 

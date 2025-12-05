@@ -12,7 +12,11 @@
     "branch": "./dist/spells/git/createBranch.js",
     "switch": "./dist/spells/git/checkout.js",
     "pull": "./dist/spells/git/fullUpdate.js",
-    "feature": "./dist/spells/tm/testFeature.js"
+    "feature": "./dist/spells/tm/testFeature.js",
+    "comments": "./dist/spells/gitlab/getComments.js",
+    "diffs": "./dist/spells/gitlab/getDiff.js",
+    "vars": "./dist/spells/gitlab/getVariable.js",
+    "release": "./dist/spells/gitlab/createRelease.js"
   },
   "scripts": {
     "clean": "rm -rf dist",

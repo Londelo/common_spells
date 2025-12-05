@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { exec, echo } from 'shelljs'
-import { selectDefaultBranch } from './selectors'
-import { yellow } from './colors'
+import { selectDefaultBranch } from '../selectors'
+import { yellow } from '../colors'
 
 const fetchAndPull = async (branch: string) => {
   const defaultBranch = await selectDefaultBranch()

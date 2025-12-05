@@ -4,6 +4,7 @@ import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import inquirer from 'inquirer'
 import { green, red, yellow } from '../../shared/colors'
 import { selectAllArgs } from '../../shared/selectors'
+import { execute } from '../../shared/shell'
 
 const errorMessage = 'FAIL to run test'
 
@@ -46,10 +47,10 @@ async function selectTag(tags: string[]) {
   return answers.tag.replace('* ', '')
 }
 
-const runTest = (testCommand: string) => {
+const runTest = async (testCommand: string) => {
   try {
     echo(yellow(testCommand))
-    exec(testCommand)
+    await execute(testCommand, `Failed ${testCommand}`, { silent: false })
     echo(green('All tests are complete.'))
     exit(0)
   } catch(err: any) {
@@ -59,7 +60,8 @@ const runTest = (testCommand: string) => {
     }
 
     if(testCommand.includes('features')) {
-      runTest(testCommand.replace('features', 'tests'))
+      echo(yellow(err.message))
+      await runTest(testCommand.replace('features', 'tests'))
     }
 
     echo(yellow(err.message))
@@ -104,15 +106,15 @@ const testFeature = async () => {
     const { exactMatch,  matches } = checkPartialMatches(tags, testParams)
 
     if(exactMatch) {
-      runTest(`npx run features:tags ${exactMatch}`)
+      await runTest(`npx run features:tags ${exactMatch}`)
     }
 
     const tag = await selectTag(matches)
-    runTest(`npx run features:tags ${tag}`)
+    await runTest(`npx run features:tags ${tag}`)
   }
 
   const tag = await selectTag(tags)
-  runTest(`npx run features:tags ${tag}`)
+  await runTest(`npx run features:tags ${tag}`)
 }
 
 (async () => await errorHandlerWrapper(testFeature, errorMessage))();

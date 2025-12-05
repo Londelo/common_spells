@@ -2,7 +2,7 @@
 import { exec, echo, exit } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { selectDefaultBranch, selectCurrentBranch, selectAllArgs } from '../../shared/selectors'
-import fetchAndPull from '../../shared/fetchAndPull'
+import fetchAndPull from '../../shared/git/fetchAndPull'
 import { green, red, yellow } from '../../shared/colors'
 
 const errorMessage = 'FAILED to build new branch'

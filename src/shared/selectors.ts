@@ -1,4 +1,4 @@
-import { exec } from "shelljs"
+import { execute } from "./shell"
 
 const dateOptions: any = {
   weekday: 'short',
@@ -16,19 +16,21 @@ let selectAllArgs = () => process.argv.slice(2).join(' ')
 
 const selectTruthyItems = (item: unknown) => !!item
 
-const selectDefaultBranch = async () =>
-  exec(
+const selectDefaultBranch = async () => {
+  const result = await execute(
     "git remote show origin | grep 'HEAD branch' | awk '{print $NF}'",
-    {silent:true}
-  ).stdout
-  .replace('\n', '')
+    "Failed to select default branch"
+  )
+  return result.replace('\n', '')
+}
 
-const selectCurrentBranch = async () =>
-  exec(
+const selectCurrentBranch = async () => {
+  const result = await execute(
     "git branch --show-current",
-    {silent:true}
-  ).stdout
-  .replace('\n', '')
+    "Failed to select current branch"
+  )
+  return result.replace('\n', '')
+}
 
 export {
   selectTruthyItems,

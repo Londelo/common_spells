@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { exec } from 'shelljs'
-import { convertDate, selectTruthyItems } from './selectors'
+import { convertDate, selectTruthyItems } from '../selectors'
 
 const selectLastCommitDate = (branchName: string) => {
   const date = exec(`git log -1 --format='%ci' "${branchName}"`, { silent: true }).stdout

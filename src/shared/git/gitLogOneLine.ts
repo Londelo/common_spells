@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { exec, echo } from 'shelljs'
-import { yellow } from './colors'
+import { yellow } from '../colors'
 import inquirer from 'inquirer'
 
 const formatLogs = (logs: string, showAll: boolean) =>

@@ -3,7 +3,6 @@ import { exec, echo } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { selectAllArgs, selectCurrentBranch } from '../../shared/selectors'
 import { green, yellow } from '../../shared/colors'
-import gitLogOneLine, { gitLogTriggers, GitLogTriggers } from '../../shared/gitLogOneLine';
 
 const DEFAULT_MESSAGE = 'small change made, for the betterment of all (maybe)'
 const errorMessage = 'FAILED to commit message'
