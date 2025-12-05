@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { exec, echo } from 'shelljs'
+import { echo } from 'shelljs'
 import errorHandlerWrapper from '../shared/errorHandlerWrapper'
 import { green, yellow } from '../shared/colors'
 import { selectAllArgs } from '../shared/selectors'
