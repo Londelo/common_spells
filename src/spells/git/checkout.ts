@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import { exec, echo, exit, config } from 'shelljs'
+import { echo, exit, config } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper';
 import { selectCurrentBranch, selectDefaultBranch } from '../../shared/selectors';
 import { green, red, yellow } from '../../shared/colors';
 import getBranchDetails, { BranchDetails } from '../../shared/git/getBranchDetails';
+import { execute } from '../../shared/shell';
 
 const errorMessage = `FAILED to switch branches`
 
@@ -36,7 +37,7 @@ async function selectBranch() {
     {
       type: 'list',
       name: 'branch',
-      message: 'Choose your destination, my love.',
+      message: 'Choose your destination.',
       choices: branchNames
     }
   ]);
@@ -49,7 +50,7 @@ async function switchBranch(branchName: string) {
     branchName = await selectDefaultBranch()
   }
   echo(yellow(`git checkout ${branchName}`))
-  await exec(`git checkout ${branchName}`)
+  await execute(`git checkout ${branchName}`, 'Failed to checkout branch')
   echo(green("Switched"))
   exit(0)
 }

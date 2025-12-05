@@ -1,9 +1,15 @@
 #!/usr/bin/env node
-import { exec } from 'shelljs'
+import { echo, exec } from 'shelljs'
 import { convertDate, selectTruthyItems } from '../selectors'
+import { yellow } from '../colors'
+import { execute } from '../shell'
+
+//TODO: only used execute
 
 const selectLastCommitDate = (branchName: string) => {
-  const date = exec(`git log -1 --format='%ci' "${branchName}"`, { silent: true }).stdout
+  const command = `git log -1 --format='%ci' "${branchName}"`
+  echo(yellow(`${command} (gets last commit date for branch)`))
+  const date = exec(command).stdout
   return convertDate.full(date)
 }
 
@@ -68,7 +74,8 @@ const collectBranchDetails = (collection: CollectionOfBranches, details: string)
 
 const getBranchDetails = async (all = true): Promise<AllBranchDetails> => {
   const getBranchCommand = all ? 'git branch -a -vv' : 'git branch -vv'
-  const allBranchDetails = await exec(getBranchCommand, { silent: true }).stdout
+  echo(yellow(getBranchCommand))
+  const allBranchDetails = (await execute(getBranchCommand, 'Failed to get branches'))
   .split('\n')
   .slice(0, -1)
   .reduce(collectBranchDetails, {} as CollectionOfBranches)

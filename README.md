@@ -15,9 +15,6 @@
     - maybe refactor the purge so it does its thing but also saves all the branchs in a .file
   - should display who owns the branch
 
-- edit forcePush with a param to dangerously push
-- edit commit to have a new message
-
 - create a way to easily navigate through all TM repos
   - scan a dir that contains all repos you want short cuts for
   - get only repos

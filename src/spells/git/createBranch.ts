@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import { exec, echo, exit } from 'shelljs'
+import { echo, exit } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { selectDefaultBranch, selectCurrentBranch, selectAllArgs } from '../../shared/selectors'
 import fetchAndPull from '../../shared/git/fetchAndPull'
 import { green, red, yellow } from '../../shared/colors'
+import { execute } from '../../shared/shell'
 
 const errorMessage = 'FAILED to build new branch'
 const branchFromCurrent = '-c'
@@ -29,11 +30,11 @@ const createBranch = async () => {
 
   if(!stayOnCurrentBranch && currentBranch !== defaultBranch) {
     echo(yellow(`moving to default branch: `) + defaultBranch)
-    await exec(`git checkout ${defaultBranch}`, {silent:true})
+    await execute(`git checkout ${defaultBranch}`, 'Failed to checkout branch')
     await fetchAndPull(defaultBranch)
   }
   echo(yellow(`git checkout -b ${newBranch}`))
-  exec(`git checkout -b ${newBranch}`)
+  await execute(`git checkout -b ${newBranch}`, 'Failed to create new branch')
   echo(green('New Branch Built'))
 }
 

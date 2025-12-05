@@ -6,12 +6,14 @@ import { yellow } from '../shared/colors'
 const errorMessage = 'Failed to display docs on spells'
 
 const displayCommands = async () => {
-  echo(yellow('fusrodah').underline)
-  echo('\t- Force pushes your current branch to the remote using "git push --force-with-lease --no-verify".')
-  echo('\t- Note: Using --force-with-lease is generally safer than --force, as it checks that the remote branch has not been updated by others before pushing. This command uses --force, which does NOT perform this safety check.')
+  echo(yellow('fpush').underline + '  →  fpush --dangerous')
+  echo('\t- Force pushes your current branch using "git push --force-with-lease --no-verify".')
+  echo('\t- If "--dangerous" if used then it force pushes your current branch using "git push --force --no-verify".')
+  echo('\t- Note: Using --force-with-lease is generally safer than --force, as it checks that the remote branch has not been updated by others before pushing.')
 
-  echo(yellow('\nswitch').underline + '  →  switch [branch name]')
+  echo(yellow('\nswitch').underline + '  →  switch [branch name] →  switch default')
   echo('\t- Switches to the specified branch. If no branch is given, interactively select from available branches.')
+  echo('\t- If "default" is given as a branch name then you will be taken to the repos default branch')
 
   echo(yellow('\nbranch').underline + '  →  branch [branch name] [-c|--current]')
   echo('\t- Creates a new branch. By default, moves to the default branch, fetches/pulls, then creates the new branch. Use -c/--current to branch from your current branch.')

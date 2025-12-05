@@ -1,15 +1,17 @@
 #!/usr/bin/env node
-import { exec, echo } from 'shelljs'
+import { echo } from 'shelljs'
 import { selectDefaultBranch } from '../selectors'
 import { yellow } from '../colors'
+import { execute } from '../shell'
 
 const fetchAndPull = async (branch: string) => {
   const defaultBranch = await selectDefaultBranch()
   const pullCommand = defaultBranch === branch ? `git pull origin ${branch}` : 'git pull'
-  echo(yellow('git fetch --all'))
-  await exec('git fetch --all')
+  const fetchCommand = 'git fetch --all'
+  echo(yellow(fetchCommand))
+  await execute(fetchCommand, 'Failed to fetch all', {silent: false})
   echo(yellow(pullCommand))
-  await exec(pullCommand)
+  await execute(pullCommand, 'Failed to pull updates', {silent: false})
 }
 
 export default fetchAndPull
