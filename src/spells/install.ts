@@ -27,7 +27,7 @@ const install = async () => {
   }
 
   echo(yellow(installCommand))
-  await execute(installCommand, `Failed to run: ${installCommand}`)
+  await execute(installCommand, `Failed to run: ${installCommand}`, {silent: false})
   echo(green('Install Complete!'))
 }
 

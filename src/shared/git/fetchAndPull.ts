@@ -9,9 +9,9 @@ const fetchAndPull = async (branch: string) => {
   const pullCommand = defaultBranch === branch ? `git pull origin ${branch}` : 'git pull'
   const fetchCommand = 'git fetch --all'
   echo(yellow(fetchCommand))
-  await execute(fetchCommand, 'Failed to fetch all')
+  await execute(fetchCommand, 'Failed to fetch all', {silent: false})
   echo(yellow(pullCommand))
-  await execute(pullCommand, 'Failed to pull updates')
+  await execute(pullCommand, 'Failed to pull updates', {silent: false})
 }
 
 export default fetchAndPull
