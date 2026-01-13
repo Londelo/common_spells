@@ -22,8 +22,8 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "npm run clean && babel src --out-dir dist --extensions '.ts,.tsx'",
-    "link": "npm link && npm link common_spells",
-    "unlink": "npm unlink common_spells && npm uninstall common_spells -g",
+    "link": "npm link",
+    "unlink": "npm unlink -g common_spells && npm uninstall -g common_spells",
     "permissions": "chmod +x ./dist/spells/**/*",
     "local:install": "npm run unlink && npm run build && npm run link && npm run permissions",
     "type-check": "tsc --noEmit"
