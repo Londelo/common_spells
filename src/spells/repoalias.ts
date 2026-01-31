@@ -32,6 +32,11 @@ const extractPathFromAlias = (line: string): string | null => {
   return match ? match[1].replace(/\\'/g, "'") : null
 }
 
+const getRepoNameFromPath = (path: string): string => {
+  const parts = path.split('/')
+  return parts[parts.length - 1] || ''
+}
+
 // I/O functions
 const displayAliases = async (): Promise<void> => {
   if (!test('-f', ALIAS_FILE)) {
@@ -138,8 +143,9 @@ const promptForAliases = async (repoPaths: string[]): Promise<Array<{ path: stri
   const collectAlias = async (paths: string[], acc: Array<{ path: string; alias: string }>): Promise<Array<{ path: string; alias: string }>> => {
     if (paths.length === 0) return acc
     const [path, ...rest] = paths
+    const defaultAlias = getRepoNameFromPath(path)
     echo(cyan(`\n${path}`))
-    const alias = await input('Alias name (empty to skip):')
+    const alias = await input('Alias name (empty to skip):', defaultAlias)
     const newAcc = alias.trim() ? [...acc, { path, alias: alias.trim() }] : acc
     return collectAlias(rest, newAcc)
   }
