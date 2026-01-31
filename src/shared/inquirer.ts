@@ -23,4 +23,16 @@ const confirm = async (message: string, defaultValue: boolean = true): Promise<b
   return answer.value
 }
 
-export { input, confirm }
+const select = async (message: string, choices: string[]): Promise<string> => {
+  const answer = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'value',
+      message,
+      choices
+    }
+  ])
+  return answer.value
+}
+
+export { input, confirm, select }
