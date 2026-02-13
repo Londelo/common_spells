@@ -41,6 +41,9 @@ const displayCommands = async () => {
 
   echo(yellow('\nvars').underline)
   echo('\t- Lists all CI/CD variables for the current GitLab project. Displays variable keys and values.')
+
+  echo(yellow('\ndocument-repos').underline)
+  echo('\t- Discovers git repos in the current directory (depth 4), prompts for name and classification per repo, then launches Claude sessions in Terminal.app tabs to document each selected repository.')
 }
 
 (async () => await errorHandlerWrapper(displayCommands, errorMessage))();
