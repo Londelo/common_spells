@@ -99,21 +99,50 @@ const configureRepos = async (selectedPaths: string[]): Promise<RepoConfig[]> =>
 const buildPrompt = (config: RepoConfig): string =>
   `/document-repos Path: ${config.path}, Name: ${config.name}, Classification: ${config.classification}`
 
-const launchTerminalTab = async (config: RepoConfig): Promise<void> => {
+type LaunchMode = 'tabs' | 'windows'
+
+const buildOsascript = (terminalCommand: string, mode: LaunchMode): string =>
+  mode === 'tabs'
+    ? [
+        'osascript',
+        '-e \'tell application "Terminal" to activate\'',
+        '-e \'tell application "System Events" to keystroke "t" using command down\'',
+        '-e \'delay 0.5\'',
+        `-e 'tell application "Terminal" to do script "${terminalCommand}" in front window'`,
+      ].join(' ')
+    : `osascript -e 'tell application "Terminal" to do script "${terminalCommand}"'`
+
+const launchTerminalSession = async (config: RepoConfig, mode: LaunchMode): Promise<void> => {
   const parentDir = config.path.split('/').slice(0, -1).join('/')
   const prompt = buildPrompt(config)
   const escapedPrompt = prompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
   const terminalCommand = `cd \\"${parentDir}\\" && claude --model haiku --permission-mode auto-accept \\"${escapedPrompt}\\"`
 
-  const osascript = `osascript -e 'tell application "Terminal" to do script "${terminalCommand}"'`
+  const osascript = buildOsascript(terminalCommand, mode)
 
   echo(yellow(`Launching session for ${config.name}...`))
   await execute(osascript, `Failed to launch Terminal for ${config.name}`)
 }
 
+const selectLaunchMode = async (): Promise<LaunchMode> => {
+  const { mode } = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'mode',
+      message: 'Open sessions in:',
+      choices: [
+        { name: 'Tabs (in one window)', value: 'tabs' },
+        { name: 'Separate windows', value: 'windows' },
+      ],
+    },
+  ])
+  return mode
+}
+
 const launchAllSessions = async (configs: RepoConfig[]): Promise<void> => {
+  const mode = await selectLaunchMode()
   echo(yellow('\nLaunching Terminal.app sessions...'))
-  await Promise.all(configs.map(launchTerminalTab))
+  await Promise.all(configs.map((config) => launchTerminalSession(config, mode)))
 }
 
 const reportSuccess = (configs: RepoConfig[]): void => {
