@@ -116,7 +116,7 @@ const launchTerminalSession = async (config: RepoConfig, mode: LaunchMode): Prom
   const parentDir = config.path.split('/').slice(0, -1).join('/')
   const prompt = buildPrompt(config)
   const escapedPrompt = prompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-  const terminalCommand = `cd \\"${parentDir}\\" && claude --model haiku --permission-mode auto-accept \\"${escapedPrompt}\\"`
+  const terminalCommand = `cd \\"${parentDir}\\" && claude --model haiku --permission-mode acceptEdits \\"${escapedPrompt}\\"`
 
   const osascript = buildOsascript(terminalCommand, mode)
 
