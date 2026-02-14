@@ -158,16 +158,15 @@ const mergeAliases = (
   newEntries: Array<{ path: string; alias: string }>,
   ideCommand: string | null
 ): string[] => {
-  // Build map from existing lines
+  // Build map keyed by path so re-runs overwrite aliases for the same repo
   const aliasMap = new Map<string, string>()
   existingLines.forEach(line => {
-    const name = extractAliasName(line)
-    if (name) aliasMap.set(name, line)
+    const path = extractPathFromAlias(line)
+    if (path) aliasMap.set(path, line)
   })
 
-  // Add/overwrite with new entries
   newEntries.forEach(({ alias, path }) => {
-    aliasMap.set(alias, formatAliasLine(alias, path, ideCommand))
+    aliasMap.set(path, formatAliasLine(alias, path, ideCommand))
   })
 
   // Return sorted array
