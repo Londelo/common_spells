@@ -43,7 +43,14 @@ const displayCommands = async () => {
   echo('\t- Lists all CI/CD variables for the current GitLab project. Displays variable keys and values.')
 
   echo(yellow('\ndocument-repos').underline)
-  echo('\t- Discovers git repos in the current directory (depth 4), prompts for name and classification per repo, then launches Claude sessions in Terminal.app tabs to document each selected repository.')
+  echo('\t- Auto-generates documentation for local git repos using Claude AI sessions.')
+  echo('\t- Run from a parent directory containing the repos you want to document.')
+
+  echo(yellow('\nrepos').underline + '  ->  repos [--config | --open]')
+  echo('\t- Manages shell aliases for quick cd + IDE open into git repositories.')
+  echo('\t- Default: Shows all configured repo aliases from ~/.repo_aliases')
+  echo('\t- --config: Scans for git repos, prompts for alias names and IDE command, writes to ~/.repo_aliases')
+  echo('\t- --open: Opens ~/.repo_aliases in VS Code for manual editing')
 }
 
 (async () => await errorHandlerWrapper(displayCommands, errorMessage))();
