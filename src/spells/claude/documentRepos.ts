@@ -40,11 +40,14 @@ const discoverRepos = async (cwd: string): Promise<string[]> => {
 }
 
 const selectRepos = async (repoPaths: string[]): Promise<string[]> => {
-  const choices = repoPaths.map((path: string) => ({
-    name: `${extractDirName(path)}  ${yellow(path).dim}`,
-    value: path,
-    checked: true,
-  }))
+  const choices = repoPaths
+    .map((path: string) => ({
+      name: `${extractDirName(path)}  ${yellow(path).dim}`,
+      value: path,
+      checked: false,
+      sortKey: extractDirName(path).toLowerCase(),
+    }))
+    .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
 
   const { selected } = await inquirer.prompt([
     {
@@ -60,7 +63,7 @@ const selectRepos = async (repoPaths: string[]): Promise<string[]> => {
 
 const configureRepo = async (repoPath: string): Promise<RepoConfig> => {
   const dirName = extractDirName(repoPath)
-  echo(yellow(`\nConfiguring: ${dirName}`))
+  echo(yellow(`\nConfiguring: ${dirName}\nPath: ${repoPath}`))
 
   const { name } = await inquirer.prompt([
     {
@@ -94,13 +97,13 @@ const configureRepos = async (selectedPaths: string[]): Promise<RepoConfig[]> =>
   )
 
 const buildPrompt = (config: RepoConfig): string =>
-  `Run /document-repos for the repository at ${config.path}. Name: ${config.name}, Classification: ${config.classification}`
+  `/document-repos Path: ${config.path}, Name: ${config.name}, Classification: ${config.classification}`
 
 const launchTerminalTab = async (config: RepoConfig): Promise<void> => {
   const parentDir = config.path.split('/').slice(0, -1).join('/')
   const prompt = buildPrompt(config)
   const escapedPrompt = prompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-  const terminalCommand = `cd \\"${parentDir}\\" && claude \\"${escapedPrompt}\\"`
+  const terminalCommand = `cd \\"${parentDir}\\" && claude --model haiku --permission-mode auto-accept \\"${escapedPrompt}\\"`
 
   const osascript = `osascript -e 'tell application "Terminal" to do script "${terminalCommand}"'`
 
@@ -123,7 +126,7 @@ const reportSuccess = (configs: RepoConfig[]): void => {
 
 const errorMessage = 'Error in document-repos'
 
-const mainFunction = async () => {
+const document_repos = async () => {
   const cwd = (await execute('pwd', 'Failed to get current directory')).trim()
 
   const repoPaths = await discoverRepos(cwd)
@@ -145,4 +148,4 @@ const mainFunction = async () => {
   reportSuccess(configs)
 }
 
-;(async () => await errorHandlerWrapper(mainFunction, errorMessage))()
+;(async () => await errorHandlerWrapper(document_repos, errorMessage))()
