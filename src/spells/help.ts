@@ -44,6 +44,11 @@ const displayCommands = async () => {
 
   echo(yellow('\ndocument-repos').underline)
   echo('\t- Discovers git repos in the current directory (depth 4), prompts for name and classification per repo, then launches Claude sessions in Terminal.app tabs to document each selected repository.')
+
+  echo(yellow('\nrepoalias').underline + '  ->  repoalias --config')
+  echo('\t- Manages shell aliases for git repositories.')
+  echo('\t- Default: Shows all configured repo aliases from ~/.repo_aliases')
+  echo('\t- --config: Scans current directory (3 levels) for git repos, prompts for alias names, and writes to ~/.repo_aliases')
 }
 
 (async () => await errorHandlerWrapper(displayCommands, errorMessage))();
