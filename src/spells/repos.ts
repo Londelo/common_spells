@@ -41,7 +41,7 @@ const getRepoNameFromPath = (path: string): string => {
 // I/O functions
 const displayAliases = async (): Promise<void> => {
   if (!test('-f', ALIAS_FILE)) {
-    echo(yellow('No aliases configured. Run: repoalias --config'))
+    echo(yellow('No aliases configured. Run: repos --config'))
     return
   }
 
@@ -49,7 +49,7 @@ const displayAliases = async (): Promise<void> => {
   const lines = content.split('\n').filter(line => line.startsWith('alias '))
 
   if (lines.length === 0) {
-    echo(yellow('No aliases configured. Run: repoalias --config'))
+    echo(yellow('No aliases configured. Run: repos --config'))
     return
   }
 
@@ -115,7 +115,7 @@ const readExistingAliasFile = async (): Promise<string[]> => {
 }
 
 const writeAliasFile = async (aliasLines: string[]): Promise<void> => {
-  const header = '# Common Spells - Auto-generated repo aliases\n# Re-run \'repoalias --config\' to update\n\n'
+  const header = '# Common Spells - Auto-generated repo aliases\n# Re-run \'repos --config\' to update\n\n'
   const content = header + aliasLines.join('\n') + '\n'
   fs.writeFileSync(ALIAS_FILE, content)
 }
@@ -177,7 +177,7 @@ const mergeAliases = (
 }
 
 // Main orchestration
-const repoalias = async () => {
+const repos = async () => {
   const { configMode, openMode } = parseArgs()
 
   if (openMode) {
@@ -247,6 +247,6 @@ const repoalias = async () => {
   echo(yellow(`\nRun: source ${shellConfig}`))
 }
 
-const errorMessage = 'Error in repoalias command'
+const errorMessage = 'Error in repos command'
 
-;(async () => await errorHandlerWrapper(repoalias, errorMessage))()
+;(async () => await errorHandlerWrapper(repos, errorMessage))()

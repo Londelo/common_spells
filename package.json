@@ -19,7 +19,7 @@
     "vars": "./dist/spells/gitlab/getVariable.js",
     "release": "./dist/spells/gitlab/createRelease.js",
     "document-repos": "./dist/spells/claude/documentRepos.js",
-    "repoalias": "./dist/spells/repoalias.js"
+    "repos": "./dist/spells/repos.js"
   },
   "scripts": {
     "clean": "rm -rf dist",

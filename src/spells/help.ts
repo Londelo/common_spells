@@ -46,7 +46,7 @@ const displayCommands = async () => {
   echo('\t- Auto-generates documentation for local git repos using Claude AI sessions.')
   echo('\t- Run from a parent directory containing the repos you want to document.')
 
-  echo(yellow('\nrepoalias').underline + '  ->  repoalias [--config | --open]')
+  echo(yellow('\nrepos').underline + '  ->  repos [--config | --open]')
   echo('\t- Manages shell aliases for quick cd + IDE open into git repositories.')
   echo('\t- Default: Shows all configured repo aliases from ~/.repo_aliases')
   echo('\t- --config: Scans for git repos, prompts for alias names and IDE command, writes to ~/.repo_aliases')
