@@ -10,8 +10,9 @@ import * as fs from 'fs'
 const ALIAS_FILE = `${process.env.HOME}/.repo_aliases`
 
 // Pure helper functions
-const parseArgs = (): { configMode: boolean } => ({
-  configMode: process.argv.includes('--config')
+const parseArgs = (): { configMode: boolean; openMode: boolean } => ({
+  configMode: process.argv.includes('--config'),
+  openMode: process.argv.includes('--open')
 })
 
 const escapePathForAlias = (path: string): string =>
@@ -177,7 +178,12 @@ const mergeAliases = (
 
 // Main orchestration
 const repoalias = async () => {
-  const { configMode } = parseArgs()
+  const { configMode, openMode } = parseArgs()
+
+  if (openMode) {
+    await execute(`code ${ALIAS_FILE}`, 'Failed to open alias file')
+    return
+  }
 
   // Default mode: display existing aliases
   if (!configMode) {
