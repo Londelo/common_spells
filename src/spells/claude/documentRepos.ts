@@ -4,6 +4,9 @@ import inquirer from 'inquirer'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { execute } from '../../shared/shell'
 import { green, yellow } from '../../shared/colors'
+import validateDockerEnvironment from '../../shared/docker/validateDockerEnvironment'
+import launchDockerSandbox from '../../shared/docker/launchDockerSandbox'
+import reportDockerResults from '../../shared/docker/reportDockerResults'
 
 type Classification = 'service' | 'worker' | 'frontend' | 'library' | 'infrastructure' | 'pipeline'
 
@@ -99,7 +102,7 @@ const configureRepos = async (selectedPaths: string[]): Promise<RepoConfig[]> =>
 const buildPrompt = (config: RepoConfig): string =>
   `/document-repos Path: ${config.path}, Name: ${config.name}, Classification: ${config.classification}`
 
-type LaunchMode = 'tabs' | 'windows'
+type LaunchMode = 'tabs' | 'windows' | 'docker'
 
 const buildOsascript = (terminalCommand: string, mode: LaunchMode): string =>
   mode === 'tabs'
@@ -133,16 +136,37 @@ const selectLaunchMode = async (): Promise<LaunchMode> => {
       choices: [
         { name: 'Tabs (in one window)', value: 'tabs' },
         { name: 'Separate windows', value: 'windows' },
+        { name: 'Docker (sandboxed)', value: 'docker' },
       ],
     },
   ])
   return mode
 }
 
+const launchAllDockerSessions = async (configs: RepoConfig[]): Promise<void> => {
+  await validateDockerEnvironment()
+  echo(yellow('\nLaunching Docker sandboxes...'))
+  const results = await Promise.all(
+    configs.map((config) => {
+      const sandboxName = `doc-${config.dirName}-${Date.now()}`
+      const prompt = buildPrompt(config)
+      return launchDockerSandbox(sandboxName, prompt, config.path, config.name)
+    })
+  )
+  reportDockerResults(results)
+}
+
 const launchAllSessions = async (configs: RepoConfig[]): Promise<void> => {
   const mode = await selectLaunchMode()
+
+  if (mode === 'docker') {
+    await launchAllDockerSessions(configs)
+    return
+  }
+
   echo(yellow('\nLaunching Terminal.app sessions...'))
   await Promise.all(configs.map((config) => launchTerminalSession(config, mode)))
+  reportSuccess(configs)
 }
 
 const reportSuccess = (configs: RepoConfig[]): void => {
@@ -173,8 +197,6 @@ const document_repos = async () => {
   const configs = await configureRepos(selectedPaths)
 
   await launchAllSessions(configs)
-
-  reportSuccess(configs)
 }
 
 ;(async () => await errorHandlerWrapper(document_repos, errorMessage))()
