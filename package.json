@@ -18,7 +18,8 @@
     "diffs": "./dist/spells/gitlab/getDiff.js",
     "vars": "./dist/spells/gitlab/getVariable.js",
     "release": "./dist/spells/gitlab/createRelease.js",
-    "document-repos": "./dist/spells/claude/documentRepos.js"
+    "document-repos": "./dist/spells/claude/documentRepos.js",
+    "repoalias": "./dist/spells/repoalias.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
