@@ -58,8 +58,8 @@ export const removeSandbox = async (sandboxName: string): Promise<void> => {
   echo(yellow(`Removing existing sandbox '${sandboxName}'...`))
   try {
     await execute(`docker sandbox rm "${sandboxName}"`, `Failed to remove sandbox ${sandboxName}`)
-  } catch {
-    // Ignore removal failures (sandbox may have already stopped)
+  } catch (error) {
+    echo(yellow(`⚠ Could not remove sandbox '${sandboxName}' (may have already stopped)`))
   }
 }
 

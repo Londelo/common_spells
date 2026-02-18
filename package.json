@@ -19,7 +19,13 @@
     "vars": "./dist/spells/gitlab/getVariable.js",
     "release": "./dist/spells/gitlab/createRelease.js",
     "document-repos": "./dist/spells/claude/documentRepos.js",
-    "repos": "./dist/spells/repos.js"
+    "repos": "./dist/spells/repos.js",
+    "gt-setup": "./dist/spells/gastown/setup.js",
+    "gt-run": "./dist/spells/gastown/run.js",
+    "gt-logs": "./dist/spells/gastown/logs.js",
+    "gt-task": "./dist/spells/gastown/task.js",
+    "gt-cleanup": "./dist/spells/gastown/cleanup.js",
+    "gt-status": "./dist/spells/gastown/status.js"
   },
   "scripts": {
     "clean": "rm -rf dist",

@@ -51,6 +51,29 @@ const displayCommands = async () => {
   echo('\t- Default: Shows all configured repo aliases from ~/.repo_aliases')
   echo('\t- --config: Scans for git repos, prompts for alias names and IDE command, writes to ~/.repo_aliases')
   echo('\t- --open: Opens ~/.repo_aliases in VS Code for manual editing')
+
+  echo(yellow('\ngt-setup').underline)
+  echo('\t- Validates environment for Docker Claude Code sandboxes.')
+  echo('\t- Checks TechPass version, Claude settings, AWS credentials, Docker sandbox support, and Bedrock config.')
+
+  echo(yellow('\ngt-run').underline + '  ->  gt-run [options] <workspace>')
+  echo('\t- Run Claude Code in a Docker sandbox.')
+  echo('\t- Options: -n (name), -p (prompt), -f (prompt file), -d (detached), -o (output), -c (continue)')
+
+  echo(yellow('\ngt-logs').underline + '  ->  gt-logs [options] [pattern]')
+  echo('\t- View and follow logs for sandboxes.')
+  echo('\t- Options: -f (follow), -n (lines), -o (output files), -a (all), -l (list)')
+
+  echo(yellow('\ngt-task').underline + '  ->  gt-task <sandbox> <prompt>')
+  echo('\t- Send a task to a running sandbox.')
+  echo('\t- Options: -f (file), -o (output), -w (wait)')
+
+  echo(yellow('\ngt-cleanup').underline + '  ->  gt-cleanup [sandbox|--all]')
+  echo('\t- Remove sandboxes and temporary files.')
+  echo('\t- Default: removes all gastown sandboxes. Pass sandbox name to remove specific one, or --all to clean everything.')
+
+  echo(yellow('\ngt-status').underline)
+  echo('\t- Show running sandboxes, recent logs, and worktrees.')
 }
 
 (async () => await errorHandlerWrapper(displayCommands, errorMessage))();
