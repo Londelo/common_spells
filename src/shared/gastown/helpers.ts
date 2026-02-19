@@ -162,7 +162,7 @@ export const buildSandboxCommand = (
   name: string,
   workspace: string,
   bedrockConfig: BedrockConfig,
-  options: { detached?: boolean; continueFlag?: boolean }
+  options: { detached?: boolean; continueFlag?: boolean; prompt?: string }
 ): string => {
   const cmd = ['docker', 'sandbox', 'run', '--name', `"${name}"`, '-w', `"${workspace}"`, '--credentials=none']
 
@@ -182,7 +182,15 @@ export const buildSandboxCommand = (
 
   const continueFlag = options.continueFlag ? ['-c'] : []
 
-  return [...cmd, ...detachedFlag, ...bedrockFlags, ...awsMount, 'claude', ...continueFlag].join(' ')
+  // Build claude command with prompt if provided
+  const claudeCommand = ['claude']
+  if (options.prompt) {
+    claudeCommand.push('-p', `"${options.prompt}"`)
+  } else {
+    claudeCommand.push(...continueFlag)
+  }
+
+  return [...cmd, ...detachedFlag, ...bedrockFlags, ...awsMount, ...claudeCommand].join(' ')
 }
 
 // --- Docker Environment Validation (used by: dccRun, dccGastown, dccSetup) ---

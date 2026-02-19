@@ -9,9 +9,9 @@ const errorMessage = 'Error in gastown run'
 type ParsedArgs = {
   readonly sandboxName?: string
   readonly workspace?: string
+  readonly mode?: 'interactive' | 'headless'
   readonly prompt?: string
   readonly promptFile?: string
-  readonly detached: boolean
   readonly outputFile?: string
   readonly continueConversation: boolean
 }
@@ -22,9 +22,9 @@ const parseArgs = (argv: readonly string[]): ParsedArgs => {
   const defaults: ParsedArgs = {
     sandboxName: undefined,
     workspace: undefined,
+    mode: 'interactive',
     prompt: undefined,
     promptFile: undefined,
-    detached: false,
     outputFile: undefined,
     continueConversation: false,
   }
@@ -38,8 +38,8 @@ const parseArgs = (argv: readonly string[]): ParsedArgs => {
       return nextArg ? { ...acc, prompt: nextArg } : acc
     if (arg === '-f' || arg === '--prompt-file')
       return nextArg ? { ...acc, promptFile: nextArg } : acc
-    if (arg === '-d' || arg === '--detached')
-      return { ...acc, detached: true }
+    if (arg === '-h' || arg === '--headless')
+      return { ...acc, mode: 'headless' }
     if (arg === '-o' || arg === '--output')
       return nextArg ? { ...acc, outputFile: nextArg } : acc
     if (arg === '-c' || arg === '--continue')
@@ -69,10 +69,10 @@ const main = async (): Promise<void> => {
     echo('')
     echo('Options:')
     echo('  -n, --name NAME      Sandbox name (default: gastown-<timestamp>)')
-    echo('  -p, --prompt TEXT    Prompt to send to Claude (enables headless mode)')
+    echo('  -p, --prompt TEXT    Prompt to send to Claude')
     echo('  -f, --prompt-file    Read prompt from file')
-    echo('  -d, --detached       Run in background (headless mode)')
-    echo('  -o, --output FILE    Write output to file (headless mode)')
+    echo('  -h, --headless       Run in headless mode (detached, no TTY)')
+    echo('  -o, --output FILE    Write output to file')
     echo('  -c, --continue       Continue previous conversation')
     process.exit(1)
   }
@@ -80,9 +80,9 @@ const main = async (): Promise<void> => {
   await runSingleAgent({
     sandboxName: options.sandboxName || generateSandboxName(),
     workspace: options.workspace,
+    mode: options.mode,
     prompt: options.prompt,
     promptFile: options.promptFile,
-    detached: options.detached,
     outputFile: options.outputFile,
     continueConversation: options.continueConversation,
   })
