@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { echo } from 'shelljs'
-import { execute } from '../shell'
+import { execute, executeInteractive } from '../shell'
 import { green, cyan, yellow } from '../colors'
 import { SandboxConfig, SandboxMode, SandboxResult } from './types'
 import {
@@ -114,9 +114,7 @@ const runInteractive = async (
   echo(yellow(command))
   echo('')
 
-  await execute(command, `Failed to run interactive sandbox ${sandboxName}`, {
-    silent: false,
-  })
+  await executeInteractive(command, `Failed to run interactive sandbox ${sandboxName}`)
 
   // Remove sandbox (logs will be saved automatically)
   await removeSandbox(sandboxName)

@@ -45,7 +45,6 @@ export const escapePrompt = (prompt: string): string => prompt.replace(/'/g, "'\
 export const sandboxExists = async (sandboxName: string): Promise<boolean> => {
   try {
     const command = 'docker sandbox ls'
-    echo(yellow(command))
     const output = await execute(command, 'Failed to list sandboxes')
     return output.includes(sandboxName)
   } catch {
