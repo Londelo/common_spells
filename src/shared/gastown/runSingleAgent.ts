@@ -2,7 +2,7 @@ import fs from 'fs'
 import { echo } from 'shelljs'
 import { execute, executeInteractive } from '../shell'
 import { green, yellow } from '../colors'
-import { SandboxConfig, SandboxMode, SandboxResult } from './types'
+import { SandboxConfig, SandboxResult } from './types'
 import {
   readBedrockConfig,
   removeSandbox,
@@ -40,33 +40,32 @@ const runSingleAgent = async (config: SandboxConfig): Promise<SandboxResult> => 
   await removeSandbox(config.sandboxName)
 
   const prompt = config.promptFile ? readPromptFromFile(config.promptFile) : config.prompt
-  const mode = config.mode || 'interactive'
-  const resolvedConfig = { ...config, prompt, workspace, mode }
+  const resolvedConfig = { ...config, prompt, workspace }
 
   const bedrockConfig = readBedrockConfig()
-  const needsDetached = mode === 'headless'
+  const needsDetached = !!prompt
   const command = buildSandboxCommand(config.sandboxName, workspace, bedrockConfig, {
     detached: needsDetached,
     continueFlag: config.continueConversation,
     prompt,
   })
 
+  writeLogHeader(paths.logFile, resolvedConfig)
   printStartupInfo(config.sandboxName, workspace)
   echo(yellow(command))
-  writeLogHeader(paths.logFile, resolvedConfig, mode)
   echo('')
 
-  if (mode === 'interactive') {
+  if (!needsDetached) {
     await executeInteractive(command, `Failed to run sandbox ${config.sandboxName}`)
     await removeSandbox(config.sandboxName)
     echo('')
     echo(green('Sandbox exited'))
-    return { sandboxName: config.sandboxName, mode, workspace, logFile: paths.logFile, status: 'completed' }
+    return { sandboxName: config.sandboxName, workspace, logFile: paths.logFile, status: 'completed' }
   } else {
-    // Headless mode
+    // Detached mode with prompt
     await execute(command, `Failed to start sandbox ${config.sandboxName}`)
     echo(green('Sandbox started in background'))
-    return { sandboxName: config.sandboxName, mode, workspace, logFile: paths.logFile, status: 'running' }
+    return { sandboxName: config.sandboxName, workspace, logFile: paths.logFile, status: 'running' }
   }
 }
 

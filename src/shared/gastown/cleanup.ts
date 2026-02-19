@@ -129,11 +129,7 @@ export const cleanup = async (options: CleanupOptions = {}): Promise<CleanupResu
 }
 
 export const cleanupAll = async (): Promise<CleanupResult> =>
-  cleanup({
-    target: '--all',
-    removeWorktrees: true,
-    removeLogs: true,
-  })
+  cleanup({ target: '--all' })
 
 export const cleanupSandbox = async (sandboxName: string): Promise<CleanupResult> =>
   cleanup({ target: sandboxName })

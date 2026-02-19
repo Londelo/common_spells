@@ -4,7 +4,7 @@ import os from 'os'
 import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { green, yellow } from '../colors'
-import { BedrockConfig, SandboxPaths, SandboxMode, LOG_DIR, OUTPUT_DIR } from './types'
+import { BedrockConfig, SandboxPaths, LOG_DIR, OUTPUT_DIR } from './types'
 
 // --- Bedrock Config (used by: dccRun, dccGastown, dccSetup) ---
 
@@ -52,38 +52,11 @@ export const sandboxExists = async (sandboxName: string): Promise<boolean> => {
   }
 }
 
-export const saveContainerLogs = async (sandboxName: string): Promise<void> => {
-  const exists = await sandboxExists(sandboxName)
-  if (!exists) return
-
-  try {
-    const logPath = path.join(os.homedir(), '.gastown', 'logs', `${sandboxName}.txt`)
-
-    // Ensure log directory exists
-    fs.mkdirSync(path.dirname(logPath), { recursive: true })
-
-    // Get Docker container logs
-    const command = `docker logs "${sandboxName}"`
-    echo(yellow(command))
-    const logs = await execute(command, `Failed to retrieve logs for ${sandboxName}`)
-
-    // Save logs to file
-    fs.writeFileSync(logPath, logs)
-
-    echo(green(`✓ Logs saved to: ${logPath}`))
-  } catch (error) {
-    echo(yellow(`⚠ Could not save logs for '${sandboxName}': ${error instanceof Error ? error.message : String(error)}`))
-  }
-}
-
 export const removeSandbox = async (sandboxName: string): Promise<boolean> => {
   const exists = await sandboxExists(sandboxName)
   if (!exists) return false
 
   try {
-    // Save logs before removing
-    await saveContainerLogs(sandboxName)
-
     echo(yellow(`Removing sandbox '${sandboxName}'...`))
     const command = `docker sandbox rm "${sandboxName}"`
     echo(yellow(command))
@@ -148,11 +121,10 @@ export const ensureDirectories = (paths: SandboxPaths): void => {
 
 export const writeLogHeader = (
   logFile: string,
-  config: { workspace: string; prompt?: string },
-  mode: SandboxMode
+  config: { workspace: string; prompt?: string }
 ): void => {
   const promptLine = config.prompt ? `Prompt: ${config.prompt.slice(0, 100)}...\n` : ''
-  const header = `Started: ${new Date().toISOString()}\nWorkspace: ${config.workspace}\nMode: ${mode}\n${promptLine}---\n`
+  const header = `Started: ${new Date().toISOString()}\nWorkspace: ${config.workspace}\n${promptLine}---\n`
   fs.writeFileSync(logFile, header)
 }
 

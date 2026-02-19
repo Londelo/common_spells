@@ -10,12 +10,9 @@ export const WORKTREE_DIR = path.join(GT_DIR, 'worktrees')
 
 // --- Types ---
 
-export type SandboxMode = 'interactive' | 'headless'
-
 export type SandboxConfig = {
   readonly sandboxName: string
   readonly workspace: string
-  readonly mode?: SandboxMode
   readonly prompt?: string
   readonly promptFile?: string
   readonly outputFile?: string
@@ -38,7 +35,6 @@ export type SandboxPaths = {
 
 export type SandboxResult = {
   readonly sandboxName: string
-  readonly mode: SandboxMode
   readonly workspace: string
   readonly logFile: string
   readonly outputFile?: string
