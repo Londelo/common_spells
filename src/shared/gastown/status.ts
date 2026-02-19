@@ -35,9 +35,7 @@ const getRunningSandboxes = async (): Promise<readonly SandboxInfo[]> => {
   try {
     const command = 'docker sandbox ls'
     echo(yellow(command))
-    const output = await execute(command, 'List sandboxes', {
-      fatal: false,
-    })
+    const output = await execute(command, 'List sandboxes')
 
     if (!output || output.trim().length === 0) {
       return []

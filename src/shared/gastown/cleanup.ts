@@ -1,10 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import { echo } from 'shelljs'
-import { execute } from '../shell'
 import { green, yellow } from '../colors'
-import { DCC_DIR, LOG_DIR, WORKTREE_DIR } from './types'
-import { listSandboxNames } from './helpers'
+import { LOG_DIR, WORKTREE_DIR } from './types'
+import { listSandboxNames, removeSandbox } from './helpers'
 
 // --- Types ---
 
@@ -21,22 +20,6 @@ type CleanupResult = {
 }
 
 // --- Sandbox Cleanup ---
-
-const removeSandbox = async (name: string): Promise<boolean> => {
-  try {
-    const command = `docker sandbox rm "${name}"`
-    echo(yellow(command))
-    await execute(command, `Remove sandbox ${name}`, {
-      fatal: false,
-    })
-    echo(`  Removed ${name}`)
-    return true
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error)
-    echo(yellow(`  Failed to remove ${name}: ${errorMsg}`))
-    return false
-  }
-}
 
 const removeSandboxes = async (target?: string): Promise<readonly string[]> => {
   echo(green('Removing sandboxes...'))

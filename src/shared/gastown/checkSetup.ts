@@ -5,7 +5,7 @@ import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { green, yellow, red, cyan } from '../colors'
 import { readBedrockConfig, validateDockerEnvironment } from './helpers'
-import { DCC_DIR } from './types'
+import { GT_DIR } from './types'
 
 // --- Types ---
 
@@ -236,8 +236,8 @@ const checkBedrockConfig = (): { readonly check: CheckResult; readonly env: Reco
     details.push(`ANTHROPIC_MODEL=${config.model}`)
   }
 
-  env['DCC_DIR'] = DCC_DIR
-  details.push(`DCC_DIR=${DCC_DIR}`)
+  env['GT_DIR'] = GT_DIR
+  details.push(`GT_DIR=${GT_DIR}`)
 
   return {
     check: {

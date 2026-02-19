@@ -28,11 +28,11 @@ const readPromptFromFile = (promptFile: string): string => {
   return fs.readFileSync(promptFile, 'utf-8')
 }
 
-const printStartupInfo = (sandboxName: string, workspace: string, logFile: string): void => {
+const printStartupInfo = (sandboxName: string, workspace: string): void => {
   echo(green('Starting sandbox'))
   echo(`  Name:      ${sandboxName}`)
   echo(`  Workspace: ${workspace}`)
-  echo(`  Log:       ${logFile}`)
+  echo(`  Logs:      Use 'docker logs ${sandboxName}' to view`)
   echo('')
 }
 
@@ -44,31 +44,31 @@ const runDetached = async (
   prompt: string | undefined,
   paths: { logFile: string; outputFile: string }
 ): Promise<SandboxResult> => {
-  const startCommand = `${command} >/dev/null 2>&1`
-  echo(yellow(startCommand))
-  await execute(startCommand, `Failed to start sandbox ${sandboxName}`)
+  // Start container - Docker will handle logging
+  echo(yellow(command))
+  await execute(command, `Failed to start sandbox ${sandboxName}`)
 
   if (prompt) {
     const escaped = escapePrompt(prompt)
     const execCmd = `docker exec "${sandboxName}" bash -c "echo '${escaped}' | claude -p --output-format stream-json --verbose" > "${paths.outputFile}" 2>&1 &`
     echo(yellow(execCmd))
     await execute(execCmd, `Failed to send prompt to sandbox ${sandboxName}`)
-    fs.appendFileSync(paths.logFile, `\nPrompt sent: ${new Date().toISOString()}\n`)
 
     echo(green('Sandbox started in background'))
     echo(`  Output: ${paths.outputFile}`)
-    echo(`  Log:    ${paths.logFile}`)
     echo('')
     echo('Commands:')
-    echo(`  docker exec -it ${sandboxName} claude  # Interactive session`)
-    echo(`  tail -f ${paths.outputFile}                  # Watch output`)
-    echo(`  docker sandbox rm ${sandboxName}       # Stop sandbox`)
+    echo(`  docker exec -it ${sandboxName} claude    # Interactive session`)
+    echo(`  tail -f ${paths.outputFile}              # Watch output`)
+    echo(`  docker logs ${sandboxName}               # View logs`)
+    echo(`  docker sandbox rm ${sandboxName}         # Stop sandbox (logs will be saved)`)
   } else {
     echo(green('Sandbox started in background'))
     echo('')
     echo('Commands:')
-    echo(`  docker exec -it ${sandboxName} claude  # Interactive session`)
-    echo(`  docker sandbox rm ${sandboxName}       # Stop sandbox`)
+    echo(`  docker exec -it ${sandboxName} claude    # Interactive session`)
+    echo(`  docker logs ${sandboxName}               # View logs`)
+    echo(`  docker sandbox rm ${sandboxName}         # Stop sandbox (logs will be saved)`)
   }
 
   return { sandboxName, mode: 'detached', workspace: '', logFile: paths.logFile, outputFile: paths.outputFile, status: 'running' }
@@ -83,27 +83,20 @@ const runHeadless = async (
   echo(cyan('Running in headless mode...'))
   echo('')
 
-  const startCommand = `${command} >/dev/null 2>&1`
-  echo(yellow(startCommand))
-  await execute(startCommand, `Failed to start sandbox ${sandboxName}`)
+  // Start container - Docker will handle logging
+  echo(yellow(command))
+  await execute(command, `Failed to start sandbox ${sandboxName}`)
   await sleep(2000)
 
+  // Execute prompt and save output (Docker captures all logs automatically)
   const escaped = escapePrompt(prompt)
-  const execCmd = [
-    `docker exec "${sandboxName}" bash -c "echo '${escaped}' | claude -p --output-format stream-json --verbose"`,
-    `2>&1 | tee -a "${paths.logFile}" | tee "${paths.outputFile}"`,
-  ].join(' ')
+  const execCmd = `docker exec "${sandboxName}" bash -c "echo '${escaped}' | claude -p --output-format stream-json --verbose" > "${paths.outputFile}" 2>&1`
 
   echo(yellow(execCmd))
   await execute(execCmd, `Failed to execute prompt in sandbox ${sandboxName}`)
 
-  try {
-    const removeCommand = `docker sandbox rm "${sandboxName}"`
-    echo(yellow(removeCommand))
-    await execute(removeCommand, `Failed to remove sandbox ${sandboxName}`)
-  } catch {
-    // Ignore cleanup failures
-  }
+  // Remove sandbox (logs will be saved automatically)
+  await removeSandbox(sandboxName)
 
   echo('')
   echo(green('Task completed'))
@@ -117,11 +110,16 @@ const runInteractive = async (
   command: string,
   paths: { logFile: string }
 ): Promise<SandboxResult> => {
-  const interactiveCommand = `${command} 2>&1 | tee -a "${paths.logFile}"`
-  echo(yellow(interactiveCommand))
-  await execute(interactiveCommand, `Failed to run interactive sandbox ${sandboxName}`, {
+  // Interactive mode runs directly - Docker captures logs automatically
+  echo(yellow(command))
+  echo('')
+
+  await execute(command, `Failed to run interactive sandbox ${sandboxName}`, {
     silent: false,
   })
+
+  // Remove sandbox (logs will be saved automatically)
+  await removeSandbox(sandboxName)
 
   echo('')
   echo(green('Sandbox exited'))
@@ -150,7 +148,7 @@ const runSingleAgent = async (config: SandboxConfig): Promise<SandboxResult> => 
   })
 
   writeLogHeader(paths.logFile, resolvedConfig, mode)
-  printStartupInfo(config.sandboxName, workspace, paths.logFile)
+  printStartupInfo(config.sandboxName, workspace)
 
   const modeRunners: Record<SandboxMode, () => Promise<SandboxResult>> = {
     detached: () => runDetached(config.sandboxName, command, prompt, paths),
