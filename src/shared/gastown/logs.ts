@@ -90,7 +90,9 @@ const showLogContent = async (file: LogFile, lines: number): Promise<void> => {
   echo(cyan(`=== ${file.name} ===`))
 
   try {
-    const content = await execute(`tail -n ${lines} "${file.path}"`, 'Read log file')
+    const command = `tail -n ${lines} "${file.path}"`
+    echo(yellow(command))
+    const content = await execute(command, 'Read log file')
     echo(content)
   } catch (error) {
     echo(yellow('Could not read file'))
@@ -107,7 +109,9 @@ const followLogs = async (files: readonly LogFile[], lines: number): Promise<voi
   echo('---')
 
   try {
-    await execute(`tail -f -n ${lines} ${paths}`, 'Follow logs', { fatal: false })
+    const command = `tail -f -n ${lines} ${paths}`
+    echo(yellow(command))
+    await execute(command, 'Follow logs', { fatal: false })
   } catch {
     // Ctrl+C will throw, which is expected
   }

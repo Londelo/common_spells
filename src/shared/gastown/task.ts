@@ -27,7 +27,9 @@ type TaskResult = {
 
 const checkSandboxExists = async (sandboxName: string): Promise<boolean> => {
   try {
-    const output = await execute('docker sandbox ls 2>/dev/null', 'List sandboxes')
+    const command = 'docker sandbox ls 2>/dev/null'
+    echo(yellow(command))
+    const output = await execute(command, 'List sandboxes')
     return output.includes(sandboxName)
   } catch {
     return false
@@ -36,8 +38,10 @@ const checkSandboxExists = async (sandboxName: string): Promise<boolean> => {
 
 const listRunningSandboxes = async (): Promise<readonly string[]> => {
   try {
+    const command = 'docker sandbox ls --format "{{.Name}}" 2>/dev/null'
+    echo(yellow(command))
     const output = await execute(
-      'docker sandbox ls --format "{{.Name}}" 2>/dev/null',
+      command,
       'List sandbox names'
     )
     return output.split('\n').filter((name: string) => name.trim().length > 0)
@@ -111,14 +115,16 @@ const executeTaskInSandbox = async (
 
   if (wait) {
     // Foreground execution with live output
-    await execute(`${dockerCommand} 2>&1 | tee "${outputFile}" | tee -a "${logFile}"`, 'Run task')
+    const foregroundCommand = `${dockerCommand} 2>&1 | tee "${outputFile}" | tee -a "${logFile}"`
+    echo(yellow(foregroundCommand))
+    await execute(foregroundCommand, 'Run task')
     appendTaskCompletion(logFile)
     echo('')
     echo(green('Task completed'))
   } else {
     // Background execution
     const backgroundCommand = `(${dockerCommand} > "${outputFile}" 2>&1; echo "" >> "${logFile}"; echo "Completed: $(date)" >> "${logFile}") &`
-
+    echo(yellow(backgroundCommand))
     await execute(backgroundCommand, 'Start background task')
 
     echo('')

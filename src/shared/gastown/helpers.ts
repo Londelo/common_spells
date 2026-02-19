@@ -44,7 +44,9 @@ export const escapePrompt = (prompt: string): string => prompt.replace(/'/g, "'\
 
 export const sandboxExists = async (sandboxName: string): Promise<boolean> => {
   try {
-    const output = await execute('docker sandbox ls', 'Failed to list sandboxes')
+    const command = 'docker sandbox ls'
+    echo(yellow(command))
+    const output = await execute(command, 'Failed to list sandboxes')
     return output.includes(sandboxName)
   } catch {
     return false
@@ -57,7 +59,9 @@ export const removeSandbox = async (sandboxName: string): Promise<void> => {
 
   echo(yellow(`Removing existing sandbox '${sandboxName}'...`))
   try {
-    await execute(`docker sandbox rm "${sandboxName}"`, `Failed to remove sandbox ${sandboxName}`)
+    const command = `docker sandbox rm "${sandboxName}"`
+    echo(yellow(command))
+    await execute(command, `Failed to remove sandbox ${sandboxName}`)
   } catch (error) {
     echo(yellow(`⚠ Could not remove sandbox '${sandboxName}' (may have already stopped)`))
   }
@@ -132,13 +136,17 @@ export const buildSandboxCommand = (
 
 export const validateDockerEnvironment = async (): Promise<void> => {
   try {
-    await execute('docker --version', 'Docker check')
+    const dockerVersionCommand = 'docker --version'
+    echo(yellow(dockerVersionCommand))
+    await execute(dockerVersionCommand, 'Docker check')
   } catch {
     throw new Error('Docker not found. Install Docker Desktop from https://www.docker.com/products/docker-desktop')
   }
 
   try {
-    await execute('docker sandbox --help', 'Docker sandbox check')
+    const sandboxHelpCommand = 'docker sandbox --help'
+    echo(yellow(sandboxHelpCommand))
+    await execute(sandboxHelpCommand, 'Docker sandbox check')
   } catch {
     throw new Error('Docker sandbox support not found. Update Docker Desktop to v29+ for sandbox feature.')
   }

@@ -44,11 +44,14 @@ const runDetached = async (
   prompt: string | undefined,
   paths: { logFile: string; outputFile: string }
 ): Promise<SandboxResult> => {
-  await execute(`${command} >/dev/null 2>&1`, `Failed to start sandbox ${sandboxName}`)
+  const startCommand = `${command} >/dev/null 2>&1`
+  echo(yellow(startCommand))
+  await execute(startCommand, `Failed to start sandbox ${sandboxName}`)
 
   if (prompt) {
     const escaped = escapePrompt(prompt)
     const execCmd = `docker exec "${sandboxName}" bash -c "echo '${escaped}' | claude -p --output-format stream-json --verbose" > "${paths.outputFile}" 2>&1 &`
+    echo(yellow(execCmd))
     await execute(execCmd, `Failed to send prompt to sandbox ${sandboxName}`)
     fs.appendFileSync(paths.logFile, `\nPrompt sent: ${new Date().toISOString()}\n`)
 
@@ -80,7 +83,9 @@ const runHeadless = async (
   echo(cyan('Running in headless mode...'))
   echo('')
 
-  await execute(`${command} >/dev/null 2>&1`, `Failed to start sandbox ${sandboxName}`)
+  const startCommand = `${command} >/dev/null 2>&1`
+  echo(yellow(startCommand))
+  await execute(startCommand, `Failed to start sandbox ${sandboxName}`)
   await sleep(2000)
 
   const escaped = escapePrompt(prompt)
@@ -89,10 +94,13 @@ const runHeadless = async (
     `2>&1 | tee -a "${paths.logFile}" | tee "${paths.outputFile}"`,
   ].join(' ')
 
+  echo(yellow(execCmd))
   await execute(execCmd, `Failed to execute prompt in sandbox ${sandboxName}`)
 
   try {
-    await execute(`docker sandbox rm "${sandboxName}"`, `Failed to remove sandbox ${sandboxName}`)
+    const removeCommand = `docker sandbox rm "${sandboxName}"`
+    echo(yellow(removeCommand))
+    await execute(removeCommand, `Failed to remove sandbox ${sandboxName}`)
   } catch {
     // Ignore cleanup failures
   }
@@ -109,7 +117,9 @@ const runInteractive = async (
   command: string,
   paths: { logFile: string }
 ): Promise<SandboxResult> => {
-  await execute(`${command} 2>&1 | tee -a "${paths.logFile}"`, `Failed to run interactive sandbox ${sandboxName}`, {
+  const interactiveCommand = `${command} 2>&1 | tee -a "${paths.logFile}"`
+  echo(yellow(interactiveCommand))
+  await execute(interactiveCommand, `Failed to run interactive sandbox ${sandboxName}`, {
     silent: false,
   })
 

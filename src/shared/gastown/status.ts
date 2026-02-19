@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { echo } from 'shelljs'
 import { execute } from '../shell'
-import { cyan } from '../colors'
+import { cyan, yellow } from '../colors'
 import { LOG_DIR, WORKTREE_DIR } from './types'
 
 // --- Types ---
@@ -33,7 +33,9 @@ type StatusReport = {
 
 const getRunningSandboxes = async (): Promise<readonly SandboxInfo[]> => {
   try {
-    const output = await execute('docker sandbox ls 2>/dev/null', 'List sandboxes', {
+    const command = 'docker sandbox ls 2>/dev/null'
+    echo(yellow(command))
+    const output = await execute(command, 'List sandboxes', {
       fatal: false,
     })
 

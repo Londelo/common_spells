@@ -23,8 +23,10 @@ type CleanupResult = {
 
 const listGastownSandboxes = async (): Promise<readonly string[]> => {
   try {
+    const command = 'docker sandbox ls --format "{{.Name}}" 2>/dev/null'
+    echo(yellow(command))
     const output = await execute(
-      'docker sandbox ls --format "{{.Name}}" 2>/dev/null',
+      command,
       'List sandboxes',
       { fatal: false }
     )
@@ -40,7 +42,9 @@ const listGastownSandboxes = async (): Promise<readonly string[]> => {
 
 const removeSandbox = async (name: string): Promise<boolean> => {
   try {
-    await execute(`docker sandbox rm "${name}" 2>/dev/null`, `Remove sandbox ${name}`, {
+    const command = `docker sandbox rm "${name}" 2>/dev/null`
+    echo(yellow(command))
+    await execute(command, `Remove sandbox ${name}`, {
       fatal: false,
     })
     echo(`  Removed ${name}`)

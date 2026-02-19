@@ -24,7 +24,9 @@ type SetupReport = {
 
 const checkTechPass = async (): Promise<CheckResult> => {
   try {
-    await execute('which tech-pass', 'TechPass lookup')
+    const whichCommand = 'which tech-pass'
+    echo(yellow(whichCommand))
+    await execute(whichCommand, 'TechPass lookup')
   } catch {
     return {
       label: 'TechPass',
@@ -37,7 +39,9 @@ const checkTechPass = async (): Promise<CheckResult> => {
   }
 
   try {
-    const versionOutput = await execute('tech-pass version 2>/dev/null', 'TechPass version')
+    const versionCommand = 'tech-pass version 2>/dev/null'
+    echo(yellow(versionCommand))
+    const versionOutput = await execute(versionCommand, 'TechPass version')
     const versionMatch = versionOutput.match(/(\d+\.\d+\.\d+)/)
     const version = versionMatch ? versionMatch[1] : null
 
@@ -169,12 +173,16 @@ const checkAwsCredentials = (): CheckResult => {
 
 const checkDocker = async (): Promise<CheckResult> => {
   try {
-    const versionOutput = await execute('docker --version 2>/dev/null', 'Docker version')
+    const dockerVersionCommand = 'docker --version 2>/dev/null'
+    echo(yellow(dockerVersionCommand))
+    const versionOutput = await execute(dockerVersionCommand, 'Docker version')
     const versionMatch = versionOutput.match(/(\d+\.\d+)/)
     const version = versionMatch ? versionMatch[1] : 'unknown'
 
     try {
-      await execute('docker sandbox --help 2>/dev/null', 'Docker sandbox check')
+      const sandboxHelpCommand = 'docker sandbox --help 2>/dev/null'
+      echo(yellow(sandboxHelpCommand))
+      await execute(sandboxHelpCommand, 'Docker sandbox check')
       return {
         label: 'Docker',
         status: 'ok',
