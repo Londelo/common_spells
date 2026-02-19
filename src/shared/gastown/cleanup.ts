@@ -4,6 +4,7 @@ import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { green, yellow } from '../colors'
 import { DCC_DIR, LOG_DIR, WORKTREE_DIR } from './types'
+import { listSandboxNames } from './helpers'
 
 // --- Types ---
 
@@ -21,36 +22,18 @@ type CleanupResult = {
 
 // --- Sandbox Cleanup ---
 
-const listGastownSandboxes = async (): Promise<readonly string[]> => {
-  try {
-    const command = 'docker sandbox ls --format "{{.Name}}" 2>/dev/null'
-    echo(yellow(command))
-    const output = await execute(
-      command,
-      'List sandboxes',
-      { fatal: false }
-    )
-
-    return output
-      .split('\n')
-      .filter((name: string) => name.trim().length > 0)
-      .filter((name: string) => name.startsWith('agent-') || name.startsWith('dcc-'))
-  } catch {
-    return []
-  }
-}
-
 const removeSandbox = async (name: string): Promise<boolean> => {
   try {
-    const command = `docker sandbox rm "${name}" 2>/dev/null`
+    const command = `docker sandbox rm "${name}"`
     echo(yellow(command))
     await execute(command, `Remove sandbox ${name}`, {
       fatal: false,
     })
     echo(`  Removed ${name}`)
     return true
-  } catch {
-    echo(yellow(`  Not found: ${name}`))
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    echo(yellow(`  Failed to remove ${name}: ${errorMsg}`))
     return false
   }
 }
@@ -63,7 +46,7 @@ const removeSandboxes = async (target?: string): Promise<readonly string[]> => {
     return success ? [target] : []
   }
 
-  const sandboxes = await listGastownSandboxes()
+  const sandboxes = await listSandboxNames()
 
   if (sandboxes.length === 0) {
     echo('  None found')

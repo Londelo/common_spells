@@ -39,7 +39,7 @@ const checkTechPass = async (): Promise<CheckResult> => {
   }
 
   try {
-    const versionCommand = 'tech-pass version 2>/dev/null'
+    const versionCommand = 'tech-pass version'
     echo(yellow(versionCommand))
     const versionOutput = await execute(versionCommand, 'TechPass version')
     const versionMatch = versionOutput.match(/(\d+\.\d+\.\d+)/)
@@ -173,14 +173,14 @@ const checkAwsCredentials = (): CheckResult => {
 
 const checkDocker = async (): Promise<CheckResult> => {
   try {
-    const dockerVersionCommand = 'docker --version 2>/dev/null'
+    const dockerVersionCommand = 'docker --version'
     echo(yellow(dockerVersionCommand))
     const versionOutput = await execute(dockerVersionCommand, 'Docker version')
     const versionMatch = versionOutput.match(/(\d+\.\d+)/)
     const version = versionMatch ? versionMatch[1] : 'unknown'
 
     try {
-      const sandboxHelpCommand = 'docker sandbox --help 2>/dev/null'
+      const sandboxHelpCommand = 'docker sandbox --help'
       echo(yellow(sandboxHelpCommand))
       await execute(sandboxHelpCommand, 'Docker sandbox check')
       return {

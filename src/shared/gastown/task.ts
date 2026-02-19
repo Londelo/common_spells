@@ -4,6 +4,7 @@ import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { green, red, cyan, yellow } from '../colors'
 import { LOG_DIR, OUTPUT_DIR } from './types'
+import { listSandboxNames } from './helpers'
 
 // --- Types ---
 
@@ -27,7 +28,7 @@ type TaskResult = {
 
 const checkSandboxExists = async (sandboxName: string): Promise<boolean> => {
   try {
-    const command = 'docker sandbox ls 2>/dev/null'
+    const command = 'docker sandbox ls'
     echo(yellow(command))
     const output = await execute(command, 'List sandboxes')
     return output.includes(sandboxName)
@@ -36,19 +37,7 @@ const checkSandboxExists = async (sandboxName: string): Promise<boolean> => {
   }
 }
 
-const listRunningSandboxes = async (): Promise<readonly string[]> => {
-  try {
-    const command = 'docker sandbox ls --format "{{.Name}}" 2>/dev/null'
-    echo(yellow(command))
-    const output = await execute(
-      command,
-      'List sandbox names'
-    )
-    return output.split('\n').filter((name: string) => name.trim().length > 0)
-  } catch {
-    return []
-  }
-}
+const listRunningSandboxes = async (): Promise<readonly string[]> => listSandboxNames()
 
 // --- Prompt Handling ---
 

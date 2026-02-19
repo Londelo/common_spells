@@ -111,7 +111,7 @@ const followLogs = async (files: readonly LogFile[], lines: number): Promise<voi
   try {
     const command = `tail -f -n ${lines} ${paths}`
     echo(yellow(command))
-    await execute(command, 'Follow logs', { fatal: false })
+    await execute(command, 'Follow logs')
   } catch {
     // Ctrl+C will throw, which is expected
   }

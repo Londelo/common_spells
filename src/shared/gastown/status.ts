@@ -33,7 +33,7 @@ type StatusReport = {
 
 const getRunningSandboxes = async (): Promise<readonly SandboxInfo[]> => {
   try {
-    const command = 'docker sandbox ls 2>/dev/null'
+    const command = 'docker sandbox ls'
     echo(yellow(command))
     const output = await execute(command, 'List sandboxes', {
       fatal: false,

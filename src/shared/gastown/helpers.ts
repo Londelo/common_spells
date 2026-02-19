@@ -67,6 +67,29 @@ export const removeSandbox = async (sandboxName: string): Promise<void> => {
   }
 }
 
+export const listSandboxNames = async (filterPrefix?: string[]): Promise<readonly string[]> => {
+  try {
+    const command = 'docker sandbox ls'
+    echo(yellow(command))
+    const output = await execute(command, 'Failed to list sandboxes')
+
+    // Parse table output - first column is the name
+    // Format: NAME    IMAGE    STATUS    ...
+    const lines = output.split('\n').filter((line: string) => line.trim().length > 0)
+
+    // Skip header row (first line) and extract first column (name)
+    const names = lines
+      .slice(1)
+      .map((line: string) => line.trim().split(/\s+/)[0])
+      .filter((name: string) => name.length > 0)
+
+    return names
+  } catch (error) {
+    echo(yellow(`  Failed to list sandboxes: ${error instanceof Error ? error.message : String(error)}`))
+    return []
+  }
+}
+
 // --- Path Resolution (used by: dccRun, dccGastown) ---
 
 export const resolveWorkspace = (workspace: string): string => {
