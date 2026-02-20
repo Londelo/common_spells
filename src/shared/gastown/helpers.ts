@@ -3,8 +3,8 @@ import path from 'path'
 import os from 'os'
 import { echo } from 'shelljs'
 import { execute } from '../shell'
-import { green, red, yellow } from '../colors'
-import { BedrockConfig, SandboxPaths, OUTPUT_DIR, GT_DIR } from './types'
+import { green, yellow } from '../colors'
+import { BedrockConfig, GT_DIR } from './types'
 
 // --- Bedrock Config (used by: dccRun, dccGastown, dccSetup) ---
 
@@ -190,17 +190,6 @@ export const resolveWorkspace = (workspace: string): string => {
   return fs.realpathSync(resolved)
 }
 
-export const resolveSandboxPaths = (sandboxName: string, outputFile?: string): SandboxPaths => ({
-  outputDir: OUTPUT_DIR,
-  outputFile: outputFile ?? path.join(OUTPUT_DIR, `${sandboxName}.txt`),
-})
-
-// --- Directory & Log Helpers (used by: dccRun, dccGastown, dccTask) ---
-
-export const ensureDirectories = (paths: SandboxPaths): void => {
-  fs.mkdirSync(paths.outputDir, { recursive: true })
-}
-
 // --- Docker Environment Validation (used by: dccRun, dccGastown, dccSetup) ---
 
 export const validateDockerEnvironment = async (): Promise<void> => {
@@ -223,68 +212,3 @@ export const validateDockerEnvironment = async (): Promise<void> => {
   echo(green('✓ Docker environment validated'))
 }
 
-// --- JSON Output Parsing (used by: dccRun, dccGastown, output file handling) ---
-
-export const parseNDJSON = (content: string): readonly any[] => {
-  const lines = content.split('\n').filter((line: string) => line.trim().length > 0)
-  return lines
-    .map((line: string) => {
-      try {
-        return JSON.parse(line)
-      } catch {
-        return null
-      }
-    })
-    .filter((obj: any) => obj !== null)
-}
-
-export const findResultInNDJSON = (objects: readonly any[]): any => {
-  const resultObjects = objects.filter((obj: any) => obj.type === 'result')
-  return resultObjects.length > 0 ? resultObjects[resultObjects.length - 1] : null
-}
-
-export const extractResult = (jsonObj: any): string => {
-  return jsonObj.result || jsonObj.message || 'No result found'
-}
-
-export const formatResultForCLI = (resultText: string): string => {
-  const border = '─'.repeat(60)
-  return `\n${yellow(border)}\n${green('Result:')}\n${resultText}\n${yellow(border)}\n`
-}
-
-export const parseAndDisplayResult = (content: string): void => {
-  try {
-    const objects = parseNDJSON(content)
-    if (objects.length === 0) {
-      throw new Error('No valid JSON found in output')
-    }
-
-    const resultObj = findResultInNDJSON(objects) || objects[objects.length - 1]
-    const resultText = extractResult(resultObj)
-    const formatted = formatResultForCLI(resultText)
-    echo(formatted)
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error)
-    echo(red(`⚠ Error parsing output: ${errorMsg}`))
-  }
-}
-
-export const readAndDisplayOutputFile = (outputFilePath: string): void => {
-  if (!fs.existsSync(outputFilePath)) {
-    echo(yellow(`⚠ Output file not found: ${outputFilePath}`))
-    return
-  }
-
-  if (fs.statSync(outputFilePath).isDirectory()) {
-    echo(red(`⚠ Path is a directory, not a file: ${outputFilePath}`))
-    return
-  }
-
-  try {
-    const content = fs.readFileSync(outputFilePath, 'utf-8')
-    parseAndDisplayResult(content)
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error)
-    echo(red(`⚠ Error reading output file: ${errorMsg}`))
-  }
-}

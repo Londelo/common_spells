@@ -11,8 +11,6 @@ type ParsedArgs = {
   readonly workspace?: string
   readonly prompt?: string
   readonly promptFile?: string
-  readonly outputFile?: string
-  readonly continueConversation: boolean
 }
 
 const generateSandboxName = (): string => `gastown-${Date.now()}`
@@ -23,8 +21,6 @@ const parseArgs = (argv: readonly string[]): ParsedArgs => {
     workspace: undefined,
     prompt: undefined,
     promptFile: undefined,
-    outputFile: undefined,
-    continueConversation: false,
   }
 
   return argv.reduce((acc, arg, index, arr) => {
@@ -36,14 +32,10 @@ const parseArgs = (argv: readonly string[]): ParsedArgs => {
       return nextArg ? { ...acc, prompt: nextArg } : acc
     if (arg === '-f' || arg === '--prompt-file')
       return nextArg ? { ...acc, promptFile: nextArg } : acc
-    if (arg === '-o' || arg === '--output')
-      return nextArg ? { ...acc, outputFile: nextArg } : acc
-    if (arg === '-c' || arg === '--continue')
-      return { ...acc, continueConversation: true }
 
     if (!arg.startsWith('-')) {
       const prevArg = arr[index - 1]
-      const isPrevOption = prevArg && prevArg.match(/^-[nfpo]|^--(name|prompt-file|output)$/)
+      const isPrevOption = prevArg && prevArg.match(/^-[nfp]|^--(name|prompt-file|prompt)$/)
 
       if (!isPrevOption && !acc.workspace) {
         return { ...acc, workspace: arg }
@@ -65,10 +57,8 @@ const main = async (): Promise<void> => {
     echo('')
     echo('Options:')
     echo('  -n, --name NAME      Sandbox name (default: gastown-<timestamp>)')
-    echo('  -p, --prompt TEXT    Prompt to send to Claude')
-    echo('  -f, --prompt-file    Read prompt from file')
-    echo('  -o, --output FILE    Write output to file')
-    echo('  -c, --continue       Continue previous conversation')
+    echo('  -p, --prompt TEXT    Prompt to send to Claude (headless mode)')
+    echo('  -f, --prompt-file    Read prompt from file (headless mode)')
     process.exit(1)
   }
 
@@ -77,8 +67,6 @@ const main = async (): Promise<void> => {
     workspace: options.workspace,
     prompt: options.prompt,
     promptFile: options.promptFile,
-    outputFile: options.outputFile,
-    continueConversation: options.continueConversation,
   })
 }
 

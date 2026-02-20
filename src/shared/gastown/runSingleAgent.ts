@@ -1,19 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 import { echo } from 'shelljs'
-import { execute, executeInteractive } from '../shell'
+import { executeInteractive } from '../shell'
 import { green, yellow } from '../colors'
 import { SandboxConfig, SandboxResult, GT_DIR } from './types'
-import {
-  removeSandbox,
-  resolveWorkspace,
-  resolveSandboxPaths,
-  ensureDirectories,
-  escapePrompt,
-  readAndDisplayOutputFile
-} from './helpers'
-
-const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms))
+import { resolveWorkspace, sandboxExists } from './helpers'
 
 const checkGastownTemplate = (): void => {
   const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
@@ -25,22 +16,6 @@ const checkGastownTemplate = (): void => {
   }
 }
 
-export const writeOutputHeader = (
-  outputFile: string,
-  config: { workspace: string; prompt: string }
-): void => {
-  const promptLine = `Prompt: ${config.prompt.slice(0, 100)}...\n`
-  const header = `Started: ${new Date().toISOString()}\nWorkspace: ${config.workspace}\n${promptLine}---\n`
-  fs.writeFileSync(outputFile, header)
-}
-
-export const writeOutputFooter = (outputFile: string): void => {
-  const footer = `\nCompleted: ${new Date().toISOString()}\n`
-  echo(green(footer))
-  fs.appendFileSync(outputFile, footer)
-}
-
-
 const readPromptFromFile = (promptFile: string): string => {
   if (!fs.existsSync(promptFile)) {
     throw new Error(`Prompt file does not exist: ${promptFile}`)
@@ -48,85 +23,50 @@ const readPromptFromFile = (promptFile: string): string => {
   return fs.readFileSync(promptFile, 'utf-8')
 }
 
-const printStartupInfo = (sandboxName: string, workspace: string): void => {
-  echo(green('Starting sandbox'))
+const printStartupInfo = (sandboxName: string, workspace: string, isExisting: boolean): void => {
+  echo(green(isExisting ? 'Using existing sandbox' : 'Starting new sandbox'))
   echo(`  Name:      ${sandboxName}`)
   echo(`  Workspace: ${workspace}`)
-  echo(`  Logs:      Use 'docker sandbox logs ${sandboxName}' to view`)
   echo('')
 }
 
 export const buildSandboxCommand = (
   name: string,
   workspace: string,
-  _options?: { detached?: boolean; }
+  options?: { prompt?: string; isExisting?: boolean }
 ): string => {
   const templateName = 'gastown:latest'
+  const { prompt, isExisting } = options ?? {}
 
-  return [
-    'docker', 'sandbox', 'run',
-    '--name', `"${name}"`,
-    '-t', templateName,
-    'claude', `"${workspace}"`
-  ].join(' ')
+  // Existing sandbox: docker sandbox run <name> [-- --print "prompt"]
+  // New sandbox: docker sandbox run --name "<name>" -t gastown:latest claude "<workspace>" [-- --print "prompt"]
+
+  const baseCommand = isExisting
+    ? ['docker', 'sandbox', 'run', name]
+    : ['docker', 'sandbox', 'run', '--name', `"${name}"`, '-t', templateName, 'claude', `"${workspace}"`]
+
+  const printArgs = prompt ? ['--', '--print', `"${prompt}"`] : []
+
+  return [...baseCommand, ...printArgs].join(' ')
 }
 
-const runInteractiveMode = async (
+const runSandbox = async (
   command: string,
   sandboxName: string,
-  paths: ReturnType<typeof resolveSandboxPaths>
+  workspace: string
 ): Promise<SandboxResult> => {
-
   echo(yellow(command))
-
   echo('')
 
   await executeInteractive(command, `Failed to run sandbox ${sandboxName}`)
 
   echo('')
-
   echo(green('Sandbox exited'))
 
   return {
     sandboxName,
-    workspace: '',
-    outputFile: paths.outputFile,
+    workspace,
     status: 'completed',
-  }
-}
-
-const runDetachedMode = async (
-  command: string,
-  sandboxName: string,
-  paths: ReturnType<typeof resolveSandboxPaths>,
-  resolvedConfig: SandboxConfig & { prompt: string; }
-): Promise<SandboxResult> => {
-
-  echo('')
-
-  echo(yellow(command))
-  execute(command, `Failed to start sandbox ${sandboxName}`, { silent: false })
-
-  const prompt = escapePrompt(resolvedConfig.prompt)
-  const dockerExec = `docker exec "${sandboxName}" bash -c`
-  const claudeCmd = `echo '${prompt}' | claude -p --output-format stream-json --verbose`
-  const cdAndRun = `cd '${resolvedConfig.workspace}' && ${claudeCmd}`
-  const promptCommand = `${dockerExec} "${cdAndRun}" >> "${paths.outputFile}" 2>&1`
-
-  await sleep(2000)
-  echo(yellow(promptCommand))
-  await writeOutputHeader(paths.outputFile, resolvedConfig)
-  echo(green('Claude is working in background'))
-  await execute(promptCommand, `Failed to execute follow-up command in sandbox ${sandboxName}`, { silent: false })
-  await writeOutputFooter(paths.outputFile)
-
-  readAndDisplayOutputFile(paths.outputFile)
-
-  return {
-    sandboxName,
-    workspace: '',
-    outputFile: paths.outputFile,
-    status: 'running',
   }
 }
 
@@ -135,26 +75,14 @@ const runSingleAgent = async (config: SandboxConfig): Promise<SandboxResult> => 
   checkGastownTemplate()
 
   const workspace = resolveWorkspace(config.workspace)
-  const paths = resolveSandboxPaths(config.sandboxName, config.outputFile)
-
-  ensureDirectories(paths)
-
-  await removeSandbox(config.sandboxName)
-
   const prompt = config.promptFile ? readPromptFromFile(config.promptFile) : config.prompt
-  const needsDetached = !!prompt
-  const command = buildSandboxCommand(config.sandboxName, workspace, { detached: needsDetached })
+  const isExisting = await sandboxExists(config.sandboxName)
 
-  printStartupInfo(config.sandboxName, workspace)
+  const command = buildSandboxCommand(config.sandboxName, workspace, { prompt, isExisting })
 
-  if (!needsDetached) {
-    const result = await runInteractiveMode(command, config.sandboxName, paths)
-    return { ...result, workspace }
-  } else {
-    const resolvedConfig = { ...config, prompt, workspace }
-    const result = await runDetachedMode(command, config.sandboxName, paths, resolvedConfig)
-    return { ...result, workspace }
-  }
+  printStartupInfo(config.sandboxName, workspace, isExisting)
+
+  return runSandbox(command, config.sandboxName, workspace)
 }
 
 export default runSingleAgent
