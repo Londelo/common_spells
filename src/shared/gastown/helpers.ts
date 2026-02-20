@@ -60,6 +60,10 @@ ENV AWS_PROFILE=\${AWS_PROFILE}
 ENV ANTHROPIC_MODEL=\${ANTHROPIC_MODEL}
 ENV GT_DIR=\${GT_DIR}
 
+# Copy AWS credentials from build context (owned by agent, read-only)
+COPY --chown=agent:agent .aws /home/agent/.aws
+RUN chmod 555 /home/agent/.aws && chmod 444 /home/agent/.aws/*
+
 # Set working directory for agent
 WORKDIR /workspace
 `
@@ -69,6 +73,24 @@ WORKDIR /workspace
   echo(green(`✓ Dockerfile written to ${dockerfilePath}`))
 }
 
+const copyAwsCredentials = (): void => {
+  const sourceDir = path.join(os.homedir(), '.aws')
+  const targetDir = path.join(GT_DIR, '.aws')
+
+  if (!fs.existsSync(sourceDir)) {
+    throw new Error(`AWS credentials not found at ${sourceDir}. Run 'aws configure' or set up SSO first.`)
+  }
+
+  // Remove existing .aws in build context if present
+  if (fs.existsSync(targetDir)) {
+    fs.rmSync(targetDir, { recursive: true })
+  }
+
+  // Copy .aws directory to build context
+  fs.cpSync(sourceDir, targetDir, { recursive: true })
+  echo(green(`✓ AWS credentials copied to build context`))
+}
+
 export const buildGastownTemplate = async (bedrockConfig: BedrockConfig): Promise<void> => {
   const templateName = 'gastown:latest'
   const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
@@ -76,6 +98,9 @@ export const buildGastownTemplate = async (bedrockConfig: BedrockConfig): Promis
   if (!fs.existsSync(dockerfilePath)) {
     throw new Error(`Dockerfile not found at ${dockerfilePath}. Run gt-setup to create it.`)
   }
+
+  // Copy AWS credentials to build context
+  copyAwsCredentials()
 
   const buildArgs = [
     `--build-arg CLAUDE_CODE_USE_BEDROCK="${bedrockConfig.bedrockEnabled || ''}"`,

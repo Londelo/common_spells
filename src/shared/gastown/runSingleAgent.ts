@@ -59,16 +59,14 @@ const printStartupInfo = (sandboxName: string, workspace: string): void => {
 export const buildSandboxCommand = (
   name: string,
   workspace: string,
-  options: { detached?: boolean; }
+  _options?: { detached?: boolean; }
 ): string => {
   const templateName = 'gastown:latest'
-  const detachedFlag = options.detached ? ['--detach'] : []
 
   return [
     'docker', 'sandbox', 'run',
     '--name', `"${name}"`,
     '-t', templateName,
-    ...detachedFlag,
     'claude', `"${workspace}"`
   ].join(' ')
 }
@@ -107,7 +105,7 @@ const runDetachedMode = async (
   echo('')
 
   echo(yellow(command))
-  await execute(command, `Failed to start sandbox ${sandboxName}`)
+  execute(command, `Failed to start sandbox ${sandboxName}`, { silent: false })
 
   const prompt = escapePrompt(resolvedConfig.prompt)
   const dockerExec = `docker exec "${sandboxName}" bash -c`
@@ -119,7 +117,7 @@ const runDetachedMode = async (
   echo(yellow(promptCommand))
   await writeOutputHeader(paths.outputFile, resolvedConfig)
   echo(green('Claude is working in background'))
-  await execute(promptCommand, `Failed to execute follow-up command in sandbox ${sandboxName}`)
+  await execute(promptCommand, `Failed to execute follow-up command in sandbox ${sandboxName}`, { silent: false })
   await writeOutputFooter(paths.outputFile)
 
   readAndDisplayOutputFile(paths.outputFile)
