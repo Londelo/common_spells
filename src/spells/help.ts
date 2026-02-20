@@ -66,6 +66,9 @@ const displayCommands = async () => {
 
   echo(yellow('\ngt-status').underline)
   echo('\t- Show running sandboxes, recent logs, and worktrees.')
+
+  echo(yellow('\ngt-open').underline)
+  echo('\t- Opens ~/.gastown directory in VS Code.')
 }
 
 (async () => await errorHandlerWrapper(displayCommands, errorMessage))();
