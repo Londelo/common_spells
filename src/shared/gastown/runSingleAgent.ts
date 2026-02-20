@@ -9,13 +9,29 @@ import {
   resolveWorkspace,
   resolveSandboxPaths,
   ensureDirectories,
-  writeLogHeader,
-  escapePrompt
+  escapePrompt,
+  readAndDisplayOutputFile
 } from './helpers'
 import path from 'path'
 import os from 'os'
 
-// --- Private helpers (only used by runSingleAgent) ---
+const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms))
+
+export const writeOutputHeader = (
+  outputFile: string,
+  config: { workspace: string; prompt: string }
+): void => {
+  const promptLine = `Prompt: ${config.prompt.slice(0, 100)}...\n`
+  const header = `Started: ${new Date().toISOString()}\nWorkspace: ${config.workspace}\n${promptLine}---\n`
+  fs.writeFileSync(outputFile, header)
+}
+
+export const writeOutputFooter = (outputFile: string): void => {
+  const footer = `\nCompleted: ${new Date().toISOString()}\n`
+  echo(green(footer))
+  fs.appendFileSync(outputFile, footer)
+}
+
 
 const readPromptFromFile = (promptFile: string): string => {
   if (!fs.existsSync(promptFile)) {
@@ -30,14 +46,6 @@ const printStartupInfo = (sandboxName: string, workspace: string): void => {
   echo(`  Workspace: ${workspace}`)
   echo(`  Logs:      Use 'docker logs ${sandboxName}' to view`)
   echo('')
-}
-
-const wrapCommandWithLogging = (
-  baseCommand: string,
-  outputFile: string,
-  logFile: string
-): string => {
-  return `${baseCommand} | tee -a "${logFile}" | tee "${outputFile}"`
 }
 
 export const buildSandboxCommand = (
@@ -63,15 +71,7 @@ export const buildSandboxCommand = (
   const awsMount = fs.existsSync(awsDir) ? [`-v "${awsDir}:/home/agent/.aws:ro"`] : []
 
   const continueFlag = options.continueFlag ? ['-c'] : []
-
-  // Build claude command with prompt if provided
-  const claudeCommand = ['claude']
-  if (options.prompt) {
-    const escaped = escapePrompt(options.prompt)
-    claudeCommand.push('-p', '--output-format', 'stream-json', '--verbose',`"${escaped}" 2>&1`)
-  } else {
-    claudeCommand.push(...continueFlag)
-  }
+  const claudeCommand = ['claude', '--model sonnet', ...continueFlag]
 
   return [...cmd, ...detachedFlag, ...bedrockFlags, ...awsMount, ...claudeCommand].join(' ')
 }
@@ -81,11 +81,17 @@ const runInteractiveMode = async (
   sandboxName: string,
   paths: ReturnType<typeof resolveSandboxPaths>
 ): Promise<SandboxResult> => {
+
   echo(yellow(command))
+
   echo('')
+
   await executeInteractive(command, `Failed to run sandbox ${sandboxName}`)
+
   echo('')
+
   echo(green('Sandbox exited'))
+
   return {
     sandboxName,
     workspace: '',
@@ -99,16 +105,33 @@ const runDetachedMode = async (
   command: string,
   sandboxName: string,
   paths: ReturnType<typeof resolveSandboxPaths>,
-  resolvedConfig: SandboxConfig & { prompt?: string; workspace: string }
+  resolvedConfig: SandboxConfig & { prompt: string; }
 ): Promise<SandboxResult> => {
-  writeLogHeader(paths.logFile, resolvedConfig)
-  const wrappedCommand = wrapCommandWithLogging(command, paths.outputFile, paths.logFile)
-  echo(yellow(wrappedCommand))
+
   echo('')
-  await executeInteractive(wrappedCommand, `Failed to start sandbox ${sandboxName}`)
-  echo(green('Sandbox started in background'))
-  echo(yellow(`  tail -f ${paths.outputFile}  # Watch output`))
-  echo(yellow(`  cat ${paths.outputFile}      # View result`))
+
+  echo(yellow(command))
+  await execute(command, `Failed to start sandbox ${sandboxName}`)
+
+  if (resolvedConfig.prompt) {
+    const escaped = escapePrompt(resolvedConfig.prompt)
+    const promptCommand = [
+      `docker exec "${sandboxName}" bash -c "echo '${escaped}' | claude -p --output-format stream-json --verbose"`,
+      `>> "${paths.outputFile}" 2>&1`
+    ].join(' ')
+
+    await sleep(2000)
+    echo(yellow(promptCommand))
+    await writeOutputHeader(paths.outputFile, resolvedConfig)
+    echo(green('Claude is working in background'))
+    await execute(promptCommand, `Failed to execute follow-up command in sandbox ${sandboxName}`)
+    await writeOutputFooter(paths.outputFile)
+  }
+
+  await removeSandbox(resolvedConfig.sandboxName)
+
+  readAndDisplayOutputFile(paths.outputFile)
+
   return {
     sandboxName,
     workspace: '',
@@ -121,14 +144,14 @@ const runDetachedMode = async (
 const runSingleAgent = async (config: SandboxConfig): Promise<SandboxResult> => {
   const workspace = resolveWorkspace(config.workspace)
   const paths = resolveSandboxPaths(config.sandboxName, config.outputFile)
+
   ensureDirectories(paths)
 
   await removeSandbox(config.sandboxName)
 
   const prompt = config.promptFile ? readPromptFromFile(config.promptFile) : config.prompt
-  const resolvedConfig = { ...config, prompt, workspace }
-  const bedrockConfig = readBedrockConfig()
   const needsDetached = !!prompt
+  const bedrockConfig = readBedrockConfig()
   const command = buildSandboxCommand(config.sandboxName, workspace, bedrockConfig, {
     detached: needsDetached,
     continueFlag: config.continueConversation,
@@ -141,6 +164,7 @@ const runSingleAgent = async (config: SandboxConfig): Promise<SandboxResult> => 
     const result = await runInteractiveMode(command, config.sandboxName, paths)
     return { ...result, workspace }
   } else {
+    const resolvedConfig = { ...config, prompt, workspace }
     const result = await runDetachedMode(command, config.sandboxName, paths, resolvedConfig)
     return { ...result, workspace }
   }
