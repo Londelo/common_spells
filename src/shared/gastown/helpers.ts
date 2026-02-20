@@ -70,7 +70,7 @@ export const removeSandbox = async (sandboxName: string): Promise<boolean> => {
   }
 }
 
-export const listSandboxNames = async (filterPrefix?: string[]): Promise<readonly string[]> => {
+export const listSandboxNames = async (): Promise<readonly string[]> => {
   try {
     const command = 'docker sandbox ls'
     echo(yellow(command))
@@ -126,43 +126,6 @@ export const writeLogHeader = (
   const promptLine = config.prompt ? `Prompt: ${config.prompt.slice(0, 100)}...\n` : ''
   const header = `Started: ${new Date().toISOString()}\nWorkspace: ${config.workspace}\n${promptLine}---\n`
   fs.writeFileSync(logFile, header)
-}
-
-// --- Docker Command Building (used by: dccRun, dccGastown) ---
-
-export const buildSandboxCommand = (
-  name: string,
-  workspace: string,
-  bedrockConfig: BedrockConfig,
-  options: { detached?: boolean; continueFlag?: boolean; prompt?: string }
-): string => {
-  const cmd = ['docker', 'sandbox', 'run', '--name', `"${name}"`, '-w', `"${workspace}"`, '--credentials=none']
-
-  const detachedFlag = options.detached ? ['--detached'] : []
-
-  const bedrockFlags = bedrockConfig.bedrockEnabled
-    ? [
-        `-e "CLAUDE_CODE_USE_BEDROCK=${bedrockConfig.bedrockEnabled}"`,
-        `-e "AWS_REGION=${bedrockConfig.awsRegion}"`,
-        ...(bedrockConfig.awsProfile ? [`-e "AWS_PROFILE=${bedrockConfig.awsProfile}"`] : []),
-        ...(bedrockConfig.model ? [`-e "ANTHROPIC_MODEL=${bedrockConfig.model}"`] : []),
-      ]
-    : []
-
-  const awsDir = path.join(os.homedir(), '.aws')
-  const awsMount = fs.existsSync(awsDir) ? [`-v "${awsDir}:/home/agent/.aws:ro"`] : []
-
-  const continueFlag = options.continueFlag ? ['-c'] : []
-
-  // Build claude command with prompt if provided
-  const claudeCommand = ['claude']
-  if (options.prompt) {
-    claudeCommand.push('-p', `"${options.prompt}"`)
-  } else {
-    claudeCommand.push(...continueFlag)
-  }
-
-  return [...cmd, ...detachedFlag, ...bedrockFlags, ...awsMount, ...claudeCommand].join(' ')
 }
 
 // --- Docker Environment Validation (used by: dccRun, dccGastown, dccSetup) ---
