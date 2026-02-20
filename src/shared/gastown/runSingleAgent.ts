@@ -52,9 +52,14 @@ export const buildSandboxCommand = (
   name: string,
   workspace: string,
   bedrockConfig: BedrockConfig,
-  options: { detached?: boolean; continueFlag?: boolean; prompt?: string }
+  options: { detached?: boolean; }
 ): string => {
-  const cmd = ['docker', 'sandbox', 'run', '--name', `"${name}"`, '-w', `"${workspace}"`, '--credentials=none']
+  const cmd = [
+    'docker', 'sandbox', 'run',
+    `-w "${workspace}"`,
+    '--name', `"${name}"`,
+    '--credentials=none'
+  ]
 
   const detachedFlag = options.detached ? ['--detached'] : []
 
@@ -70,10 +75,7 @@ export const buildSandboxCommand = (
   const awsDir = path.join(os.homedir(), '.aws')
   const awsMount = fs.existsSync(awsDir) ? [`-v "${awsDir}:/home/agent/.aws:ro"`] : []
 
-  const continueFlag = options.continueFlag ? ['-c'] : []
-  const claudeCommand = ['claude', '--model sonnet', ...continueFlag]
-
-  return [...cmd, ...detachedFlag, ...bedrockFlags, ...awsMount, ...claudeCommand].join(' ')
+  return [...cmd, ...detachedFlag, ...bedrockFlags, ...awsMount, 'claude' ].join(' ')
 }
 
 const runInteractiveMode = async (
@@ -112,22 +114,18 @@ const runDetachedMode = async (
   echo(yellow(command))
   await execute(command, `Failed to start sandbox ${sandboxName}`)
 
-  if (resolvedConfig.prompt) {
-    const escaped = escapePrompt(resolvedConfig.prompt)
-    const promptCommand = [
-      `docker exec "${sandboxName}" bash -c "echo '${escaped}' | claude -p --output-format stream-json --verbose"`,
-      `>> "${paths.outputFile}" 2>&1`
-    ].join(' ')
+  const prompt = escapePrompt(resolvedConfig.prompt)
+  const dockerExec = `docker exec "${sandboxName}" bash -c`
+  const claudeCmd = `echo '${prompt}' | claude -p --output-format stream-json --verbose`
+  const cdAndRun = `cd '${resolvedConfig.workspace}' && ${claudeCmd}`
+  const promptCommand = `${dockerExec} "${cdAndRun}" >> "${paths.outputFile}" 2>&1`
 
-    await sleep(2000)
-    echo(yellow(promptCommand))
-    await writeOutputHeader(paths.outputFile, resolvedConfig)
-    echo(green('Claude is working in background'))
-    await execute(promptCommand, `Failed to execute follow-up command in sandbox ${sandboxName}`)
-    await writeOutputFooter(paths.outputFile)
-  }
-
-  await removeSandbox(resolvedConfig.sandboxName)
+  await sleep(2000)
+  echo(yellow(promptCommand))
+  await writeOutputHeader(paths.outputFile, resolvedConfig)
+  echo(green('Claude is working in background'))
+  await execute(promptCommand, `Failed to execute follow-up command in sandbox ${sandboxName}`)
+  await writeOutputFooter(paths.outputFile)
 
   readAndDisplayOutputFile(paths.outputFile)
 
@@ -150,11 +148,7 @@ const runSingleAgent = async (config: SandboxConfig): Promise<SandboxResult> => 
   const prompt = config.promptFile ? readPromptFromFile(config.promptFile) : config.prompt
   const needsDetached = !!prompt
   const bedrockConfig = readBedrockConfig()
-  const command = buildSandboxCommand(config.sandboxName, workspace, bedrockConfig, {
-    detached: needsDetached,
-    continueFlag: config.continueConversation,
-    prompt,
-  })
+  const command = buildSandboxCommand(config.sandboxName, workspace, bedrockConfig, { detached: needsDetached })
 
   printStartupInfo(config.sandboxName, workspace)
 
