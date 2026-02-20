@@ -3,7 +3,7 @@ import path from 'path'
 import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { cyan, yellow } from '../colors'
-import { LOG_DIR, WORKTREE_DIR } from './types'
+import { WORKTREE_DIR } from './types'
 
 // --- Types ---
 
@@ -12,11 +12,6 @@ type SandboxInfo = {
   readonly status: string
 }
 
-type LogInfo = {
-  readonly name: string
-  readonly timestamp: Date
-  readonly path: string
-}
 
 type WorktreeInfo = {
   readonly name: string
@@ -25,7 +20,6 @@ type WorktreeInfo = {
 
 type StatusReport = {
   readonly sandboxes: readonly SandboxInfo[]
-  readonly recentLogs: readonly LogInfo[]
   readonly worktrees: readonly WorktreeInfo[]
 }
 
@@ -61,36 +55,6 @@ const getRunningSandboxes = async (): Promise<readonly SandboxInfo[]> => {
   }
 }
 
-// --- Log Status ---
-
-const getRecentLogs = (): readonly LogInfo[] => {
-  if (!fs.existsSync(LOG_DIR)) {
-    return []
-  }
-
-  try {
-    const entries = fs.readdirSync(LOG_DIR)
-
-    const logs = entries
-      .filter((name: string) => name.endsWith('.log'))
-      .map((name: string) => {
-        const filePath = path.join(LOG_DIR, name)
-        const stats = fs.statSync(filePath)
-
-        return {
-          name,
-          timestamp: stats.mtime,
-          path: filePath,
-        }
-      })
-      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-      .slice(0, 5)
-
-    return logs
-  } catch {
-    return []
-  }
-}
 
 // --- Worktree Status ---
 
@@ -134,20 +98,6 @@ const displaySandboxes = (sandboxes: readonly SandboxInfo[]): void => {
   echo('')
 }
 
-const displayRecentLogs = (logs: readonly LogInfo[]): void => {
-  echo(cyan('=== Recent Logs ==='))
-
-  if (logs.length === 0) {
-    echo('None')
-  } else {
-    logs.forEach((log: LogInfo) => {
-      const timestamp = log.timestamp.toLocaleString()
-      echo(`  ${log.name} (${timestamp})`)
-    })
-  }
-
-  echo('')
-}
 
 const displayWorktrees = (worktrees: readonly WorktreeInfo[]): void => {
   echo(cyan('=== Worktrees ==='))
@@ -167,12 +117,10 @@ const displayWorktrees = (worktrees: readonly WorktreeInfo[]): void => {
 
 export const getStatus = async (): Promise<StatusReport> => {
   const sandboxes = await getRunningSandboxes()
-  const recentLogs = getRecentLogs()
   const worktrees = getWorktrees()
 
   return {
     sandboxes,
-    recentLogs,
     worktrees,
   }
 }
@@ -181,6 +129,5 @@ export const displayStatus = async (): Promise<void> => {
   const status = await getStatus()
 
   displaySandboxes(status.sandboxes)
-  displayRecentLogs(status.recentLogs)
   displayWorktrees(status.worktrees)
 }

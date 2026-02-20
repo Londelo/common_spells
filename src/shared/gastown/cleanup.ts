@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { echo } from 'shelljs'
 import { green, yellow } from '../colors'
-import { LOG_DIR, WORKTREE_DIR } from './types'
+import { WORKTREE_DIR } from './types'
 import { listSandboxNames, removeSandbox } from './helpers'
 
 // --- Types ---
@@ -10,13 +10,11 @@ import { listSandboxNames, removeSandbox } from './helpers'
 type CleanupOptions = {
   readonly target?: string
   readonly removeWorktrees?: boolean
-  readonly removeLogs?: boolean
 }
 
 type CleanupResult = {
   readonly sandboxesRemoved: readonly string[]
   readonly worktreesRemoved: boolean
-  readonly logsRemoved: boolean
 }
 
 // --- Sandbox Cleanup ---
@@ -78,37 +76,11 @@ const removeWorktrees = (): boolean => {
   }
 }
 
-// --- Log Cleanup ---
-
-const removeLogs = (): boolean => {
-  if (!fs.existsSync(LOG_DIR)) {
-    return false
-  }
-
-  echo('')
-  echo(green('Removing logs...'))
-
-  try {
-    const entries = fs.readdirSync(LOG_DIR)
-
-    entries
-      .filter((entry: string) => entry.endsWith('.log'))
-      .forEach((entry: string) => {
-        fs.unlinkSync(path.join(LOG_DIR, entry))
-      })
-
-    echo('  Done')
-    return true
-  } catch (error) {
-    echo(yellow('  Failed to remove logs'))
-    return false
-  }
-}
 
 // --- Main Function ---
 
 export const cleanup = async (options: CleanupOptions = {}): Promise<CleanupResult> => {
-  const { target, removeWorktrees: shouldRemoveWorktrees, removeLogs: shouldRemoveLogs } = options
+  const { target, removeWorktrees: shouldRemoveWorktrees } = options
 
   echo('=== Cleanup ===')
 
@@ -116,15 +88,12 @@ export const cleanup = async (options: CleanupOptions = {}): Promise<CleanupResu
 
   const worktreesRemoved = shouldRemoveWorktrees ? removeWorktrees() : false
 
-  const logsRemoved = shouldRemoveLogs ? removeLogs() : false
-
   echo('')
   echo(green('Cleanup complete'))
 
   return {
     sandboxesRemoved,
     worktreesRemoved,
-    logsRemoved,
   }
 }
 

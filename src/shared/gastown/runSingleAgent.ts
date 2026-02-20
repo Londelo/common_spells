@@ -95,7 +95,6 @@ const runInteractiveMode = async (
   return {
     sandboxName,
     workspace: '',
-    logFile: paths.logFile,
     outputFile: paths.outputFile,
     status: 'completed',
   }
@@ -135,7 +134,6 @@ const runDetachedMode = async (
   return {
     sandboxName,
     workspace: '',
-    logFile: paths.logFile,
     outputFile: paths.outputFile,
     status: 'running',
   }

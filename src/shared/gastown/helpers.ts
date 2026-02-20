@@ -4,7 +4,7 @@ import os from 'os'
 import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { green, red, yellow } from '../colors'
-import { BedrockConfig, SandboxPaths, LOG_DIR, OUTPUT_DIR } from './types'
+import { BedrockConfig, SandboxPaths, OUTPUT_DIR } from './types'
 
 // --- Bedrock Config (used by: dccRun, dccGastown, dccSetup) ---
 
@@ -105,16 +105,13 @@ export const resolveWorkspace = (workspace: string): string => {
 }
 
 export const resolveSandboxPaths = (sandboxName: string, outputFile?: string): SandboxPaths => ({
-  logDir: LOG_DIR,
   outputDir: OUTPUT_DIR,
-  logFile: path.join(LOG_DIR, `${sandboxName}.log`),
   outputFile: outputFile ?? path.join(OUTPUT_DIR, `${sandboxName}.txt`),
 })
 
 // --- Directory & Log Helpers (used by: dccRun, dccGastown, dccTask) ---
 
 export const ensureDirectories = (paths: SandboxPaths): void => {
-  fs.mkdirSync(paths.logDir, { recursive: true })
   fs.mkdirSync(paths.outputDir, { recursive: true })
 }
 
