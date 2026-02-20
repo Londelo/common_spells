@@ -4,7 +4,7 @@ import os from 'os'
 import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { green, red, yellow } from '../colors'
-import { BedrockConfig, SandboxPaths, OUTPUT_DIR } from './types'
+import { BedrockConfig, SandboxPaths, OUTPUT_DIR, GT_DIR } from './types'
 
 // --- Bedrock Config (used by: dccRun, dccGastown, dccSetup) ---
 
@@ -34,6 +34,67 @@ export const readBedrockConfig = (): BedrockConfig => {
     awsProfile: env.AWS_PROFILE ?? process.env.AWS_PROFILE ?? undefined,
     model: env.ANTHROPIC_MODEL ?? process.env.ANTHROPIC_MODEL ?? undefined,
   }
+}
+
+export const writeGastownDockerfile = (): void => {
+  const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
+
+  const dockerfileContent = `# Gastown Docker Template for Claude Code with Bedrock Configuration
+# Extends the official Claude Code sandbox template
+
+FROM docker/sandbox-templates:claude-code
+
+# Build arguments - these are passed from buildGastownTemplate() function
+# They are injected at build time using --build-arg flags
+ARG CLAUDE_CODE_USE_BEDROCK=""
+ARG AWS_REGION="us-east-1"
+ARG AWS_PROFILE=""
+ARG ANTHROPIC_MODEL=""
+ARG GT_DIR=""
+
+# Convert build args to environment variables that persist in the container
+# These will be available to Claude Code agent when sandbox runs
+ENV CLAUDE_CODE_USE_BEDROCK=\${CLAUDE_CODE_USE_BEDROCK}
+ENV AWS_REGION=\${AWS_REGION}
+ENV AWS_PROFILE=\${AWS_PROFILE}
+ENV ANTHROPIC_MODEL=\${ANTHROPIC_MODEL}
+ENV GT_DIR=\${GT_DIR}
+
+# Set working directory for agent
+WORKDIR /workspace
+`
+
+  fs.mkdirSync(GT_DIR, { recursive: true })
+  fs.writeFileSync(dockerfilePath, dockerfileContent, 'utf-8')
+  echo(green(`✓ Dockerfile written to ${dockerfilePath}`))
+}
+
+export const buildGastownTemplate = async (bedrockConfig: BedrockConfig): Promise<void> => {
+  const templateName = 'gastown:latest'
+  const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
+
+  if (!fs.existsSync(dockerfilePath)) {
+    throw new Error(`Dockerfile not found at ${dockerfilePath}. Run gt-setup to create it.`)
+  }
+
+  const buildArgs = [
+    `--build-arg CLAUDE_CODE_USE_BEDROCK="${bedrockConfig.bedrockEnabled || ''}"`,
+    `--build-arg AWS_REGION="${bedrockConfig.awsRegion}"`,
+    `--build-arg AWS_PROFILE="${bedrockConfig.awsProfile || ''}"`,
+    `--build-arg ANTHROPIC_MODEL="${bedrockConfig.model || ''}"`,
+    `--build-arg GT_DIR="${GT_DIR}"`
+  ].join(' ')
+
+  const buildCommand = `docker build ${buildArgs} -f "${dockerfilePath}" -t ${templateName} "${GT_DIR}"`
+
+  echo(yellow('\nBuilding gastown Docker template...'))
+  echo(yellow(buildCommand))
+  echo('')
+
+  await execute(buildCommand, 'Failed to build Docker template')
+
+  echo(green(`✓ Template built: ${templateName}`))
+  echo('')
 }
 
 // --- Prompt Escaping (used by: dccRun, dccGastown, dccTask) ---

@@ -1,10 +1,10 @@
 import fs from 'fs'
+import path from 'path'
 import { echo } from 'shelljs'
 import { execute, executeInteractive } from '../shell'
 import { green, yellow } from '../colors'
-import { BedrockConfig, SandboxConfig, SandboxResult } from './types'
+import { SandboxConfig, SandboxResult, GT_DIR } from './types'
 import {
-  readBedrockConfig,
   removeSandbox,
   resolveWorkspace,
   resolveSandboxPaths,
@@ -12,10 +12,18 @@ import {
   escapePrompt,
   readAndDisplayOutputFile
 } from './helpers'
-import path from 'path'
-import os from 'os'
 
 const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms))
+
+const checkGastownTemplate = (): void => {
+  const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
+
+  if (!fs.existsSync(dockerfilePath)) {
+    throw new Error(
+      'Gastown Docker template not found. Please run "gt-setup" first to create the template.'
+    )
+  }
+}
 
 export const writeOutputHeader = (
   outputFile: string,
@@ -44,38 +52,25 @@ const printStartupInfo = (sandboxName: string, workspace: string): void => {
   echo(green('Starting sandbox'))
   echo(`  Name:      ${sandboxName}`)
   echo(`  Workspace: ${workspace}`)
-  echo(`  Logs:      Use 'docker logs ${sandboxName}' to view`)
+  echo(`  Logs:      Use 'docker sandbox logs ${sandboxName}' to view`)
   echo('')
 }
 
 export const buildSandboxCommand = (
   name: string,
   workspace: string,
-  bedrockConfig: BedrockConfig,
   options: { detached?: boolean; }
 ): string => {
-  const cmd = [
+  const templateName = 'gastown:latest'
+  const detachedFlag = options.detached ? ['--detach'] : []
+
+  return [
     'docker', 'sandbox', 'run',
-    `-w "${workspace}"`,
     '--name', `"${name}"`,
-    '--credentials=none'
-  ]
-
-  const detachedFlag = options.detached ? ['--detached'] : []
-
-  const bedrockFlags = bedrockConfig.bedrockEnabled
-    ? [
-        `-e "CLAUDE_CODE_USE_BEDROCK=${bedrockConfig.bedrockEnabled}"`,
-        `-e "AWS_REGION=${bedrockConfig.awsRegion}"`,
-        ...(bedrockConfig.awsProfile ? [`-e "AWS_PROFILE=${bedrockConfig.awsProfile}"`] : []),
-        ...(bedrockConfig.model ? [`-e "ANTHROPIC_MODEL=${bedrockConfig.model}"`] : []),
-      ]
-    : []
-
-  const awsDir = path.join(os.homedir(), '.aws')
-  const awsMount = fs.existsSync(awsDir) ? [`-v "${awsDir}:/home/agent/.aws:ro"`] : []
-
-  return [...cmd, ...detachedFlag, ...bedrockFlags, ...awsMount, 'claude' ].join(' ')
+    '-t', templateName,
+    ...detachedFlag,
+    'claude', `"${workspace}"`
+  ].join(' ')
 }
 
 const runInteractiveMode = async (
@@ -138,6 +133,9 @@ const runDetachedMode = async (
 }
 
 const runSingleAgent = async (config: SandboxConfig): Promise<SandboxResult> => {
+  // Check if template exists, prompt to run setup if not
+  checkGastownTemplate()
+
   const workspace = resolveWorkspace(config.workspace)
   const paths = resolveSandboxPaths(config.sandboxName, config.outputFile)
 
@@ -147,8 +145,7 @@ const runSingleAgent = async (config: SandboxConfig): Promise<SandboxResult> => 
 
   const prompt = config.promptFile ? readPromptFromFile(config.promptFile) : config.prompt
   const needsDetached = !!prompt
-  const bedrockConfig = readBedrockConfig()
-  const command = buildSandboxCommand(config.sandboxName, workspace, bedrockConfig, { detached: needsDetached })
+  const command = buildSandboxCommand(config.sandboxName, workspace, { detached: needsDetached })
 
   printStartupInfo(config.sandboxName, workspace)
 

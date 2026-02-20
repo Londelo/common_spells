@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
-import dccSetup from '../../shared/gastown/checkSetup'
+import setup from '../../shared/gastown/setup'
 
 const errorMessage = 'Error in gastown setup'
 
 const main = async (): Promise<void> => {
-  await dccSetup()
+  await setup()
 }
 
 ;(async () => await errorHandlerWrapper(main, errorMessage))()

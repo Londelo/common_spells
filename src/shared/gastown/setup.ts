@@ -4,7 +4,7 @@ import os from 'os'
 import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { green, yellow, red, cyan } from '../colors'
-import { readBedrockConfig, validateDockerEnvironment } from './helpers'
+import { readBedrockConfig, writeGastownDockerfile, buildGastownTemplate } from './helpers'
 import { GT_DIR } from './types'
 
 // --- Types ---
@@ -297,7 +297,7 @@ const printSummary = (report: SetupReport): void => {
 
 // --- Main Entry Point ---
 
-const dccSetup = async (): Promise<SetupReport> => {
+const setup = async (): Promise<SetupReport> => {
   echo(cyan('=== Docker Claude Code Setup ==='))
   echo('')
 
@@ -323,7 +323,14 @@ const dccSetup = async (): Promise<SetupReport> => {
 
   printSummary(report)
 
+  // Write Dockerfile to GT_DIR
+  writeGastownDockerfile()
+
+  // Build Docker template with Bedrock config
+  const config = readBedrockConfig()
+  await buildGastownTemplate(config)
+
   return report
 }
 
-export default dccSetup
+export default setup
