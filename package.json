@@ -24,7 +24,8 @@
     "gt-run": "./dist/spells/gastown/run.js",
     "gt-cleanup": "./dist/spells/gastown/cleanup.js",
     "gt-status": "./dist/spells/gastown/status.js",
-    "gt-open": "./dist/spells/gastown/open.js"
+    "gt-open": "./dist/spells/gastown/open.js",
+    "gt-connect": "./dist/spells/gastown/connect.js"
   },
   "scripts": {
     "clean": "rm -rf dist",

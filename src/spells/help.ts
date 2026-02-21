@@ -69,6 +69,11 @@ const displayCommands = async () => {
 
   echo(yellow('\ngt-open').underline)
   echo('\t- Opens ~/.gastown directory in VS Code.')
+
+  echo(yellow('\ngt-connect').underline + '  ->  gt-connect [sandbox-name]')
+  echo('\t- Connect to a running Docker sandbox.')
+  echo('\t- Default: Lists running sandboxes and lets you select one to connect to.')
+  echo('\t- With sandbox name: Directly connects to the specified sandbox.')
 }
 
 (async () => await errorHandlerWrapper(displayCommands, errorMessage))();

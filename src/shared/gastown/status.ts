@@ -11,7 +11,7 @@ type StatusReport = {
   readonly sandboxes: readonly SandboxInfo[]
 }
 
-const getRunningSandboxes = async (): Promise<readonly SandboxInfo[]> => {
+export const getRunningSandboxes = async (): Promise<readonly SandboxInfo[]> => {
   try {
     const command = 'docker sandbox ls'
     echo(yellow(command))

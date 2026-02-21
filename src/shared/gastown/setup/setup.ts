@@ -2,10 +2,10 @@ import fs from 'fs'
 import path from 'path'
 import os from 'os'
 import { echo } from 'shelljs'
-import { execute } from '../shell'
-import { green, yellow, red, cyan } from '../colors'
-import { BedrockConfig, GT_DIR, SANDBOX_DIR, PROXY_CONFIG_PATH, ProxyConfig } from './types'
-import { input } from '../inquirer'
+import { execute } from '../../shell'
+import { green, yellow, red, cyan } from '../../colors'
+import { BedrockConfig, GT_DIR, SANDBOX_DIR, PROXY_CONFIG_PATH, ProxyConfig } from '../types'
+import { input } from '../../inquirer'
 
 type CheckResult = {
   readonly label: string
