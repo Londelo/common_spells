@@ -6,8 +6,6 @@ import { execute } from '../shell'
 import { green, yellow } from '../colors'
 import { BedrockConfig, GT_DIR } from './types'
 
-// --- Bedrock Config (used by: dccRun, dccGastown, dccSetup) ---
-
 const readSettingsFile = (): any => {
   const settingsPath = path.join(os.homedir(), '.claude', 'settings.json')
   if (!fs.existsSync(settingsPath)) return null
@@ -39,32 +37,23 @@ export const readBedrockConfig = (): BedrockConfig => {
 export const writeGastownDockerfile = (): void => {
   const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
 
-  const dockerfileContent = `# Gastown Docker Template for Claude Code with Bedrock Configuration
-# Extends the official Claude Code sandbox template
+  const dockerfileContent = `FROM docker/sandbox-templates:claude-code
 
-FROM docker/sandbox-templates:claude-code
-
-# Build arguments - these are passed from buildGastownTemplate() function
-# They are injected at build time using --build-arg flags
 ARG CLAUDE_CODE_USE_BEDROCK=""
 ARG AWS_REGION="us-east-1"
 ARG AWS_PROFILE=""
 ARG ANTHROPIC_MODEL=""
 ARG GT_DIR=""
 
-# Convert build args to environment variables that persist in the container
-# These will be available to Claude Code agent when sandbox runs
 ENV CLAUDE_CODE_USE_BEDROCK=\${CLAUDE_CODE_USE_BEDROCK}
 ENV AWS_REGION=\${AWS_REGION}
 ENV AWS_PROFILE=\${AWS_PROFILE}
 ENV ANTHROPIC_MODEL=\${ANTHROPIC_MODEL}
 ENV GT_DIR=\${GT_DIR}
 
-# Copy AWS credentials from build context (owned by agent, read-only)
 COPY --chown=agent:agent .aws /home/agent/.aws
 RUN chmod 555 /home/agent/.aws && chmod 444 /home/agent/.aws/*
 
-# Set working directory for agent
 WORKDIR /workspace
 `
 
@@ -81,12 +70,10 @@ const copyAwsCredentials = (): void => {
     throw new Error(`AWS credentials not found at ${sourceDir}. Run 'aws configure' or set up SSO first.`)
   }
 
-  // Remove existing .aws in build context if present
   if (fs.existsSync(targetDir)) {
     fs.rmSync(targetDir, { recursive: true })
   }
 
-  // Copy .aws directory to build context
   fs.cpSync(sourceDir, targetDir, { recursive: true })
   echo(green(`✓ AWS credentials copied to build context`))
 }
@@ -99,7 +86,6 @@ export const buildGastownTemplate = async (bedrockConfig: BedrockConfig): Promis
     throw new Error(`Dockerfile not found at ${dockerfilePath}. Run gt-setup to create it.`)
   }
 
-  // Copy AWS credentials to build context
   copyAwsCredentials()
 
   const buildArgs = [
@@ -122,11 +108,7 @@ export const buildGastownTemplate = async (bedrockConfig: BedrockConfig): Promis
   echo('')
 }
 
-// --- Prompt Escaping (used by: dccRun, dccGastown, dccTask) ---
-
 export const escapePrompt = (prompt: string): string => prompt.replace(/'/g, "'\\''")
-
-// --- Sandbox Lifecycle (used by: dccRun, dccGastown, dccTask, dccCleanup) ---
 
 export const sandboxExists = async (sandboxName: string): Promise<boolean> => {
   try {
@@ -161,11 +143,8 @@ export const listSandboxNames = async (): Promise<readonly string[]> => {
     echo(yellow(command))
     const output = await execute(command, 'Failed to list sandboxes')
 
-    // Parse table output - first column is the name
-    // Format: NAME    IMAGE    STATUS    ...
     const lines = output.split('\n').filter((line: string) => line.trim().length > 0)
 
-    // Skip header row (first line) and extract first column (name)
     const names = lines
       .slice(1)
       .map((line: string) => line.trim().split(/\s+/)[0])
@@ -178,8 +157,6 @@ export const listSandboxNames = async (): Promise<readonly string[]> => {
   }
 }
 
-// --- Path Resolution (used by: dccRun, dccGastown) ---
-
 export const resolveWorkspace = (workspace: string): string => {
   const resolved = path.resolve(workspace)
 
@@ -189,8 +166,6 @@ export const resolveWorkspace = (workspace: string): string => {
 
   return fs.realpathSync(resolved)
 }
-
-// --- Docker Environment Validation (used by: dccRun, dccGastown, dccSetup) ---
 
 export const validateDockerEnvironment = async (): Promise<void> => {
   try {

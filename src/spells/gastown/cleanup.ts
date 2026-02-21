@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { echo } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { cleanup, cleanupAll } from '../../shared/gastown/cleanup'
 
@@ -13,7 +14,7 @@ const main = async (): Promise<void> => {
   } else if (target) {
     await cleanup({ target })
   } else {
-    await cleanup()
+    echo('Please specify a target or use --all to clean up all sandboxes')
   }
 }
 

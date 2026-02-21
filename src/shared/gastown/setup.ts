@@ -7,8 +7,6 @@ import { green, yellow, red, cyan } from '../colors'
 import { readBedrockConfig, writeGastownDockerfile, buildGastownTemplate } from './helpers'
 import { GT_DIR } from './types'
 
-// --- Types ---
-
 type CheckResult = {
   readonly label: string
   readonly status: 'ok' | 'warn' | 'error'
@@ -19,8 +17,6 @@ type SetupReport = {
   readonly checks: readonly CheckResult[]
   readonly environment: Record<string, string>
 }
-
-// --- TechPass Check ---
 
 const checkTechPass = async (): Promise<CheckResult> => {
   try {
@@ -86,8 +82,6 @@ const compareVersions = (a: string, b: string): number => {
   }, 0)
 }
 
-// --- Claude Settings Check ---
-
 const checkClaudeSettings = (): CheckResult => {
   const settingsPath = path.join(os.homedir(), '.claude', 'settings.json')
 
@@ -122,8 +116,6 @@ const checkClaudeSettings = (): CheckResult => {
     }
   }
 }
-
-// --- AWS Credentials Check ---
 
 const checkAwsCredentials = (): CheckResult => {
   const awsDir = path.join(os.homedir(), '.aws')
@@ -161,15 +153,11 @@ const checkAwsCredentials = (): CheckResult => {
       const raw = fs.readFileSync(configFile, 'utf-8')
       const hasSso = raw.includes('sso_')
       details.push(`SSO configured: ${hasSso ? 'yes' : 'no'}`)
-    } catch {
-      // Ignore config read failures
-    }
+    } catch {}
   }
 
   return { label: 'AWS Credentials', status: 'ok', details }
 }
-
-// --- Docker Check ---
 
 const checkDocker = async (): Promise<CheckResult> => {
   try {
@@ -211,8 +199,6 @@ const checkDocker = async (): Promise<CheckResult> => {
   }
 }
 
-// --- Bedrock Config Check ---
-
 const checkBedrockConfig = (): { readonly check: CheckResult; readonly env: Record<string, string> } => {
   const config = readBedrockConfig()
   const env: Record<string, string> = {}
@@ -248,8 +234,6 @@ const checkBedrockConfig = (): { readonly check: CheckResult; readonly env: Reco
     env,
   }
 }
-
-// --- Display ---
 
 const statusIcon = (status: 'ok' | 'warn' | 'error'): string => {
   const icons: Record<string, string> = { ok: '✓', warn: '⚠', error: '✗' }
@@ -295,8 +279,6 @@ const printSummary = (report: SetupReport): void => {
   echo('')
 }
 
-// --- Main Entry Point ---
-
 const setup = async (): Promise<SetupReport> => {
   echo(cyan('=== Docker Claude Code Setup ==='))
   echo('')
@@ -323,10 +305,8 @@ const setup = async (): Promise<SetupReport> => {
 
   printSummary(report)
 
-  // Write Dockerfile to GT_DIR
   writeGastownDockerfile()
 
-  // Build Docker template with Bedrock config
   const config = readBedrockConfig()
   await buildGastownTemplate(config)
 

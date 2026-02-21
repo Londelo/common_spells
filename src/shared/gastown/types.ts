@@ -4,7 +4,6 @@ import os from 'os'
 // --- Constants (used by all gastown scripts) ---
 
 export const GT_DIR = path.join(os.homedir(), '.gastown')
-export const WORKTREE_DIR = path.join(GT_DIR, 'worktrees')
 
 // --- Types ---
 
