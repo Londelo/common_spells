@@ -372,9 +372,9 @@ const setup = async (): Promise<SetupReport> => {
 
   await buildGastownTemplate()
 
-  printSummary(report)
-
   await configureNetworkPolicy()
+
+  printSummary(report)
 
   return report
 }
