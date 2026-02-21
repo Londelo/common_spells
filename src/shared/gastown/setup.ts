@@ -4,7 +4,8 @@ import os from 'os'
 import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { green, yellow, red, cyan } from '../colors'
-import { BedrockConfig, GT_DIR } from './types'
+import { BedrockConfig, GT_DIR, SANDBOX_DIR, PROXY_CONFIG_PATH, ProxyConfig } from './types'
+import { input } from '../inquirer'
 
 type CheckResult = {
   readonly label: string
@@ -43,6 +44,66 @@ const readBedrockConfig = (): BedrockConfig => {
     awsProfile: env.AWS_PROFILE ?? process.env.AWS_PROFILE ?? undefined,
     model: env.ANTHROPIC_MODEL ?? process.env.ANTHROPIC_MODEL ?? undefined,
   }
+}
+
+// --- Proxy Config Functions ---
+
+const readProxyConfig = (): ProxyConfig | null => {
+  if (!fs.existsSync(PROXY_CONFIG_PATH)) return null
+
+  try {
+    const raw = fs.readFileSync(PROXY_CONFIG_PATH, 'utf-8')
+    return JSON.parse(raw) as ProxyConfig
+  } catch {
+    return null
+  }
+}
+
+const writeProxyConfig = (config: ProxyConfig): void => {
+  fs.mkdirSync(SANDBOX_DIR, { recursive: true })
+  fs.writeFileSync(PROXY_CONFIG_PATH, JSON.stringify(config, null, 2), 'utf-8')
+}
+
+const collectHosts = async (hosts: readonly string[] = []): Promise<readonly string[]> => {
+  const prompt = hosts.length === 0
+    ? 'Add a hostname to allow (or press Enter when done):'
+    : 'Add another hostname (or press Enter when done):'
+
+  const hostname = await input(prompt)
+
+  if (!hostname.trim()) {
+    return hosts
+  }
+
+  echo(cyan(`Hosts to allow: [${[...hosts, hostname.trim()].join(', ')}]`))
+  return collectHosts([...hosts, hostname.trim()])
+}
+
+const configureNetworkPolicy = async (): Promise<void> => {
+  echo(green('\nPlease set up your default network policy'))
+  echo('  - all new entires will overwrite old ones')
+  echo(`  - the network policy is stored in: ${PROXY_CONFIG_PATH}`)
+
+
+
+  echo(yellow('\n⚠ Internet access is DENIED but your can allow specific hostnames'))
+
+  const currentConfig = readProxyConfig()
+  if (currentConfig && currentConfig.allow.length > 0) {
+    echo(cyan('Currently allowed hosts:'))
+    currentConfig.allow.forEach((host: string) => echo(`  • ${host}`))
+  } else {
+    echo('No host names currently allowed')
+  }
+  echo('')
+  const hosts = await collectHosts()
+
+  writeProxyConfig({ policy: 'deny', allow: hosts })
+
+  const message = hosts.length === 0
+    ? 'Network policy saved (all internet access denied)'
+    : `Network policy saved with ${hosts.length} allowed host${hosts.length === 1 ? '' : 's'}`
+  echo(green(`✓ ${message}\n`))
 }
 
 const writeGastownDockerfile = (): void => {
@@ -357,27 +418,19 @@ const printSummary = (report: SetupReport): void => {
   const warns = report.checks.filter((c: CheckResult) => c.status === 'warn')
 
   if (errors.length === 0 && warns.length === 0) {
-    echo(green('=== Setup Complete ==='))
+    echo(green('=== Environment Checks Complete ==='))
     echo('')
-    echo('Your environment is ready. You can now run:')
+    echo('Your environment is ready.')
   } else if (errors.length === 0) {
-    echo(yellow('=== Setup Complete (with warnings) ==='))
+    echo(yellow('=== Environment Checks Complete (with warnings) ==='))
     echo('')
     echo('Your environment may work, but some issues were detected.')
   } else {
-    echo(red('=== Setup Incomplete ==='))
+    echo(red('=== Environment Checks Incomplete ==='))
     echo('')
     echo('Some required components are missing. Fix the errors above before proceeding.')
     return
   }
-
-  echo('')
-  echo('  # Single agent (interactive)')
-  echo(`  dcc-run ~/your-project`)
-  echo('')
-  echo('  # Single agent (headless)')
-  echo(`  dcc-run -p "Your task" ~/your-project`)
-  echo('')
 }
 
 const setup = async (): Promise<SetupReport> => {
@@ -404,12 +457,13 @@ const setup = async (): Promise<SetupReport> => {
     environment: env,
   }
 
-  printSummary(report)
-
   writeGastownDockerfile()
-
   const config = readBedrockConfig()
   await buildGastownTemplate(config)
+
+  printSummary(report)
+
+  await configureNetworkPolicy()
 
   return report
 }

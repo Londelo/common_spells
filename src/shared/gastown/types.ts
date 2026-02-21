@@ -4,6 +4,8 @@ import os from 'os'
 // --- Constants (used by all gastown scripts) ---
 
 export const GT_DIR = path.join(os.homedir(), '.gastown')
+export const SANDBOX_DIR = path.join(os.homedir(), '.sandboxd')
+export const PROXY_CONFIG_PATH = path.join(SANDBOX_DIR, 'proxy-config.json')
 
 // --- Types ---
 
@@ -26,4 +28,9 @@ export type SandboxResult = {
   readonly workspace: string
   readonly status: 'running' | 'completed' | 'failed'
   readonly error?: string
+}
+
+export type ProxyConfig = {
+  readonly policy: 'deny'
+  readonly allow: readonly string[]
 }
