@@ -29,7 +29,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "npm run clean && babel src --out-dir dist --extensions '.ts,.tsx'",
+    "build": "npm run clean && babel src --out-dir dist --extensions '.ts,.tsx' --copy-files",
     "link": "npm link",
     "unlink": "npm unlink -g common_spells && npm uninstall -g common_spells",
     "permissions": "chmod +x ./dist/spells/**/*",

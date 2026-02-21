@@ -5,8 +5,8 @@ import { echo } from 'shelljs'
 import { execute } from '../../shell'
 import { green, yellow, red, cyan } from '../../colors'
 import { GT_DIR, PROXY_CONFIG_PATH } from '../types'
-import { input } from '../../inquirer'
-import { readBedrockConfig, readProxyConfig, writeProxyConfig, compareVersions } from './helpers'
+import { readBedrockConfig, compareVersions } from './helpers'
+import proxyConfig from './proxy-config.json'
 
 type CheckResult = {
   readonly label: string
@@ -19,46 +19,14 @@ type SetupReport = {
   readonly environment: Record<string, string>
 }
 
-const collectHosts = async (hosts: readonly string[] = []): Promise<readonly string[]> => {
-  const prompt = hosts.length === 0
-    ? 'Add a hostname to allow (or press Enter when done):'
-    : 'Add another hostname (or press Enter when done):'
-
-  const hostname = await input(prompt)
-
-  if (!hostname.trim()) {
-    return hosts
-  }
-
-  echo(cyan(`Hosts to allow: [${[...hosts, hostname.trim()].join(', ')}]`))
-  return collectHosts([...hosts, hostname.trim()])
-}
-
 const configureNetworkPolicy = async (): Promise<void> => {
-  echo(green('\nPlease set up your default network policy'))
-  echo('  - all new entires will overwrite old ones')
-  echo(`  - the network policy is stored in: ${PROXY_CONFIG_PATH}`)
-
-
-
-  echo(yellow('\n⚠ Internet access is DENIED but your can allow specific hostnames'))
-
-  const currentConfig = readProxyConfig()
-  if (currentConfig && currentConfig.allow.length > 0) {
-    echo(cyan('Currently allowed hosts:'))
-    currentConfig.allow.forEach((host: string) => echo(`  • ${host}`))
-  } else {
-    echo('No host names currently allowed')
+  try {
+    fs.mkdirSync(path.dirname(PROXY_CONFIG_PATH), { recursive: true })
+    fs.writeFileSync(PROXY_CONFIG_PATH, JSON.stringify(proxyConfig, null, 2), 'utf-8')
+    echo(green(`✓ Network policy configured at ${PROXY_CONFIG_PATH}\n`))
+  } catch (error) {
+    throw new Error(`Failed to configure network policy: ${error}`)
   }
-  echo('')
-  const hosts = await collectHosts()
-
-  writeProxyConfig({ policy: 'deny', allow: hosts })
-
-  const message = hosts.length === 0
-    ? 'Network policy saved (all internet access denied)'
-    : `Network policy saved with ${hosts.length} allowed host${hosts.length === 1 ? '' : 's'}`
-  echo(green(`✓ ${message}\n`))
 }
 
 const writeGastownDockerfile = (): void => {
