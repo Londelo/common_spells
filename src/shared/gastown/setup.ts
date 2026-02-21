@@ -4,8 +4,7 @@ import os from 'os'
 import { echo } from 'shelljs'
 import { execute } from '../shell'
 import { green, yellow, red, cyan } from '../colors'
-import { readBedrockConfig, writeGastownDockerfile, buildGastownTemplate } from './helpers'
-import { GT_DIR } from './types'
+import { BedrockConfig, GT_DIR } from './types'
 
 type CheckResult = {
   readonly label: string
@@ -16,6 +15,108 @@ type CheckResult = {
 type SetupReport = {
   readonly checks: readonly CheckResult[]
   readonly environment: Record<string, string>
+}
+
+const readSettingsFile = (): any => {
+  const settingsPath = path.join(os.homedir(), '.claude', 'settings.json')
+  if (!fs.existsSync(settingsPath)) return null
+
+  try {
+    const raw = fs.readFileSync(settingsPath, 'utf-8')
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
+}
+
+const readBedrockConfig = (): BedrockConfig => {
+  const settings = readSettingsFile()
+  const env = settings?.env ?? {}
+
+  const bedrockFromSettings = env.CLAUDE_CODE_USE_BEDROCK ?? null
+  const apiProviderFallback = settings?.apiProvider === 'bedrock' ? '1' : null
+  const bedrockEnabled = bedrockFromSettings ?? apiProviderFallback ?? process.env.CLAUDE_CODE_USE_BEDROCK
+
+  return {
+    bedrockEnabled: bedrockEnabled || undefined,
+    awsRegion: env.AWS_REGION ?? process.env.AWS_REGION ?? 'us-east-1',
+    awsProfile: env.AWS_PROFILE ?? process.env.AWS_PROFILE ?? undefined,
+    model: env.ANTHROPIC_MODEL ?? process.env.ANTHROPIC_MODEL ?? undefined,
+  }
+}
+
+const writeGastownDockerfile = (): void => {
+  const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
+
+  const dockerfileContent = `FROM docker/sandbox-templates:claude-code
+
+ARG CLAUDE_CODE_USE_BEDROCK=""
+ARG AWS_REGION="us-east-1"
+ARG AWS_PROFILE=""
+ARG ANTHROPIC_MODEL=""
+ARG GT_DIR=""
+
+ENV CLAUDE_CODE_USE_BEDROCK=\${CLAUDE_CODE_USE_BEDROCK}
+ENV AWS_REGION=\${AWS_REGION}
+ENV AWS_PROFILE=\${AWS_PROFILE}
+ENV ANTHROPIC_MODEL=\${ANTHROPIC_MODEL}
+ENV GT_DIR=\${GT_DIR}
+
+COPY --chown=agent:agent .aws /home/agent/.aws
+RUN chmod 555 /home/agent/.aws && chmod 444 /home/agent/.aws/*
+
+WORKDIR /workspace
+`
+
+  fs.mkdirSync(GT_DIR, { recursive: true })
+  fs.writeFileSync(dockerfilePath, dockerfileContent, 'utf-8')
+  echo(green(`✓ Dockerfile written to ${dockerfilePath}`))
+}
+
+const copyAwsCredentials = (): void => {
+  const sourceDir = path.join(os.homedir(), '.aws')
+  const targetDir = path.join(GT_DIR, '.aws')
+
+  if (!fs.existsSync(sourceDir)) {
+    throw new Error(`AWS credentials not found at ${sourceDir}. Run 'aws configure' or set up SSO first.`)
+  }
+
+  if (fs.existsSync(targetDir)) {
+    fs.rmSync(targetDir, { recursive: true })
+  }
+
+  fs.cpSync(sourceDir, targetDir, { recursive: true })
+  echo(green(`✓ AWS credentials copied to build context`))
+}
+
+const buildGastownTemplate = async (bedrockConfig: BedrockConfig): Promise<void> => {
+  const templateName = 'gastown:latest'
+  const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
+
+  if (!fs.existsSync(dockerfilePath)) {
+    throw new Error(`Dockerfile not found at ${dockerfilePath}. Run gt-setup to create it.`)
+  }
+
+  copyAwsCredentials()
+
+  const buildArgs = [
+    `--build-arg CLAUDE_CODE_USE_BEDROCK="${bedrockConfig.bedrockEnabled || ''}"`,
+    `--build-arg AWS_REGION="${bedrockConfig.awsRegion}"`,
+    `--build-arg AWS_PROFILE="${bedrockConfig.awsProfile || ''}"`,
+    `--build-arg ANTHROPIC_MODEL="${bedrockConfig.model || ''}"`,
+    `--build-arg GT_DIR="${GT_DIR}"`
+  ].join(' ')
+
+  const buildCommand = `docker build ${buildArgs} -f "${dockerfilePath}" -t ${templateName} "${GT_DIR}"`
+
+  echo(yellow('\nBuilding gastown Docker template...'))
+  echo(yellow(buildCommand))
+  echo('')
+
+  await execute(buildCommand, 'Failed to build Docker template')
+
+  echo(green(`✓ Template built: ${templateName}`))
+  echo('')
 }
 
 const checkTechPass = async (): Promise<CheckResult> => {
