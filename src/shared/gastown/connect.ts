@@ -18,13 +18,8 @@ type ConnectResult = {
   readonly connected: boolean
 }
 
-const getConnectableSandboxes = async (): Promise<readonly SandboxInfo[]> => {
-  const allSandboxes = await getRunningSandboxes()
-  return allSandboxes.filter((sandbox: SandboxInfo) => sandbox.status.toLowerCase() === 'running')
-}
-
 const selectSandbox = async (sandboxes: readonly SandboxInfo[]): Promise<string> => {
-  const choices = sandboxes.map((sandbox: SandboxInfo) => `${sandbox.name} ${cyan('(running)')}`).concat('Cancel')
+  const choices = sandboxes.map((sandbox: SandboxInfo) => sandbox.name).concat('Cancel')
 
   const selection = await select('Select a sandbox to connect to:', choices)
 
@@ -35,7 +30,7 @@ const selectSandbox = async (sandboxes: readonly SandboxInfo[]): Promise<string>
   return selection.split(' ')[0]
 }
 
-const buildConnectCommand = (sandboxName: string): string => `docker sandbox run ${sandboxName}`
+const buildConnectCommand = (sandboxName: string): string => `docker sandbox run ${sandboxName} -- continue`
 
 const connectToSandbox = async (sandboxName: string): Promise<ConnectResult> => {
   const command = buildConnectCommand(sandboxName)
@@ -73,7 +68,7 @@ export const connect = async (options?: ConnectOptions): Promise<ConnectResult> 
   }
 
   // Get running sandboxes
-  const runningSandboxes = await getConnectableSandboxes()
+  const runningSandboxes = await getRunningSandboxes()
 
   // Handle edge case: no running sandboxes
   if (runningSandboxes.length === 0) {
@@ -81,7 +76,7 @@ export const connect = async (options?: ConnectOptions): Promise<ConnectResult> 
     echo('')
     echo('To see all sandboxes: gt-status')
     echo('To start a sandbox: gt-run <workspace>')
-    throw new Error('No running sandboxes available')
+    process.exit(0)
   }
 
   // Let user select sandbox

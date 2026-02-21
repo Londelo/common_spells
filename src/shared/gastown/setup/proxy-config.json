@@ -1,22 +1,17 @@
 {
   "policy": {
     "default": "deny",
-    "logBlocked": false,
+    "logBlocked": true,
     "logAllowed": false
   },
   "network": {
     "allowedDomains": [
-      "api.anthropic.com:443",
-      "statsig.anthropic.com:443",
-      "platform.claude.com:443",
-      "hub.docker.com:443",
-      "*.docker.com:443",
-      "ports.ubuntu.com:443",
-      "ports.ubuntu.com:80",
-      "registry.docker.io:443",
-      "*.docker.io:443",
-      "registry.npmjs.org:443",
-      "*.npmjs.org:443"
+      "bedrock-runtime.us-east-1.amazonaws.com:443",
+      "bedrock.us-east-1.amazonaws.com:443",
+      "sts.amazonaws.com:443",
+      "sts.us-east-1.amazonaws.com:443",
+      "download.docker.com:443",
+      "ports.ubuntu.com:80"
     ],
     "blockedDomains": [
       "metadata.azure.internal",
