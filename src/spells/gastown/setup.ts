@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
-import setup from '../../shared/gastown/setup/setup'
+import setup from '../../shared/gastown/setup'
 
 const errorMessage = 'Error in gastown setup'
 

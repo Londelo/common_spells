@@ -4,8 +4,9 @@ import os from 'os'
 import { echo } from 'shelljs'
 import { execute } from '../../shell'
 import { green, yellow, red, cyan } from '../../colors'
-import { BedrockConfig, GT_DIR, SANDBOX_DIR, PROXY_CONFIG_PATH, ProxyConfig } from '../types'
+import { GT_DIR, PROXY_CONFIG_PATH } from '../types'
 import { input } from '../../inquirer'
+import { readBedrockConfig, readProxyConfig, writeProxyConfig, compareVersions } from './helpers'
 
 type CheckResult = {
   readonly label: string
@@ -16,52 +17,6 @@ type CheckResult = {
 type SetupReport = {
   readonly checks: readonly CheckResult[]
   readonly environment: Record<string, string>
-}
-
-const readSettingsFile = (): any => {
-  const settingsPath = path.join(os.homedir(), '.claude', 'settings.json')
-  if (!fs.existsSync(settingsPath)) return null
-
-  try {
-    const raw = fs.readFileSync(settingsPath, 'utf-8')
-    return JSON.parse(raw)
-  } catch {
-    return null
-  }
-}
-
-const readBedrockConfig = (): BedrockConfig => {
-  const settings = readSettingsFile()
-  const env = settings?.env ?? {}
-
-  const bedrockFromSettings = env.CLAUDE_CODE_USE_BEDROCK ?? null
-  const apiProviderFallback = settings?.apiProvider === 'bedrock' ? '1' : null
-  const bedrockEnabled = bedrockFromSettings ?? apiProviderFallback ?? process.env.CLAUDE_CODE_USE_BEDROCK
-
-  return {
-    bedrockEnabled: bedrockEnabled || undefined,
-    awsRegion: env.AWS_REGION ?? process.env.AWS_REGION ?? 'us-east-1',
-    awsProfile: env.AWS_PROFILE ?? process.env.AWS_PROFILE ?? undefined,
-    model: env.ANTHROPIC_MODEL ?? process.env.ANTHROPIC_MODEL ?? undefined,
-  }
-}
-
-// --- Proxy Config Functions ---
-
-const readProxyConfig = (): ProxyConfig | null => {
-  if (!fs.existsSync(PROXY_CONFIG_PATH)) return null
-
-  try {
-    const raw = fs.readFileSync(PROXY_CONFIG_PATH, 'utf-8')
-    return JSON.parse(raw) as ProxyConfig
-  } catch {
-    return null
-  }
-}
-
-const writeProxyConfig = (config: ProxyConfig): void => {
-  fs.mkdirSync(SANDBOX_DIR, { recursive: true })
-  fs.writeFileSync(PROXY_CONFIG_PATH, JSON.stringify(config, null, 2), 'utf-8')
 }
 
 const collectHosts = async (hosts: readonly string[] = []): Promise<readonly string[]> => {
@@ -150,7 +105,9 @@ const copyAwsCredentials = (): void => {
   echo(green(`✓ AWS credentials copied to build context`))
 }
 
-const buildGastownTemplate = async (bedrockConfig: BedrockConfig): Promise<void> => {
+const buildGastownTemplate = async (): Promise<void> => {
+  writeGastownDockerfile()
+  const bedrockConfig = readBedrockConfig()
   const templateName = 'gastown:latest'
   const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
 
@@ -230,18 +187,6 @@ const checkTechPass = async (): Promise<CheckResult> => {
       details: ['Could not determine TechPass version'],
     }
   }
-}
-
-const compareVersions = (a: string, b: string): number => {
-  const partsA = a.split('.').map(Number)
-  const partsB = b.split('.').map(Number)
-  const maxLen = Math.max(partsA.length, partsB.length)
-
-  return Array.from({ length: maxLen }).reduce<number>((result, _, i) => {
-    if (result !== 0) return result
-    const diff = (partsA[i] ?? 0) - (partsB[i] ?? 0)
-    return diff
-  }, 0)
 }
 
 const checkClaudeSettings = (): CheckResult => {
@@ -457,9 +402,7 @@ const setup = async (): Promise<SetupReport> => {
     environment: env,
   }
 
-  writeGastownDockerfile()
-  const config = readBedrockConfig()
-  await buildGastownTemplate(config)
+  await buildGastownTemplate()
 
   printSummary(report)
 
