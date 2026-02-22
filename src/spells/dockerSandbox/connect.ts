@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
-import { connect } from '../../shared/gastown/connect'
+import { connect } from '../../shared/dockerSandbox/connect'
 
-const errorMessage = 'Error in gastown connect'
+const errorMessage = 'Error in dockerSandbox connect'
 
 const main = async (): Promise<void> => {
   const args = process.argv.slice(2)

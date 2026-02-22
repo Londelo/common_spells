@@ -1,9 +1,9 @@
 import path from 'path'
 import os from 'os'
 
-// --- Constants (used by all gastown scripts) ---
+// --- Constants (used by all dockerSandbox scripts) ---
 
-export const GT_DIR = path.join(os.homedir(), '.gastown')
+export const DS_DIR = path.join(os.homedir(), '.dockerSandbox')
 export const SANDBOX_DIR = path.join(os.homedir(), '.sandboxd')
 export const PROXY_CONFIG_PATH = path.join(SANDBOX_DIR, 'proxy-config.json')
 

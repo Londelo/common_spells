@@ -3,15 +3,15 @@ import path from 'path'
 import { echo } from 'shelljs'
 import { executeInteractive } from '../shell'
 import { green, yellow } from '../colors'
-import { SandboxConfig, SandboxResult, GT_DIR } from './types'
+import { SandboxConfig, SandboxResult, DS_DIR } from './types'
 import { resolveWorkspace, sandboxExists } from './helpers'
 
-const checkGastownTemplate = (): void => {
-  const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
+const checkDockerSandboxTemplate = (): void => {
+  const dockerfilePath = path.join(DS_DIR, 'Dockerfile.dockerSandbox')
 
   if (!fs.existsSync(dockerfilePath)) {
     throw new Error(
-      'Gastown Docker template not found. Please run "gt-setup" first to create the template.'
+      'Docker Sandbox template not found. Please run "ds-setup" first to create the template.'
     )
   }
 }
@@ -35,11 +35,11 @@ export const buildSandboxCommand = (
   workspace: string,
   options?: { prompt?: string; isExisting?: boolean }
 ): string => {
-  const templateName = 'gastown:latest'
+  const templateName = 'dockerSandbox:latest'
   const { prompt, isExisting } = options ?? {}
 
   // Existing sandbox: docker sandbox run <name> [-- --print "prompt"]
-  // New sandbox: docker sandbox run --name "<name>" -t gastown:latest claude "<workspace>" [-- --print "prompt"]
+  // New sandbox: docker sandbox run --name "<name>" -t dockerSandbox:latest claude "<workspace>" [-- --print "prompt"]
 
   const baseCommand = isExisting
     ? ['docker', 'sandbox', 'run', name]
@@ -72,7 +72,7 @@ const runSandbox = async (
 
 const runSingleAgent = async (config: SandboxConfig): Promise<SandboxResult> => {
   // Check if template exists, prompt to run setup if not
-  checkGastownTemplate()
+  checkDockerSandboxTemplate()
 
   const workspace = resolveWorkspace(config.workspace)
   const prompt = config.promptFile ? readPromptFromFile(config.promptFile) : config.prompt

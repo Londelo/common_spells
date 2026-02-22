@@ -4,7 +4,7 @@ import os from 'os'
 import { echo } from 'shelljs'
 import { execute } from '../../shell'
 import { green, yellow, red, cyan } from '../../colors'
-import { GT_DIR, PROXY_CONFIG_PATH } from '../types'
+import { DS_DIR, PROXY_CONFIG_PATH } from '../types'
 import { readBedrockConfig, compareVersions, copyAwsCredentials, copyPlugin } from './helpers'
 import proxyConfig from './networkPolicy.json'
 import { createDockerfileContent } from './dockerfile'
@@ -30,17 +30,17 @@ const configureNetworkPolicy = async (): Promise<void> => {
   }
 }
 
-const buildGastownTemplate = async (plugin: string = 'empty'): Promise<void> => {
+const buildDockerSandboxTemplate = async (plugin: string = 'empty'): Promise<void> => {
   const bedrockConfig = readBedrockConfig()
-  const templateName = 'gastown:latest'
-  const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
+  const templateName = 'dockerSandbox:latest'
+  const dockerfilePath = path.join(DS_DIR, 'Dockerfile.dockerSandbox')
 
-  fs.mkdirSync(GT_DIR, { recursive: true })
+  fs.mkdirSync(DS_DIR, { recursive: true })
   fs.writeFileSync(dockerfilePath, createDockerfileContent(plugin), 'utf-8')
   echo(green(`✓ Dockerfile written to ${dockerfilePath}`))
 
   if (!fs.existsSync(dockerfilePath)) {
-    throw new Error(`Dockerfile not found at ${dockerfilePath}. Run gt-setup to create it.`)
+    throw new Error(`Dockerfile not found at ${dockerfilePath}. Run ds-setup to create it.`)
   }
 
   copyAwsCredentials()
@@ -53,12 +53,12 @@ const buildGastownTemplate = async (plugin: string = 'empty'): Promise<void> => 
     `--build-arg AWS_REGION="${bedrockConfig.awsRegion}"`,
     `--build-arg AWS_PROFILE="${bedrockConfig.awsProfile || ''}"`,
     `--build-arg ANTHROPIC_MODEL="${bedrockConfig.model || ''}"`,
-    `--build-arg GT_DIR="${GT_DIR}"`
+    `--build-arg DS_DIR="${DS_DIR}"`
   ].join(' ')
 
-  const buildCommand = `docker build ${buildArgs} -f "${dockerfilePath}" -t ${templateName} "${GT_DIR}"`
+  const buildCommand = `docker build ${buildArgs} -f "${dockerfilePath}" -t ${templateName} "${DS_DIR}"`
 
-  echo(yellow('\nBuilding gastown Docker template...'))
+  echo(yellow('\nBuilding dockerSandbox Docker template...'))
   echo(yellow(buildCommand))
   echo('')
 
@@ -260,8 +260,8 @@ const checkBedrockConfig = (): { readonly check: CheckResult; readonly env: Reco
     details.push(`ANTHROPIC_MODEL=${config.model}`)
   }
 
-  env['GT_DIR'] = GT_DIR
-  details.push(`GT_DIR=${GT_DIR}`)
+  env['DS_DIR'] = DS_DIR
+  details.push(`DS_DIR=${DS_DIR}`)
 
   return {
     check: {
@@ -333,7 +333,7 @@ const setup = async (plugin: string = 'empty'): Promise<SetupReport> => {
     environment: env,
   }
 
-  await buildGastownTemplate(plugin)
+  await buildDockerSandboxTemplate(plugin)
 
   await configureNetworkPolicy()
 

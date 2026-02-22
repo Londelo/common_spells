@@ -74,8 +74,8 @@ export const connect = async (options?: ConnectOptions): Promise<ConnectResult> 
   if (runningSandboxes.length === 0) {
     echo(yellow('No running sandboxes found'))
     echo('')
-    echo('To see all sandboxes: gt-status')
-    echo('To start a sandbox: gt-run <workspace>')
+    echo('To see all sandboxes: ds-status')
+    echo('To start a sandbox: ds-run <workspace>')
     process.exit(0)
   }
 

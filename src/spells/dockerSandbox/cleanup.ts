@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { echo } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
-import { cleanup, cleanupAll } from '../../shared/gastown/cleanup'
+import { cleanup, cleanupAll } from '../../shared/dockerSandbox/cleanup'
 
-const errorMessage = 'Error in gastown cleanup'
+const errorMessage = 'Error in dockerSandbox cleanup'
 
 const main = async (): Promise<void> => {
   const args = process.argv.slice(2)

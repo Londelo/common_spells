@@ -20,12 +20,12 @@
     "release": "./dist/spells/gitlab/createRelease.js",
     "document-repos": "./dist/spells/claude/documentRepos.js",
     "repos": "./dist/spells/repos.js",
-    "gt-setup": "./dist/spells/gastown/setup.js",
-    "gt-run": "./dist/spells/gastown/run.js",
-    "gt-cleanup": "./dist/spells/gastown/cleanup.js",
-    "gt-status": "./dist/spells/gastown/status.js",
-    "gt-open": "./dist/spells/gastown/open.js",
-    "gt-connect": "./dist/spells/gastown/connect.js"
+    "ds-setup": "./dist/spells/dockerSandbox/setup.js",
+    "ds-run": "./dist/spells/dockerSandbox/run.js",
+    "ds-cleanup": "./dist/spells/dockerSandbox/cleanup.js",
+    "ds-status": "./dist/spells/dockerSandbox/status.js",
+    "ds-open": "./dist/spells/dockerSandbox/open.js",
+    "ds-connect": "./dist/spells/dockerSandbox/connect.js"
   },
   "scripts": {
     "clean": "rm -rf dist",

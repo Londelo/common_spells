@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { echo } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
-import runSingleAgent from '../../shared/gastown/runSingleAgent'
+import runSingleAgent from '../../shared/dockerSandbox/runSingleAgent'
 import { red } from '../../shared/colors'
 
-const errorMessage = 'Error in gastown run'
+const errorMessage = 'Error in dockerSandbox run'
 
 type ParsedArgs = {
   readonly sandboxName?: string
@@ -13,7 +13,7 @@ type ParsedArgs = {
   readonly promptFile?: string
 }
 
-const generateSandboxName = (): string => `gastown-${Date.now()}`
+const generateSandboxName = (): string => `ds-${Date.now()}`
 
 const parseArgs = (argv: readonly string[]): ParsedArgs => {
   const defaults: ParsedArgs = {
@@ -53,10 +53,10 @@ const main = async (): Promise<void> => {
   if (!options.workspace) {
     echo(red('Error: Workspace path required'))
     echo('')
-    echo('Usage: gt-run [options] <workspace>')
+    echo('Usage: ds-run [options] <workspace>')
     echo('')
     echo('Options:')
-    echo('  -n, --name NAME      Sandbox name (default: gastown-<timestamp>)')
+    echo('  -n, --name NAME      Sandbox name (default: ds-<timestamp>)')
     echo('  -p, --prompt TEXT    Prompt to send to Claude (headless mode)')
     echo('  -f, --prompt-file    Read prompt from file (headless mode)')
     process.exit(1)
