@@ -2,7 +2,8 @@
 name: analyze-docs
 description: Analyzes Verified Fan platform documentation to answer questions about how the system works. Triggers on "what does X do?", "what happens when X?", "how does X work?", "how do X and Y interact?", "why does X do Y?", "why is X designed this way?", "explain X", "walk me through X", "what's the architecture of X?", "search the docs for X", "find documentation about X".
 allowed-tools: Task, Read, Glob, Grep, Edit, Bash(ls:*,find:*,cat:*,head:*,tail:*,wc:*,tree:*)
-user-invocable: false
+user-invocable: true
+disable-model-invocation: true
 model: sonnet
 ---
 
