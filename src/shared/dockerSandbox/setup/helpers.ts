@@ -105,3 +105,16 @@ export const copyPlugin = (plugin: string): void => {
   fs.cpSync(sourceDir, targetDir, { recursive: true })
   echo(green(`✓ Plugin '${plugin}' copied to build context`))
 }
+
+export const getAvailablePlugins = (): readonly string[] => {
+  const pluginsDir = path.join(__dirname, 'plugins')
+
+  if (!fs.existsSync(pluginsDir)) {
+    return []
+  }
+
+  const entries = fs.readdirSync(pluginsDir, { withFileTypes: true })
+  return entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+}
