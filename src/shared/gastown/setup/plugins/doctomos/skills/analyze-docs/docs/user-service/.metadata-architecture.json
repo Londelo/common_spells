@@ -1,0 +1,53 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "timestamp": "2026-02-13T20:00:00.000Z",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Layered Monolith with Service-Oriented Integration",
+  "entry_points": [
+    "app/index.js",
+    "features/cucumberSetup.js"
+  ],
+  "key_directories": [
+    "app/",
+    "app/router/",
+    "app/managers/",
+    "app/datastore/",
+    "app/services/",
+    "lib/",
+    "lib/middlewares/",
+    "features/",
+    "configs/",
+    "tools/"
+  ],
+  "layers": [
+    "Router (app/router/)",
+    "Manager (app/managers/)",
+    "Datastore (app/datastore/)",
+    "Services (app/services/)",
+    "Infrastructure (lib/)"
+  ],
+  "primary_patterns": [
+    "Layered Architecture",
+    "Repository Pattern",
+    "Manager/Service Pattern",
+    "Middleware Chain",
+    "Facade Pattern",
+    "Context Object Pattern"
+  ],
+  "external_integrations": [
+    "Ticketmaster API v2",
+    "Facebook Graph API",
+    "Entries Service",
+    "Exports Service",
+    "SLA Service",
+    "Campaign Data Stream",
+    "MongoDB"
+  ],
+  "testing_framework": "Cucumber BDD + Jest",
+  "main_framework": "Koa.js"
+}

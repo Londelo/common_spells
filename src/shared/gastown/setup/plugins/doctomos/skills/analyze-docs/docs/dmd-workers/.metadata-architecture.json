@@ -1,0 +1,82 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "timestamp": "2026-02-13T22:00:00Z",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Serverless + Event-Driven + Middleware Pipeline",
+  "entry_points": [
+    "shared/entryFiles/lambda.js",
+    "apps/*/index.js",
+    "shared/appResolver/index.js"
+  ],
+  "key_directories": [
+    "apps/",
+    "shared/",
+    "configs/",
+    "features/",
+    "terraform/",
+    "tools/"
+  ],
+  "workers": [
+    "demandStreamToSqs",
+    "eventDetails",
+    "notificationGenerator",
+    "notificationScheduler",
+    "notificationSend",
+    "proxyTmAccountService",
+    "shortenEventUrl",
+    "smsStatusConsumer"
+  ],
+  "middleware_types": [
+    "kinesisConsumer",
+    "dynamodbConsumer",
+    "dynamodbKinesisConsumer",
+    "sqsConsumer",
+    "appsyncResolver",
+    "scheduled",
+    "kafkaConsumer",
+    "s3Consumer",
+    "sdkInvoked",
+    "firehoseProcessor",
+    "snsSubscriber"
+  ],
+  "external_dependencies": [
+    "DynamoDB",
+    "Kinesis",
+    "SQS",
+    "AppSync",
+    "CloudWatch",
+    "Lambda",
+    "Redis",
+    "MongoDB",
+    "Bitly API",
+    "SMS Service",
+    "TM Accounts API",
+    "TM Discovery API",
+    "OpenTelemetry Collector"
+  ],
+  "design_patterns": [
+    "Middleware Pattern (Chain of Responsibility)",
+    "Dependency Injection",
+    "Pipeline Pattern (Function Composition)",
+    "Strategy Pattern (Middleware Type Selection)",
+    "Adapter Pattern (Event Source Transformations)",
+    "Factory Pattern (Service Initialization)",
+    "Repository Pattern (Implied)",
+    "Batch Processing Pattern",
+    "Correlation ID Pattern (Distributed Tracing)"
+  ],
+  "tech_stack": {
+    "runtime": "Node.js",
+    "languages": ["JavaScript", "TypeScript"],
+    "framework": "AWS Lambda",
+    "build_tools": ["Webpack", "Babel"],
+    "testing": ["Cucumber", "Jest"],
+    "infrastructure": ["Terraform"],
+    "observability": ["OpenTelemetry", "CloudWatch"]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T22:00:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/demand-capture/data-pipeline",
+  "repo_name": "dmd-pipeline",
+  "classification": "pipeline",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [],
+    "consumes_events": [
+      "dynamodb.INSERT",
+      "dynamodb.MODIFY",
+      "dynamodb.REMOVE"
+    ],
+    "depends_on_services": [
+      "dynamodb-table-demand",
+      "kinesis-stream-demand",
+      "s3-bucket-demand",
+      "aws-glue-catalog",
+      "aws-athena",
+      "cloudwatch-logs"
+    ],
+    "depends_on_repos": [
+      "demand-capture (upstream - writes to DynamoDB)"
+    ],
+    "outputs_to": [
+      "s3-avro-archives",
+      "s3-error-files",
+      "athena-queryable-tables"
+    ]
+  },
+  "record_types_processed": [
+    "demand",
+    "notification",
+    "event",
+    "sale"
+  ],
+  "data_transformations": [
+    "dynamodb_stream_to_json",
+    "unmarshall_dynamodb_format",
+    "validate_avro_schema",
+    "mark_deleted_records",
+    "scrub_pii_fields",
+    "add_reference_id",
+    "add_system_metadata",
+    "group_by_type_and_date",
+    "convert_to_avro_container",
+    "upload_to_s3"
+  ],
+  "storage_patterns": [
+    "s3://{bucket}/data/{type}/partition_date={YYYY-MM-DD}/{timestamp}-{uuid}.avro",
+    "s3://{bucket}/errors/{timestamp}-{uuid}.json"
+  ],
+  "key_business_metrics": [
+    "event_processing_latency_seconds",
+    "processing_success_rate_percent",
+    "records_per_avro_file_avg",
+    "athena_query_latency_seconds",
+    "pii_scrubbing_compliance_percent"
+  ]
+}

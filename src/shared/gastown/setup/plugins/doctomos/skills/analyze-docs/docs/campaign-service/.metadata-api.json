@@ -1,0 +1,35 @@
+{
+  "agent": "api",
+  "status": "success",
+  "timestamp": "2026-02-13T21:46:00Z",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "rest",
+  "framework": "koa",
+  "endpoints_count": 42,
+  "resource_types": [
+    "campaigns",
+    "markets",
+    "events",
+    "contacts",
+    "artists",
+    "venues",
+    "promoters"
+  ],
+  "authentication": "jwt",
+  "schemas_count": 9,
+  "schema_versions": ["v1", "v2"],
+  "notes": [
+    "3-tier architecture: Router -> Manager -> Datastore",
+    "Functional programming enforced via ESLint",
+    "OpenTelemetry tracing with correlation IDs",
+    "Prometheus metrics exposed on /metrics",
+    "Campaign lifecycle with automatic status transitions",
+    "JWT authentication with permission-based access control",
+    "Supreme user privileges required for admin operations",
+    "JSON schema validation for all request bodies",
+    "Multi-locale content support"
+  ]
+}

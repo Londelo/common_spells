@@ -1,0 +1,73 @@
+{
+  "agent": "coding-style",
+  "status": "success",
+  "timestamp": "2026-02-13T21:45:00.000Z",
+  "files_written": [
+    "dynamic/style-conventions.md",
+    "dynamic/style-complexity.md"
+  ],
+  "coding_style": {
+    "naming_convention": "camelCase (variables/functions), PascalCase (components/types)",
+    "avg_function_length": 22,
+    "max_nesting_depth": 2,
+    "key_linting_rules": [
+      "fp/no-loops",
+      "fp/no-let",
+      "fp/no-mutation",
+      "complexity: 6",
+      "max-lines: 200",
+      "max-depth: 2",
+      "no-console",
+      "prefer-const"
+    ],
+    "readability": {
+      "overall_rating": "Excellent",
+      "intention_revealing_names": "Excellent",
+      "narrative_flow": "Excellent",
+      "abstraction_consistency": "Excellent",
+      "self_documentation": "Excellent"
+    },
+    "top_principles": [
+      "DRY",
+      "Single Responsibility",
+      "YAGNI",
+      "KISS",
+      "AHA"
+    ],
+    "functional_programming": {
+      "enabled": true,
+      "strictness": "high",
+      "no_classes": true,
+      "no_loops": true,
+      "no_let": true,
+      "no_mutations": true,
+      "exceptions": [
+        "this",
+        "ctx",
+        "context",
+        "R (ramda)",
+        "router"
+      ]
+    },
+    "framework": "Next.js 15 (React 18)",
+    "state_management": [
+      "Zustand (global)",
+      "React hooks (local)",
+      "Apollo Client (server/GraphQL)"
+    ],
+    "styling": "styled-components",
+    "type_system": "TypeScript (strict mode)",
+    "complexity_assessment": {
+      "overall_complexity": "Low (2.5/10)",
+      "avg_file_size": 65,
+      "largest_file": 189,
+      "files_exceeding_limits": 3,
+      "complexity_enforcement": "Strong (ESLint rules)",
+      "problem_areas": [
+        "lib/hooks/useTableControls (189 lines)",
+        "components/EventForm/useEventForm.ts (163 lines)",
+        "components/EventsList/EventsListRow/helpers.ts (getBadgeStatus complexity)"
+      ]
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "kubernetes",
+  "deployment_tool": "helm",
+  "ci_cd_platform": "gitlab-ci",
+  "raw_connections": {
+    "kubernetes_clusters": [
+      "nonprod9.us-east-1",
+      "preprod9.us-east-1",
+      "prod9.us-east-1"
+    ],
+    "mongodb_clusters": [
+      "NonProd0-shard-0",
+      "VF-prod-shard-0"
+    ],
+    "mongodb_databases": [
+      "dev",
+      "prod"
+    ],
+    "mongodb_collections": [
+      "codes"
+    ],
+    "s3_buckets": [
+      "prd2011.dev1.us-east-1.vf-scoring.tmaws",
+      "prd2011.prod1.us-east-1.vf-scoring.tmaws"
+    ],
+    "ecr_repositories": [
+      "889199535989.dkr.ecr.us-east-1.amazonaws.com/titan/code-service"
+    ],
+    "environments": [
+      "qa",
+      "dev",
+      "preprod",
+      "prod"
+    ],
+    "monitoring_tools": [
+      "prometheus",
+      "fluentd",
+      "elasticsearch",
+      "lightstep"
+    ]
+  },
+  "deployment_pipeline": {
+    "stages": [
+      "destroy",
+      "install",
+      "test",
+      "bundle",
+      "dockerize",
+      "qa environments",
+      "features",
+      "dev pre deploy",
+      "dev deploy",
+      "dev post deploy",
+      "preprod pre deploy",
+      "preprod deploy",
+      "preprod post deploy",
+      "production kick-off",
+      "production pre deploy",
+      "production deploy",
+      "cleanup"
+    ],
+    "test_jobs": [
+      "eslint",
+      "yaml lint",
+      "server-uts",
+      "lib-uts",
+      "features",
+      "dev features",
+      "preprod features",
+      "dev monoql features",
+      "preprod monoql features"
+    ]
+  },
+  "health_endpoints": {
+    "heartbeat": "/heartbeat",
+    "metrics": "/metrics"
+  },
+  "notes": [
+    "Kubernetes deployment using Helm 3 (v3.10.1) with tm/webservice chart v11.6.0",
+    "Multi-environment deployment: qa, dev, preprod, prod",
+    "MongoDB Atlas clusters for data persistence",
+    "GitLab CI/CD with 17 pipeline stages",
+    "Manual approval required for production deployments",
+    "Fluentd sidecar for log aggregation to Elasticsearch",
+    "Prometheus metrics endpoint for monitoring",
+    "LightStep distributed tracing integration",
+    "Horizontal pod autoscaling in production (3-12 pods)",
+    "Health checks via /heartbeat endpoint",
+    "Feature tests run in Docker containers and against deployed environments",
+    "Database indexes automatically created during pre-deploy stages"
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "agent": "api",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00.000Z",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "rest",
+  "framework": "koa",
+  "endpoints_count": 9,
+  "authentication": "jwt-rs256",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/images",
+      "purpose": "Upload base64-encoded images",
+      "auth_required": true,
+      "supreme_required": true
+    },
+    {
+      "method": "POST",
+      "path": "/files",
+      "purpose": "Upload files via multipart",
+      "auth_required": true,
+      "supreme_required": true
+    },
+    {
+      "method": "GET",
+      "path": "/files/list",
+      "purpose": "List S3 objects by prefix",
+      "auth_required": true,
+      "supreme_required": true
+    },
+    {
+      "method": "GET",
+      "path": "/files/list/data",
+      "purpose": "List S3 objects with pagination",
+      "auth_required": true,
+      "supreme_required": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/files",
+      "purpose": "Delete multiple S3 objects",
+      "auth_required": true,
+      "supreme_required": true
+    },
+    {
+      "method": "POST",
+      "path": "/trigger/:function",
+      "purpose": "Trigger Lambda/Step Functions",
+      "auth_required": true,
+      "supreme_required": true
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "purpose": "Prometheus metrics",
+      "auth_required": false
+    },
+    {
+      "method": "GET",
+      "path": "/heartbeat",
+      "purpose": "Health check",
+      "auth_required": false
+    },
+    {
+      "method": "POST",
+      "path": "/dev/token",
+      "purpose": "Development JWT generation",
+      "auth_required": false,
+      "development_only": true
+    }
+  ],
+  "features": [
+    "Base64 image uploads",
+    "Multipart file uploads",
+    "S3 file listing with pagination",
+    "Bulk file deletion",
+    "AWS Lambda/Step Functions triggering",
+    "JWT authentication (RS256)",
+    "Supreme user authorization",
+    "Prometheus metrics",
+    "Distributed tracing",
+    "Special TMOL bucket support with STS AssumeRole"
+  ],
+  "aws_services": [
+    "S3",
+    "Lambda",
+    "Step Functions",
+    "STS"
+  ]
+}

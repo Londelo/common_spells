@@ -1,0 +1,106 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "terraform",
+  "deployment_tool": "terramisu",
+  "ci_cd_platform": "gitlab",
+  "container_platform": "docker",
+  "raw_connections": {
+    "compute": {
+      "type": "EC2 with Auto Scaling",
+      "launch_template": "Flatcar Container Linux",
+      "instance_types": ["t2.medium", "t2.xlarge"],
+      "container_runtime": "docker"
+    },
+    "load_balancer": {
+      "type": "Classic ELB",
+      "internal": true,
+      "protocol": "HTTPS -> HTTP",
+      "health_check_path": "/heartbeat"
+    },
+    "storage": {
+      "s3_buckets": [
+        "prd1541.vf.*.us-east-1.tmaws-export-service",
+        "prd2011.*.us-east-1.vf-scoring.tmaws",
+        "prd2011.*.us-east-1.campaign-data.tmaws",
+        "prd3563-*-fanscore-ds-us-east-1"
+      ],
+      "athena_database": "prd2011_${environment}_campaign_data"
+    },
+    "streaming": {
+      "kinesis_streams": ["PRD1541*"]
+    },
+    "networking": {
+      "vpcs": ["dev", "prod"],
+      "subnets": ["web"],
+      "security_groups": ["campaigns-sg", "web", "onprem"]
+    },
+    "monitoring": {
+      "cloudwatch_alarms": ["CpuHigh", "CpuLow"],
+      "prometheus": {
+        "node_exporter": 9100,
+        "cadvisor": 4914,
+        "application": 8080
+      },
+      "logging": {
+        "platform": "ELK",
+        "log_driver": "fluentd",
+        "endpoints": {
+          "dev1": "verifiedfan-logs.dev1.us-east-1.nonprod-tmaws.io",
+          "prod1": "verifiedfan-logs.prod1.us-east-1.prod-tmaws.io"
+        }
+      }
+    },
+    "security": {
+      "crowdstrike_falcon": true,
+      "iam_role": "default",
+      "assume_roles": [
+        "SFMC S3 CrossAccount",
+        "TMOL S3 Full Access"
+      ]
+    }
+  },
+  "environments": [
+    {
+      "name": "qa1",
+      "account": "tm-nonprod",
+      "region": "us-east-1",
+      "vpc": "dev",
+      "url": "https://vf-export-qa1-us-east-1.titan.nonprod-tmaws.io"
+    },
+    {
+      "name": "dev1",
+      "account": "tm-nonprod",
+      "region": "us-east-1",
+      "vpc": "dev",
+      "url": "https://vf-export-dev1-us-east-1.titan.nonprod-tmaws.io"
+    },
+    {
+      "name": "preprod1",
+      "account": "tm-prod",
+      "region": "us-east-1",
+      "vpc": "prod",
+      "url": "https://vf-export-preprod1-us-east-1.titan.prod-tmaws.io"
+    },
+    {
+      "name": "prod1",
+      "account": "tm-prod",
+      "region": "us-east-1",
+      "vpc": "prod",
+      "url": "https://vf-export-prod1-us-east-1.titan.pub-tmaws.io"
+    }
+  ],
+  "key_resources": {
+    "product_code": "PRD1541",
+    "inventory_code": "vf-export",
+    "product_name": "titan",
+    "repository": "git@git.tmaws.io:Titan/export-service.git",
+    "ecr_repository": "889199535989.dkr.ecr.us-east-1.amazonaws.com/titan/export-service"
+  }
+}

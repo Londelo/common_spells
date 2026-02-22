@@ -1,0 +1,177 @@
+{
+  "agent": "api",
+  "status": "success",
+  "timestamp": "2026-02-16T10:00:00Z",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "appsync_graphql_lambda_workers",
+  "summary": {
+    "appsync_resolvers": 4,
+    "appsync_authorizers": 1,
+    "kinesis_workers": 8,
+    "sqs_workers": 1,
+    "other_workers": 2,
+    "total_workers": 16
+  },
+  "endpoints": {
+    "graphql_resolvers": [
+      {
+        "name": "validateToken",
+        "type": "AppSyncAuthorizerWorker",
+        "file": "apps/auth/validateToken/index.ts",
+        "description": "Lambda authorizer that validates API key and user tokens"
+      },
+      {
+        "name": "checkLiveness",
+        "type": "AppSyncWorker",
+        "file": "apps/idv/checkLiveness/index.ts",
+        "description": "Initiates or retrieves liveness verification sessions"
+      },
+      {
+        "name": "handleEvent",
+        "type": "AppSyncWorker",
+        "file": "apps/idv/handleEvent/index.ts",
+        "description": "Processes webhook callbacks from IDV vendors"
+      },
+      {
+        "name": "getArmScore",
+        "type": "AppSyncWorker",
+        "file": "apps/scoring/getArmScore/index.ts",
+        "description": "Retrieves ARM risk score from Redis cache"
+      }
+    ],
+    "event_workers": [
+      {
+        "name": "scoreUsers",
+        "type": "KinesisWorker",
+        "file": "apps/scoring/scoreUsers/index.ts",
+        "event_source": "DynamoDB Stream (via Kinesis)",
+        "description": "Processes ARAI responses and calculates user scores"
+      },
+      {
+        "name": "enqueueFromVfStream",
+        "type": "KinesisWorker",
+        "file": "apps/scoring/enqueueFromVfStream/index.ts",
+        "event_source": "Kinesis Stream",
+        "description": "Enqueues VerifiedFan login activities for scoring"
+      },
+      {
+        "name": "enqueueFromStream",
+        "type": "KinesisWorker",
+        "file": "apps/scoring/enqueueFromStream/index.ts",
+        "event_source": "Kinesis Stream",
+        "description": "Filters and enqueues scorable user activities"
+      },
+      {
+        "name": "enqueueFromDemandStream",
+        "type": "KinesisWorker",
+        "file": "apps/scoring/enqueueFromDemandStream/index.ts",
+        "event_source": "Kinesis Stream",
+        "description": "Enqueues demand/inventory events for scoring"
+      },
+      {
+        "name": "enqueueFromPurchaseStream",
+        "type": "KinesisWorker",
+        "file": "apps/scoring/enqueueFromPurchaseStream/index.ts",
+        "event_source": "Kinesis Stream",
+        "description": "Enqueues successful purchase events for scoring"
+      },
+      {
+        "name": "enqueueFromSQJourneyStream",
+        "type": "KinesisWorker",
+        "file": "apps/scoring/enqueueFromSQJourneyStream/index.ts",
+        "event_source": "Kinesis Stream",
+        "description": "Enqueues SeatGeek Journey events for scoring"
+      },
+      {
+        "name": "processRescoreEvents",
+        "type": "KinesisWorker",
+        "file": "apps/scoring/processRescoreEvents/index.ts",
+        "event_source": "Kinesis Stream",
+        "description": "Processes manual or scheduled rescore events"
+      },
+      {
+        "name": "stagingScoreUsers",
+        "type": "KinesisWorker",
+        "file": "apps/scoring/stagingScoreUsers/index.ts",
+        "event_source": "DynamoDB Stream (via Kinesis)",
+        "description": "Staging environment version for testing scoring model changes"
+      },
+      {
+        "name": "lookupArai",
+        "type": "SQSWorker",
+        "file": "apps/scoring/lookupArai/index.ts",
+        "event_source": "SQS Queue",
+        "description": "Fetches ARAI data from TM Accounts and persists to DynamoDB"
+      },
+      {
+        "name": "startBotOrNotImport",
+        "type": "Lambda",
+        "file": "apps/botornot/startBotOrNotImport/index.ts",
+        "description": "Initiates bot detection data import jobs"
+      },
+      {
+        "name": "startClusterImport",
+        "type": "Lambda",
+        "file": "apps/clustering/startClusterImport/index.ts",
+        "description": "Initiates user clustering data import jobs"
+      }
+    ]
+  },
+  "key_types": [
+    "Worker<Event, Result, Services>",
+    "AppSyncWorker<Arguments, Result, Services>",
+    "AppSyncAuthorizerWorker<Result, Services>",
+    "KinesisWorker<Message, Result, Services>",
+    "SQSWorker<Message, Result, Services>",
+    "LivenessOptions",
+    "LivenessDecision",
+    "LivenessSession",
+    "ResolverContext",
+    "UserAccountActivity",
+    "DynamoDbChangeRecord",
+    "TransformedKinesisMessage",
+    "TransformedSQSRecord"
+  ],
+  "authentication": {
+    "method": "AppSync Authorization",
+    "format": "apiKey:userToken",
+    "required_headers": ["Authorization"],
+    "optional_headers": ["tmuo"]
+  },
+  "middleware_types": [
+    "KINESIS_CONSUMER",
+    "DYNAMODB_CONSUMER",
+    "DYNAMODB_KINESIS_CONSUMER",
+    "SQS_CONSUMER",
+    "KAFKA_CONSUMER",
+    "S3_CONSUMER",
+    "SNS_SUBSCRIBER",
+    "FIREHOSE_PROCESSOR",
+    "APPSYNC_RESOLVER",
+    "APPSYNC_AUTHORIZER",
+    "SCHEDULED",
+    "SDK_INVOKED",
+    "FANOUT_CONTROLLER"
+  ],
+  "dependencies": {
+    "aws_services": [
+      "AppSync",
+      "Lambda",
+      "Kinesis",
+      "DynamoDB",
+      "SQS",
+      "S3",
+      "SNS",
+      "EventBridge"
+    ],
+    "external_services": [
+      "Ticketmaster Accounts",
+      "Persona (IDV Vendor)",
+      "Redis (ARM Scores)",
+      "Unleash (Feature Flags)"
+    ]
+  }
+}

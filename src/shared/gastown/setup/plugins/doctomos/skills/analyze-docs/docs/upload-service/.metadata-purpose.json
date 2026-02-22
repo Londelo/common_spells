@@ -1,0 +1,56 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:49:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [],
+    "consumes_events": [],
+    "triggers_aws_services": [
+      "processCcpaRequestLambda",
+      "processSmsWaveFilesLambda",
+      "processScheduledLambda",
+      "generateSmsWaveCodesLambda",
+      "selectionStepFn"
+    ],
+    "depends_on_repos": [],
+    "aws_dependencies": [
+      "S3 (multiple buckets)",
+      "Lambda (4 functions)",
+      "Step Functions (1 state machine)",
+      "STS (assume role)"
+    ],
+    "internal_libraries": [
+      "@verifiedfan/aws",
+      "@verifiedfan/lib",
+      "@verifiedfan/log",
+      "@verifiedfan/prometheus",
+      "@verifiedfan/mongodb"
+    ]
+  },
+  "analysis_summary": {
+    "primary_purpose": "Centralized file and image upload API with AWS Lambda/Step Function triggering capabilities",
+    "user_types": [
+      "Supreme Users (Admin)",
+      "Internal Services",
+      "Compliance Systems"
+    ],
+    "key_capabilities": [
+      "S3 file/image upload",
+      "File listing and content retrieval",
+      "File deletion",
+      "Lambda/Step Function triggering"
+    ],
+    "authentication_model": "JWT with Supreme user flag for most operations; CCPA trigger allows unauthenticated access",
+    "data_flows": [
+      "HTTP request -> Auth check -> S3 upload -> URL response",
+      "HTTP request -> Auth check -> S3 list -> Sort/paginate -> Response",
+      "HTTP request -> Auth check -> S3 list -> Download -> Parse -> Response",
+      "HTTP request -> Auth check -> AWS client invoke -> Success response"
+    ]
+  }
+}

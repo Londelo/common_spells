@@ -1,0 +1,57 @@
+{
+  "agent": "api",
+  "status": "success",
+  "timestamp": "2026-02-13T21:52:00.000Z",
+  "repo_name": "admin-ui-next",
+  "classification": "frontend",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_types": ["graphql", "rest"],
+  "graphql": {
+    "endpoint": "GRAPHQL_URL (configurable)",
+    "client": "Apollo Client",
+    "queries_count": 5,
+    "mutations_count": 4,
+    "fragments_count": 12,
+    "operations": [
+      "admin_initApp",
+      "admin_campaignsList",
+      "admin_campaign",
+      "promoters",
+      "admin_searchVenues",
+      "admin_upsertMarket",
+      "admin_deleteMarket",
+      "upsertPromoter",
+      "deletePromoter"
+    ]
+  },
+  "rest": {
+    "endpoints_count": 2,
+    "endpoints": [
+      {
+        "path": "/heartbeat",
+        "methods": ["GET"],
+        "purpose": "Health check"
+      },
+      {
+        "path": "/metrics",
+        "methods": ["GET"],
+        "purpose": "Prometheus metrics"
+      }
+    ]
+  },
+  "authentication": {
+    "graphql": "Cookie-based session (credentials: include)",
+    "rest": "None (public health/metrics endpoints)"
+  },
+  "key_entities": [
+    "Campaign",
+    "Market",
+    "Promoter",
+    "Venue",
+    "Artist",
+    "Viewer"
+  ]
+}

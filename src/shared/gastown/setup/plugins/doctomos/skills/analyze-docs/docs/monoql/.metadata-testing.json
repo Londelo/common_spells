@@ -1,0 +1,44 @@
+{
+  "agent": "testing",
+  "status": "success",
+  "files_written": [
+    "static/testing-strategy.md",
+    "static/testing-coverage.md"
+  ],
+  "test_framework": "jest",
+  "bdd_framework": "cucumber",
+  "test_file_count": 10,
+  "unit_test_count": 10,
+  "feature_file_count": 22,
+  "has_integration_tests": false,
+  "has_e2e_tests": true,
+  "has_performance_tests": false,
+  "has_security_tests": false,
+  "coverage_configured": false,
+  "coverage_enforced": false,
+  "ci_integration": true,
+  "docker_testing": true,
+  "post_deploy_testing": true,
+  "environments_tested": ["dev", "preprod"],
+  "test_utilities": {
+    "chai": "^4.1.2",
+    "cucumber": "^6.0.5",
+    "cucumber-html-reporter": "^5.1.0",
+    "jest": "^21.2.1"
+  },
+  "test_locations": {
+    "unit_tests": ["app/**/*.spec.js", "lib/**/*.spec.js"],
+    "feature_tests": ["features/scenarios/*.feature"],
+    "step_definitions": ["features/step_definitions/*.js"],
+    "test_utilities": ["features/lib/**/*.js"]
+  },
+  "run_commands": {
+    "server_tests": "npx run server:test",
+    "lib_tests": "npx run lib:test",
+    "features": "npx run features",
+    "docker_features": "npx run docker:features reports/all",
+    "eslint": "npx run eslint"
+  },
+  "analysis_date": "2026-02-13",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/titan/monoql"
+}

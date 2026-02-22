@@ -1,0 +1,72 @@
+{
+  "agent": "dependencies",
+  "status": "success",
+  "timestamp": "2026-02-13T21:49:00Z",
+  "files_written": [
+    "dynamic/dependencies-external.md",
+    "dynamic/dependencies-internal.md",
+    "dynamic/dependencies-analysis.md"
+  ],
+  "raw_connections": {
+    "libraries_internal": {
+      "@verifiedfan/avro": "2.0.0",
+      "@verifiedfan/aws": "2.7.0",
+      "@verifiedfan/batch-fn": "1.2.1",
+      "@verifiedfan/batch-transform-stream": "0.2.3",
+      "@verifiedfan/cloudwatch-stdout": "2.0.0",
+      "@verifiedfan/configs": "1.2.4",
+      "@verifiedfan/csv-write-stream": "2.0.3",
+      "@verifiedfan/date": "1.2.1",
+      "@verifiedfan/delay": "1.2.1",
+      "@verifiedfan/flatten-transform-stream": "0.2.0",
+      "@verifiedfan/jwt": "0.1.1",
+      "@verifiedfan/locale": "1.1.0",
+      "@verifiedfan/log": "1.4.1",
+      "@verifiedfan/map-utils": "1.3.1",
+      "@verifiedfan/mongodb": "2.1.0",
+      "@verifiedfan/request": "3.5.1",
+      "@verifiedfan/schemas": "1.3.1",
+      "@verifiedfan/sfmc": "1.1.0",
+      "@verifiedfan/slack": "1.1.0",
+      "@verifiedfan/string-utils": "1.1.1",
+      "@verifiedfan/tm-pacman": "1.1.0",
+      "@verifiedfan/tm-sms": "1.2.0",
+      "@verifiedfan/tracing": "3.0.1",
+      "@verifiedfan/yaml": "1.2.1"
+    },
+    "libraries_external": {
+      "@opentelemetry/api": "1.8.0",
+      "@types/node": "18.16.3",
+      "add": "2.0.6",
+      "avsc": "5.4.7",
+      "awaity": "1.0.0",
+      "debug": "4.1.0",
+      "fs-extra": "8.1.0",
+      "moment": "2.24.0",
+      "moment-timezone": "0.5.27",
+      "ramda": "0.27.0",
+      "saslprep": "1.0.1",
+      "splunk-sdk": "1.8.4",
+      "uuid": "3.2.1",
+      "yarn": "1.16.0",
+      "zip-a-folder": "0.0.9"
+    }
+  },
+  "summary": {
+    "total_dependencies": 87,
+    "production_internal": 24,
+    "production_external": 15,
+    "dev_internal": 2,
+    "dev_external": 46,
+    "high_priority_updates": 2,
+    "likely_unused": 2,
+    "pre_1_0_internal": 3
+  },
+  "risk_flags": {
+    "moment_js_maintenance_mode": true,
+    "uuid_very_outdated": true,
+    "unused_dependencies_present": true,
+    "heavy_internal_coupling": true,
+    "dual_build_system": true
+  }
+}

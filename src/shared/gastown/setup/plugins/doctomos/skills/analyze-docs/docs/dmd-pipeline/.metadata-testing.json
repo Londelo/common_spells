@@ -1,0 +1,43 @@
+{
+  "agent": "testing",
+  "status": "success",
+  "timestamp": "2026-02-13T21:55:00Z",
+  "files_written": [
+    "static/testing-strategy.md",
+    "static/testing-coverage.md"
+  ],
+  "test_framework": "jest",
+  "test_configurations": {
+    "main": "jest.config.ts",
+    "e2e": "test/e2e/jest.config.ts",
+    "integration": "test/integration/jest.config.ts"
+  },
+  "test_file_count": 10,
+  "test_distribution": {
+    "unit_tests": 5,
+    "integration_tests": 1,
+    "e2e_tests": 4
+  },
+  "test_locations": {
+    "unit": "src/**/*.test.ts",
+    "integration": "test/integration/",
+    "e2e": "test/e2e/"
+  },
+  "has_integration_tests": true,
+  "has_e2e_tests": true,
+  "ci_test_stages": [
+    "unit-tests",
+    "integration-test-dev1",
+    "e2e-test-dev1",
+    "integration-test-qa1",
+    "e2e-test-qa1",
+    "integration-test-preprod",
+    "e2e-test-preprod"
+  ],
+  "coverage_enabled": false,
+  "test_environments": [
+    "dev1",
+    "qa1",
+    "preprod1"
+  ]
+}

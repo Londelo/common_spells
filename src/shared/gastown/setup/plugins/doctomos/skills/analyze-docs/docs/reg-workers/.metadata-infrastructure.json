@@ -1,0 +1,116 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T21:48:00.000Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_as_code": {
+    "primary_tool": "terraform",
+    "version": ">=1.5.6",
+    "terraform_modules": [
+      "nodejs-lambda (v2.0.3)",
+      "tm-env (v1.0.0)",
+      "account (v1.1.1)",
+      "naming (v1.3.3)"
+    ]
+  },
+  "deployment_tool": {
+    "tool": "terramisu",
+    "version": "v1.8.3",
+    "ci_cd": "gitlab"
+  },
+  "terraform_stacks": [
+    "registration",
+    "replication",
+    "selection",
+    "dataPipeline",
+    "notification"
+  ],
+  "raw_connections": {
+    "lambda_functions": [
+      "checkEligibility",
+      "upsertUsers",
+      "enqueueEntries",
+      "saveEntries",
+      "retryScore",
+      "enqueueMarketSelections",
+      "saveSelections",
+      "refreshSelections",
+      "markAssignedCodes",
+      "processData",
+      "sendData",
+      "notificationGenerator",
+      "getMarketsToNotify",
+      "planSends",
+      "triggerReminderEmail"
+    ],
+    "dynamodb_tables": [
+      "demand-table"
+    ],
+    "sqs_queues": [
+      "user-info",
+      "user-info-dlq",
+      "save-entries",
+      "save-entries-dlq",
+      "retry-score",
+      "retry-score-dlq",
+      "enqueue-entries-dlq",
+      "save-selection",
+      "save-selection-dlq",
+      "refresh-selection",
+      "refresh-selection-dlq",
+      "mark-assigned-codes-dlq",
+      "data-queue",
+      "data-queue-dlq",
+      "campaign-queue",
+      "campaign-queue-dlq",
+      "market-queue",
+      "market-queue-dlq",
+      "evt-mapping-queue",
+      "evt-mapping-queue-dlq",
+      "reg-markets-queue",
+      "reg-markets-queue-dlq",
+      "registration-queue",
+      "registration-queue-dlq",
+      "dmnd-table-pipe-dlq"
+    ],
+    "sns_topics": [
+      "data-sns"
+    ],
+    "step_functions": [
+      "selection-step-fn",
+      "notification-step-fn"
+    ],
+    "secrets_manager": [
+      "kafka-cert"
+    ],
+    "dynamodb_streams": [
+      "demand-table-stream"
+    ],
+    "eventbridge_rules": [
+      "user-info",
+      "notification-schedule"
+    ],
+    "external_services": [
+      "Entry Service (MongoDB)",
+      "User Service",
+      "Campaign Service",
+      "Code Service",
+      "Kafka",
+      "Redis",
+      "MongoDB"
+    ]
+  },
+  "environments": [
+    "qa1",
+    "dev1",
+    "preprod1",
+    "prod1"
+  ],
+  "regions": [
+    "us-east-1"
+  ]
+}

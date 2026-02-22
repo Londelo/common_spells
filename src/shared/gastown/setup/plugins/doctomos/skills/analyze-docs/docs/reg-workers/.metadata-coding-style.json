@@ -1,0 +1,65 @@
+{
+  "agent": "coding-style",
+  "status": "success",
+  "timestamp": "2026-02-13T22:00:00Z",
+  "files_written": [
+    "dynamic/style-conventions.md",
+    "dynamic/style-complexity.md"
+  ],
+  "coding_style": {
+    "naming_convention": "camelCase",
+    "avg_function_length": 25,
+    "max_nesting_depth": 2,
+    "max_file_lines": 200,
+    "key_linting_rules": [
+      "fp/no-let",
+      "fp/no-mutation",
+      "fp/no-loops",
+      "fp/no-class",
+      "complexity: 6",
+      "max-depth: 2",
+      "max-lines: 200",
+      "prefer-const",
+      "no-console"
+    ],
+    "readability": {
+      "overall_rating": "Excellent",
+      "intention_revealing_names": "Excellent",
+      "narrative_flow": "Excellent",
+      "abstraction_consistency": "Excellent",
+      "self_documentation": "Excellent"
+    },
+    "top_principles": [
+      "DRY",
+      "Single Responsibility",
+      "YAGNI",
+      "Functional Composition",
+      "Immutability",
+      "Dependency Inversion"
+    ],
+    "config_files": {
+      "eslint": ".eslintrc.yml",
+      "typescript": "tsconfig.json",
+      "prettier": "none"
+    },
+    "formatting": {
+      "indentation": "2 spaces",
+      "quotes": "single",
+      "semicolons": "required",
+      "trailing_commas": "never",
+      "line_length": 120,
+      "brace_style": "stroustrup"
+    },
+    "complexity_metrics": {
+      "max_cyclomatic_complexity": 6,
+      "avg_cyclomatic_complexity": 2,
+      "largest_files": [
+        "apps/registration/checkEligibility/validation/validateEntry/typeValidationFns.ts: 188 lines",
+        "shared/middlewares/telemetry.ts: 143 lines",
+        "shared/types/campaign.ts: 124 lines"
+      ]
+    },
+    "consistency_assessment": "Strong - ESLint rules strictly followed, naming conventions uniform, file organization consistent",
+    "complexity_assessment": "Excellent - Strict limits enforced, no unmanaged complexity, functional style keeps code simple"
+  }
+}

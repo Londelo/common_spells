@@ -1,0 +1,19 @@
+{
+  "agent": "api",
+  "status": "success",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "rest",
+  "framework": "koa",
+  "endpoints_count": 5,
+  "development_endpoints_count": 4,
+  "system_endpoints_count": 2,
+  "database": "mongodb",
+  "authentication": "jwt",
+  "authorization": "supreme_user",
+  "code_types": ["tm", "external"],
+  "code_statuses": ["available", "reserved", "assigned"],
+  "timestamp": "2026-02-13T00:00:00Z"
+}

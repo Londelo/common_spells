@@ -1,0 +1,77 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "timestamp": "2026-02-13T21:44:00Z",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Layered Service Architecture (3-tier) with Service-Oriented patterns",
+  "entry_points": [
+    "app/index.js",
+    "app/router/index.js",
+    "lib/config.js"
+  ],
+  "key_directories": [
+    "app/router/",
+    "app/managers/",
+    "app/services/",
+    "app/datastore/",
+    "lib/middlewares/",
+    "configs/"
+  ],
+  "layers": {
+    "presentation": "app/router/",
+    "business_logic": "app/managers/",
+    "data_services": "app/services/, app/datastore/",
+    "cross_cutting": "lib/middlewares/"
+  },
+  "patterns": [
+    "Dependency Injection",
+    "Factory Pattern",
+    "Strategy Pattern (Middleware)",
+    "Adapter Pattern (Context transformation)",
+    "Service Locator",
+    "Router Composition",
+    "Instrumentation Decorator",
+    "Config-Driven Behavior",
+    "Error Factory"
+  ],
+  "external_integrations": [
+    "AWS S3",
+    "AWS Lambda",
+    "AWS Step Functions",
+    "AWS STS",
+    "MongoDB (minimal usage)",
+    "Lightstep (tracing)",
+    "Prometheus (metrics)"
+  ],
+  "api_endpoints": {
+    "files": [
+      "POST /files",
+      "GET /files/list",
+      "GET /files/list/data",
+      "DELETE /files"
+    ],
+    "images": [
+      "POST /images"
+    ],
+    "triggers": [
+      "POST /trigger/:function"
+    ],
+    "ops": [
+      "GET /heartbeat",
+      "GET /metrics"
+    ]
+  },
+  "framework": "Koa.js",
+  "language": "JavaScript (ES6+ with Babel)",
+  "deployment": "Docker + AWS ECS Fargate",
+  "infrastructure": "Terraform",
+  "testing": {
+    "bdd": "Cucumber.js (features/)",
+    "unit": "Jest (*.spec.js)",
+    "integration": "integrationTests/"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "agent": "api",
+  "status": "success",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "graphql",
+  "endpoints_count": 68,
+  "queries_count": 19,
+  "mutations_count": 49,
+  "types_count": 120,
+  "enums_count": 15,
+  "interfaces_count": 1,
+  "timestamp": "2026-02-13T00:00:00Z",
+  "schema_version": "current",
+  "features": [
+    "campaign_management",
+    "registration",
+    "fanlist",
+    "code_distribution",
+    "wave_preparation",
+    "exports",
+    "metrics",
+    "promoter_management",
+    "file_uploads",
+    "multi_locale_content",
+    "authentication",
+    "market_management"
+  ]
+}

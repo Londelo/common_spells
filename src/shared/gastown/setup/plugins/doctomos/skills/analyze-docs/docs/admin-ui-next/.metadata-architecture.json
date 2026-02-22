@@ -1,0 +1,49 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Next.js App Router with Feature-Driven Architecture (hybrid Monolith + Event-Driven)",
+  "entry_points": [
+    "app/layout.tsx",
+    "app/campaigns/page.tsx",
+    "app/promoters/page.tsx",
+    "middleware.ts"
+  ],
+  "key_directories": [
+    "app/",
+    "components/",
+    "lib/",
+    "lib/graphql/",
+    "lib/hooks/",
+    "lib/context/",
+    "lib/store/",
+    "configs/"
+  ],
+  "primary_patterns": [
+    "Next.js App Router (file-based routing)",
+    "Context Provider Pattern",
+    "Custom Hooks Pattern",
+    "GraphQL Repository Pattern",
+    "Feature-Driven Organization",
+    "Server/Client Component Split (RSC)",
+    "Higher-Order Components (WithSuspense)",
+    "State Management (Zustand + Apollo Cache)"
+  ],
+  "data_layer": "Apollo Client (GraphQL)",
+  "state_management": [
+    "Apollo InMemoryCache (server state)",
+    "Zustand (minimal client state)",
+    "React Hook Form (form state)",
+    "URL parameters (navigation state)"
+  ],
+  "external_integrations": [
+    "GraphQL API (primary data source)",
+    "Authentication Service (login/logout)",
+    "TM1 Design System (UI components)",
+    "Prometheus (metrics export)"
+  ]
+}

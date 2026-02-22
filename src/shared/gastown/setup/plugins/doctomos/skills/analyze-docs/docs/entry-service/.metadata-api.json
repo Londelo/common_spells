@@ -1,0 +1,32 @@
+{
+  "agent": "api",
+  "status": "success",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "mixed",
+  "api_types_detected": [
+    "graphql",
+    "rest"
+  ],
+  "rest_framework": "koa",
+  "authentication": "jwt",
+  "endpoints_count": 32,
+  "graphql_queries": 1,
+  "graphql_mutations": 0,
+  "api_versions": [
+    "v1",
+    "v2"
+  ],
+  "timestamp": "2026-02-13T00:00:00.000Z",
+  "notes": [
+    "Service provides both GraphQL and REST APIs",
+    "JWT authentication required for all endpoints except /metrics, /heartbeat, /dev/token",
+    "Supreme user role provides admin-level access",
+    "Supports batch operations via V2 API",
+    "Special handling for Mexican phone numbers (+52 format)",
+    "Market preference system with primary and additional markets",
+    "Entry filter types: winners, codeless, blocked, verified"
+  ]
+}

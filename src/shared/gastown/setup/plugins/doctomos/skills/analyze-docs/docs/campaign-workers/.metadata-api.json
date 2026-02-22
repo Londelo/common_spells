@@ -1,0 +1,21 @@
+{
+  "agent": "api",
+  "status": "success",
+  "message": "API documentation not applicable (no API definitions found)",
+  "classification": "worker",
+  "findings": {
+    "graphql_schemas": false,
+    "rest_endpoints": false,
+    "library_exports": false,
+    "repository_type": "AWS Lambda Workers"
+  },
+  "checked_patterns": [
+    "**/*.graphql",
+    "**/schema.graphql",
+    "**/typeDefs.{ts,js}",
+    "**/routes/**/*.{ts,js}",
+    "index.{ts,js}",
+    "src/index.{ts,js}"
+  ],
+  "timestamp": "2026-02-13T21:55:00Z"
+}

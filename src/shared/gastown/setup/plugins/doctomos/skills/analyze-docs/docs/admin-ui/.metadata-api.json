@@ -1,0 +1,39 @@
+{
+  "agent": "api",
+  "status": "success",
+  "timestamp": "2026-02-13T12:00:00Z",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "graphql",
+  "rest_endpoints_count": 3,
+  "graphql_types_count": 120,
+  "graphql_queries_count": 12,
+  "graphql_mutations_count": 25,
+  "notes": [
+    "GraphQL API with comprehensive campaign and market management",
+    "Token-based authentication with cookie sessions",
+    "File upload support via apollo-upload-client",
+    "Metrics and analytics for campaign performance",
+    "Wave management and fanlist operations",
+    "REST endpoints for basic server operations (heartbeat, metrics, UI routing)"
+  ],
+  "rest_endpoints": [
+    {
+      "method": "GET",
+      "path": "/heartbeat",
+      "purpose": "Health check endpoint - returns build info and environment"
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "purpose": "Prometheus metrics endpoint"
+    },
+    {
+      "method": "GET",
+      "path": "/ui/*",
+      "purpose": "Serves the React frontend application"
+    }
+  ]
+}

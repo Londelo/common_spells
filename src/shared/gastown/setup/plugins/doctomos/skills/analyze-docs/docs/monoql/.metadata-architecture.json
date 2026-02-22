@@ -1,0 +1,50 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "GraphQL API Gateway with Microservices Backend",
+  "entry_points": [
+    "app/index.js",
+    "app/router/index.js",
+    "app/graphql/index.js",
+    "app/graphql/schema/index.js"
+  ],
+  "key_directories": [
+    "app/",
+    "app/graphql/schema/resolvers/",
+    "app/DataLoaders/",
+    "lib/clients/",
+    "lib/middlewares/",
+    "configs/",
+    "features/"
+  ],
+  "design_patterns": [
+    "DataLoader Pattern",
+    "Middleware Chain Pattern",
+    "Service Layer Pattern",
+    "Factory Pattern",
+    "Resolver Composition",
+    "Configuration as Code",
+    "Instrumentation Pattern"
+  ],
+  "backend_services": [
+    "campaigns",
+    "entries",
+    "exports",
+    "uploads",
+    "users",
+    "codes"
+  ],
+  "technology_stack": {
+    "framework": "Koa",
+    "graphql_server": "Apollo Server Koa",
+    "graphql_version": "0.12.0",
+    "testing": ["Jest", "Cucumber"],
+    "observability": ["Prometheus", "OpenTelemetry"],
+    "build": ["Babel", "Webpack"]
+  }
+}

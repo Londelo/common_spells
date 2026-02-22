@@ -5,8 +5,9 @@ import { echo } from 'shelljs'
 import { execute } from '../../shell'
 import { green, yellow, red, cyan } from '../../colors'
 import { GT_DIR, PROXY_CONFIG_PATH } from '../types'
-import { readBedrockConfig, compareVersions } from './helpers'
-import proxyConfig from './proxy-config.json'
+import { readBedrockConfig, compareVersions, copyAwsCredentials, copyPlugin } from './helpers'
+import proxyConfig from './networkPolicy.json'
+import { createDockerfileContent } from './dockerfile'
 
 type CheckResult = {
   readonly label: string
@@ -29,61 +30,23 @@ const configureNetworkPolicy = async (): Promise<void> => {
   }
 }
 
-const writeGastownDockerfile = (): void => {
-  const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
-
-  const dockerfileContent = `FROM docker/sandbox-templates:claude-code
-
-ARG CLAUDE_CODE_USE_BEDROCK=""
-ARG AWS_REGION="us-east-1"
-ARG AWS_PROFILE=""
-ARG ANTHROPIC_MODEL=""
-ARG GT_DIR=""
-
-ENV CLAUDE_CODE_USE_BEDROCK=\${CLAUDE_CODE_USE_BEDROCK}
-ENV AWS_REGION=\${AWS_REGION}
-ENV AWS_PROFILE=\${AWS_PROFILE}
-ENV ANTHROPIC_MODEL=\${ANTHROPIC_MODEL}
-ENV GT_DIR=\${GT_DIR}
-
-COPY --chown=agent:agent .aws /home/agent/.aws
-RUN chmod 555 /home/agent/.aws && chmod 444 /home/agent/.aws/*
-
-WORKDIR /workspace
-`
-
-  fs.mkdirSync(GT_DIR, { recursive: true })
-  fs.writeFileSync(dockerfilePath, dockerfileContent, 'utf-8')
-  echo(green(`✓ Dockerfile written to ${dockerfilePath}`))
-}
-
-const copyAwsCredentials = (): void => {
-  const sourceDir = path.join(os.homedir(), '.aws')
-  const targetDir = path.join(GT_DIR, '.aws')
-
-  if (!fs.existsSync(sourceDir)) {
-    throw new Error(`AWS credentials not found at ${sourceDir}. Run 'aws configure' or set up SSO first.`)
-  }
-
-  if (fs.existsSync(targetDir)) {
-    fs.rmSync(targetDir, { recursive: true })
-  }
-
-  fs.cpSync(sourceDir, targetDir, { recursive: true })
-  echo(green(`✓ AWS credentials copied to build context`))
-}
-
-const buildGastownTemplate = async (): Promise<void> => {
-  writeGastownDockerfile()
+const buildGastownTemplate = async (plugin: string = 'empty'): Promise<void> => {
   const bedrockConfig = readBedrockConfig()
   const templateName = 'gastown:latest'
   const dockerfilePath = path.join(GT_DIR, 'Dockerfile.gastown')
+
+  fs.mkdirSync(GT_DIR, { recursive: true })
+  fs.writeFileSync(dockerfilePath, createDockerfileContent(plugin), 'utf-8')
+  echo(green(`✓ Dockerfile written to ${dockerfilePath}`))
 
   if (!fs.existsSync(dockerfilePath)) {
     throw new Error(`Dockerfile not found at ${dockerfilePath}. Run gt-setup to create it.`)
   }
 
   copyAwsCredentials()
+  if (plugin !== 'empty') {
+    copyPlugin(plugin)
+  }
 
   const buildArgs = [
     `--build-arg CLAUDE_CODE_USE_BEDROCK="${bedrockConfig.bedrockEnabled || ''}"`,
@@ -346,7 +309,7 @@ const printSummary = (report: SetupReport): void => {
   }
 }
 
-const setup = async (): Promise<SetupReport> => {
+const setup = async (plugin: string = 'empty'): Promise<SetupReport> => {
   echo(cyan('=== Docker Claude Code Setup ==='))
   echo('')
 
@@ -370,7 +333,7 @@ const setup = async (): Promise<SetupReport> => {
     environment: env,
   }
 
-  await buildGastownTemplate()
+  await buildGastownTemplate(plugin)
 
   await configureNetworkPolicy()
 

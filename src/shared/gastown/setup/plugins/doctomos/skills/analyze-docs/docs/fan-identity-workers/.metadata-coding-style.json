@@ -1,0 +1,123 @@
+{
+  "agent": "coding-style",
+  "status": "success",
+  "timestamp": "2026-02-16T18:45:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/vf/fan-identity/workers",
+  "repo_name": "fan-identity-workers",
+  "classification": "worker",
+  "files_written": [
+    "dynamic/style-conventions.md",
+    "dynamic/style-complexity.md"
+  ],
+  "analysis_summary": {
+    "files_sampled": 30,
+    "config_files_analyzed": [
+      ".eslintrc.yml",
+      "tsconfig.json",
+      "package.json"
+    ],
+    "languages": ["TypeScript", "JavaScript"],
+    "primary_language": "TypeScript"
+  },
+  "coding_style": {
+    "naming_convention": "camelCase (functions/variables), PascalCase (types), SCREAMING_SNAKE_CASE (constants)",
+    "avg_function_length": 25,
+    "max_nesting_depth": 2,
+    "max_cyclomatic_complexity": 6,
+    "avg_file_size_lines": 52,
+    "largest_file_lines": 159,
+    "key_linting_rules": [
+      "fp/no-mutation",
+      "fp/no-let",
+      "fp/no-loops",
+      "fp/no-class",
+      "prefer-const",
+      "complexity: 6",
+      "max-depth: 2",
+      "max-lines: 200"
+    ],
+    "formatting": {
+      "indentation": "2 spaces",
+      "quotes": "single",
+      "semicolons": "required",
+      "trailing_commas": "never",
+      "line_length": 120
+    },
+    "readability": {
+      "overall_rating": "Good",
+      "intention_revealing_names": "Excellent",
+      "narrative_flow": "Good",
+      "abstraction_consistency": "Good",
+      "self_documentation": "Excellent"
+    },
+    "top_principles": [
+      "Functional Programming",
+      "DRY",
+      "Single Responsibility",
+      "KISS",
+      "Dependency Inversion",
+      "Interface Segregation",
+      "YAGNI"
+    ],
+    "principle_adherence": {
+      "DRY": "Strong",
+      "KISS": "Strong",
+      "YAGNI": "Strong",
+      "Single_Responsibility": "Strong",
+      "Open_Closed": "Moderate",
+      "Liskov_Substitution": "Weak",
+      "Interface_Segregation": "Strong",
+      "Dependency_Inversion": "Strong",
+      "Functional_Programming": "Very Strong"
+    }
+  },
+  "complexity_metrics": {
+    "simple_areas": [
+      "Worker entry points (apps/)",
+      "Utility functions (shared/util/)",
+      "Type definitions",
+      "Configuration files"
+    ],
+    "moderate_complexity_areas": [
+      "Service factories (shared/services/)",
+      "Middleware orchestration",
+      "Data transformation logic"
+    ],
+    "complex_areas": [
+      "Rules engine (shared/services/identity/rules/)",
+      "Vendor integration (PersonaIDVVendor.ts)",
+      "Stream processing (PutManyToStream/)"
+    ],
+    "complexity_drivers": [
+      "Ramda async pipelines",
+      "Higher-order functions",
+      "Generic types",
+      "Sequential async with early exit",
+      "Combinator patterns"
+    ]
+  },
+  "consistency_assessment": {
+    "overall": "Strong",
+    "highly_consistent": [
+      "Functional programming patterns",
+      "Naming conventions",
+      "File structure",
+      "Factory pattern usage",
+      "Error handling"
+    ],
+    "minor_inconsistencies": [
+      "Mix of .ts and .js files (migration in progress)",
+      "Logger usage (Debug vs Log)",
+      "ESLint exception patterns"
+    ]
+  },
+  "recommendations": [
+    "Reduce Ramda pipeline density for better debuggability",
+    "Extract helper functions for complex reduce operations",
+    "Add complexity budget tracking to CI/CD",
+    "Document rationale for all ESLint disables",
+    "Consider splitting large service files (>150 lines)",
+    "Standardize error handling patterns",
+    "Add complexity examples to CLAUDE.md"
+  ]
+}

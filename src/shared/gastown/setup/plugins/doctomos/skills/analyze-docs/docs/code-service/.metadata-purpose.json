@@ -1,0 +1,47 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:40:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [],
+    "consumes_events": [],
+    "depends_on_repos": [
+      "campaign-service",
+      "user-verification-service"
+    ],
+    "depends_on_services": [
+      "aws-s3",
+      "mongodb",
+      "jwt-auth-service"
+    ]
+  },
+  "api_endpoints": [
+    "POST /:campaignId/codes",
+    "GET /:campaignId/codes/count",
+    "GET /:campaignId/reserve",
+    "POST /:campaignId/assign",
+    "POST /:campaignId/release"
+  ],
+  "business_entities": [
+    "Code",
+    "Campaign",
+    "Reservation",
+    "Supreme User",
+    "Code Type",
+    "Code Status"
+  ],
+  "code_types": [
+    "tm",
+    "external"
+  ],
+  "code_statuses": [
+    "available",
+    "reserved",
+    "assigned"
+  ]
+}

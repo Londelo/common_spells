@@ -1,0 +1,106 @@
+{
+  "agent": "coding-style",
+  "status": "success",
+  "timestamp": "2026-02-13T21:47:00Z",
+  "files_written": [
+    "dynamic/style-conventions.md",
+    "dynamic/style-complexity.md"
+  ],
+  "coding_style": {
+    "language": "JavaScript (ES6+)",
+    "framework": "React + Redux + Redux Saga",
+    "parser": "babel-eslint",
+    "naming_convention": {
+      "variables": "camelCase",
+      "functions": "camelCase",
+      "constants": "SCREAMING_SNAKE_CASE",
+      "components": "PascalCase",
+      "files_components": "PascalCase",
+      "files_utilities": "camelCase"
+    },
+    "formatting": {
+      "indentation": "2 spaces",
+      "quotes": "single (JS), double (JSX)",
+      "semicolons": "required",
+      "trailing_commas": "never",
+      "line_length": 120
+    },
+    "avg_function_length": 23,
+    "median_function_length": 20,
+    "max_nesting_depth": 4,
+    "total_files": 417,
+    "total_lines": 16700,
+    "non_empty_lines": 14652,
+    "key_linting_rules": [
+      "no-var",
+      "prefer-const",
+      "eqeqeq",
+      "no-console (warn)",
+      "prefer-template",
+      "prefer-arrow-callback",
+      "no-nested-ternary",
+      "no-plusplus",
+      "no-restricted-syntax (no for/while loops)",
+      "id-length (min: 2)",
+      "curly",
+      "object-shorthand"
+    ],
+    "architecture": {
+      "pattern": "Redux + Redux Saga",
+      "state_management": "Immutable.js",
+      "side_effects": "Redux Saga",
+      "api": "GraphQL (Apollo Client)",
+      "styling": "styled-components"
+    },
+    "readability": {
+      "overall_rating": "Good",
+      "intention_revealing_names": "Excellent",
+      "narrative_flow": "Good",
+      "abstraction_consistency": "Good",
+      "self_documentation": "Excellent"
+    },
+    "top_principles": [
+      "DRY",
+      "Single Responsibility",
+      "YAGNI",
+      "AHA"
+    ],
+    "complexity": {
+      "level": "Moderate",
+      "largest_files": [
+        "ReactTable/index.js (424 lines)",
+        "localizationUtils.js (369 lines)",
+        "graphql/index.js (268 lines)"
+      ],
+      "complex_areas": [
+        "Redux Saga orchestration",
+        "Main reducer (40+ action types)",
+        "ReactTable component",
+        "Localization utilities"
+      ],
+      "simple_areas": [
+        "Action creators",
+        "Configuration files",
+        "Server middleware",
+        "Simple utilities"
+      ]
+    },
+    "recommendations": {
+      "high_priority": [
+        "Refactor ReactTable into smaller components",
+        "Split main reducer into domain-specific slices"
+      ],
+      "medium_priority": [
+        "Extract complex saga logic",
+        "Add JSDoc to complex functions",
+        "Flatten reducer state shape"
+      ],
+      "low_priority": [
+        "Consolidate GraphQL operations",
+        "Standardize error handling",
+        "Consider i18n library for localization"
+      ]
+    },
+    "consistency": "Good - Strong adherence to ESLint rules with consistent patterns throughout"
+  }
+}

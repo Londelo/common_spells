@@ -1,0 +1,40 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      "vfLogin (to Campaign Data Stream via Kinesis)"
+    ],
+    "consumes_events": [],
+    "depends_on_repos": [
+      "tm-accounts-v2",
+      "tm-wallet",
+      "entry-service",
+      "export-service",
+      "campaign-service (implied via permissions)"
+    ],
+    "integration_apis": [
+      "Ticketmaster Accounts API v2",
+      "Ticketmaster Wallet API",
+      "Facebook Graph API",
+      "Twitter API",
+      "Tumblr API",
+      "YouTube/Google API"
+    ],
+    "data_stores": [
+      "MongoDB (users collection)",
+      "MongoDB (permissions collection)",
+      "MongoDB (userSupremes collection)",
+      "MongoDB (workers collection)",
+      "MongoDB (codeAlphas collection)"
+    ],
+    "streaming_platforms": [
+      "AWS Kinesis (campaignDataStream)"
+    ]
+  }
+}

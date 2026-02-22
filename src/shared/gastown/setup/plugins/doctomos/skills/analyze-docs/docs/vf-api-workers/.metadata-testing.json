@@ -1,0 +1,29 @@
+{
+  "agent": "testing",
+  "status": "success",
+  "timestamp": "2026-02-13T21:48:00Z",
+  "files_written": [
+    "static/testing-strategy.md",
+    "static/testing-coverage.md"
+  ],
+  "analysis": {
+    "test_framework": "jest",
+    "integration_framework": "cucumber",
+    "test_file_count": 29,
+    "integration_feature_count": 8,
+    "has_integration_tests": true,
+    "has_e2e_tests": true,
+    "test_distribution": {
+      "apps": 14,
+      "shared": 15,
+      "tools": 0
+    },
+    "coverage_tools": "none",
+    "ci_integration": "gitlab-ci",
+    "test_runners": {
+      "unit": "jest via runjs",
+      "integration": "cucumber-js",
+      "e2e": "external pipeline"
+    }
+  }
+}

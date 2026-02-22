@@ -1,0 +1,61 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "kubernetes",
+  "deployment_platform": "gitlab-ci",
+  "raw_connections": {
+    "container_registry": "889199535989.dkr.ecr.us-east-1.amazonaws.com",
+    "kubernetes_clusters": [
+      "nonprod9.us-east-1",
+      "preprod9.us-east-1",
+      "prod9.us-east-1",
+      "prod10.us-west-2"
+    ],
+    "mongodb_clusters": [
+      "VF-prod-shard-0",
+      "NonProd0-shard-0"
+    ],
+    "kinesis_streams": [
+      "prd2011-dev1-vf1-input-stream",
+      "prd2011-prod1-vf1-input-stream"
+    ],
+    "s3_buckets": [
+      "prd2011.dev1.us-east-1.campaign-data.tmaws",
+      "prd2011.prod1.us-east-1.campaign-data.tmaws"
+    ],
+    "dynamodb_tables": [
+      "prd2011-dev1-us-east-1-fan-identity-table",
+      "prd2011-dev1-us-east-1-acct-fanscore-table"
+    ],
+    "sqs_queues": [
+      "prd2011-dev1-us-east-1-reg-replica-retry-score",
+      "prd2011-prod1-us-east-1-reg-replica-retry-score"
+    ],
+    "external_services": [
+      "MongoDB Atlas",
+      "AWS ECR",
+      "AWS Kinesis",
+      "AWS S3",
+      "AWS DynamoDB",
+      "AWS SQS",
+      "Elasticsearch",
+      "AppSync",
+      "Nudata",
+      "Salesforce Marketing Cloud",
+      "TM Accounts (AUUM)",
+      "Payment Phone Confirmation"
+    ],
+    "observability": {
+      "metrics": "Prometheus",
+      "logging": "Fluentd -> Elasticsearch",
+      "tracing": "OpenTelemetry",
+      "health_check": "/heartbeat"
+    }
+  }
+}

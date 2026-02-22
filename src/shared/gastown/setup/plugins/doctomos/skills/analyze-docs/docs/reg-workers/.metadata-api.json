@@ -1,0 +1,40 @@
+{
+  "agent": "api",
+  "status": "success",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "lambda_workers",
+  "workers_count": 12,
+  "appsync_resolvers": 1,
+  "sqs_consumers": 7,
+  "dynamodb_consumers": 2,
+  "sdk_invoked": 2,
+  "scheduled": 1,
+  "domains": [
+    "registration",
+    "replication",
+    "selection",
+    "dataPipeline",
+    "notification"
+  ],
+  "primary_api": "checkEligibility (AppSync Resolver)",
+  "data_pipeline_types": [
+    "CAMPAIGN",
+    "EVENT_MAPPING",
+    "MARKET",
+    "REGISTERED_MARKET",
+    "REGISTRATION"
+  ],
+  "shared_types_documented": [
+    "Campaign",
+    "Market",
+    "CampaignGate",
+    "Preference",
+    "ScoringRecord",
+    "UserInfo",
+    "RegistrationEntry"
+  ],
+  "timestamp": "2026-02-13T21:54:00Z"
+}

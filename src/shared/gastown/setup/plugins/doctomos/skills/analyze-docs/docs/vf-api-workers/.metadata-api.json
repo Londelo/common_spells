@@ -1,0 +1,25 @@
+{
+  "agent": "api",
+  "status": "success - API documentation not applicable",
+  "reason": "No API definitions found (no GraphQL schemas, no REST routes, not a library package)",
+  "classification": "worker",
+  "analysis": {
+    "graphql_schemas": false,
+    "rest_endpoints": false,
+    "library_exports": false,
+    "worker_type": "event-driven Lambda functions",
+    "triggers": [
+      "Kinesis streams",
+      "DynamoDB streams",
+      "S3 events",
+      "SQS queues",
+      "SNS topics",
+      "AppSync resolvers",
+      "Scheduled events",
+      "Firehose",
+      "Kafka"
+    ]
+  },
+  "files_written": [],
+  "timestamp": "2026-02-13T21:48:00Z"
+}

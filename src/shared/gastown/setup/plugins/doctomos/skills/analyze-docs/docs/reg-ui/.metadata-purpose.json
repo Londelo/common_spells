@@ -1,0 +1,76 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:46:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "analysis_summary": {
+    "classification": "frontend",
+    "primary_function": "Fan registration UI for concert presale campaigns",
+    "tech_stack": "Next.js 14 (App Router), React 18, TypeScript, styled-components, Zustand",
+    "data_sources": "Redis cache (campaign data), AppSync GraphQL (entries, fan data)"
+  },
+  "raw_connections": {
+    "publishes_events": [
+      "page_view_events (Google Tag Manager)",
+      "client_logs (/api/log endpoint)",
+      "prometheus_metrics (/metrics endpoint)"
+    ],
+    "consumes_events": [
+      "campaign_data (Redis cache)",
+      "user_authentication (Ticketmaster Identity Service)",
+      "entry_records (AppSync GraphQL getEntry query)",
+      "LNAA_membership_status (AppSync GraphQL getLNAAMemberStatus query)"
+    ],
+    "graphql_mutations": [
+      "upsertEntry (create/update fan registration)",
+      "activateLNAA (activate fan club membership)"
+    ],
+    "graphql_queries": [
+      "getEntry (fetch existing entry)",
+      "getLNAAMemberStatus (check fan club membership)",
+      "fetchCampaign (load campaign data - mock server only)"
+    ],
+    "depends_on_repos": [
+      "campaign-service (publishes campaign data to Redis)",
+      "entry-service (AppSync GraphQL backend for entries)",
+      "identity-service (user authentication)",
+      "artist-discovery-service (artist details and social links)",
+      "promoter-service (promoter metadata)"
+    ],
+    "depends_on_packages": [
+      "@verifiedfan/idv-sdk (identity verification)",
+      "@verifiedfan/locale (locale fallback logic)",
+      "@verifiedfan/log (structured logging)",
+      "@verifiedfan/redis (Redis client wrapper)",
+      "@ticketmaster/global-design-system (UI components)"
+    ]
+  },
+  "key_business_concepts": [
+    "Campaign (presale registration event)",
+    "Entry (fan registration record)",
+    "Market (concert event within tour)",
+    "Presale Code (unique access code per market)",
+    "LNAA (Live Nation Artist Alliance fan club)",
+    "Linked Campaign (parent campaign gating access)",
+    "Campaign Gate (access control: linked, invite, IDV)",
+    "Opt-In Preferences (marketing consents)",
+    "Split Allocation (multiple presale sources)"
+  ],
+  "primary_user_flows": [
+    "Fan registers for presale → selects markets → checks opt-ins → receives codes",
+    "Fan modifies entry → updates markets → receives updated codes",
+    "LNAA member registers → activates membership → receives priority access",
+    "Fan accesses linked campaign → validates parent entry → registers for child campaign",
+    "Fan completes IDV verification → passes liveness check → registration enabled"
+  ],
+  "supported_locales": [
+    "en-US", "en-CA", "en-GB", "en-AU", "en-NZ",
+    "fr-FR", "fr-CA",
+    "es-ES", "es-MX", "es-AR", "es-CL", "es-CO",
+    "de-DE", "it-IT", "nl-NL", "pl-PL", "pt-PT", "pt-BR"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Layered Monolithic Service with Queue-Based Background Processing",
+  "entry_points": [
+    "app/index.js",
+    "app/router/index.js",
+    "app/managers/queue/process.js"
+  ],
+  "key_directories": [
+    "app/datastore/",
+    "app/managers/",
+    "app/router/",
+    "app/services/",
+    "lib/",
+    "lib/middlewares/",
+    "features/"
+  ],
+  "design_patterns": [
+    "Layered Architecture",
+    "Strategy Pattern",
+    "Repository Pattern",
+    "Queue/Worker Pattern",
+    "Dependency Injection",
+    "Stream Processing",
+    "Middleware Chain",
+    "Factory Pattern"
+  ],
+  "external_integrations": [
+    "MongoDB",
+    "AWS S3",
+    "AWS Athena",
+    "Salesforce Marketing Cloud",
+    "Code Service API",
+    "Entry Service API",
+    "Prometheus",
+    "OpenTelemetry"
+  ],
+  "export_types_count": 14,
+  "layer_count": 4
+}

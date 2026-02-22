@@ -1,0 +1,55 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Layered Architecture (N-Tier)",
+  "entry_points": [
+    "app/index.js",
+    "app/router/index.js",
+    "app/router/v2.js",
+    "app/router/users.js"
+  ],
+  "key_directories": [
+    "app/",
+    "app/datastore/",
+    "app/managers/",
+    "app/services/",
+    "app/router/",
+    "lib/",
+    "features/",
+    "tools/",
+    "configs/"
+  ],
+  "layers": [
+    "Router (HTTP)",
+    "Manager (Business Logic)",
+    "Datastore (MongoDB)",
+    "Services (External APIs)"
+  ],
+  "primary_patterns": [
+    "Repository Pattern",
+    "Service Layer Pattern",
+    "Facade Pattern",
+    "Middleware Chain",
+    "Dependency Injection",
+    "Normalizer/Transformer",
+    "Hook Pattern"
+  ],
+  "external_integrations": [
+    "MongoDB",
+    "Campaign Service (REST)",
+    "User Service (REST)",
+    "AWS AppSync (GraphQL)",
+    "AWS Kinesis",
+    "AWS SQS",
+    "Nudetect API",
+    "Salesforce Marketing Cloud"
+  ],
+  "language": "JavaScript (Node.js)",
+  "framework": "Koa",
+  "test_framework": "Jest + Cucumber"
+}

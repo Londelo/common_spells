@@ -1,0 +1,52 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "raw_connections": {
+    "ec2_instances": "Auto Scaling Group with Flatcar Linux",
+    "load_balancers": ["Classic ELB (HTTPS:443 -> HTTP:8080)"],
+    "s3_buckets": ["upload-bucket", "scoring-bucket", "qa-scoring-bucket"],
+    "kinesis_streams": ["PRD1541*"],
+    "step_functions": ["selection_step_fn_arn (configurable)"],
+    "lambda_functions": ["Invoke permissions to all functions"],
+    "security_groups": ["campaigns-sg", "web", "onprem"],
+    "route53_zones": ["nonprod-tmaws.io", "prod-tmaws.io", "pub-tmaws.io"],
+    "monitoring": ["CloudWatch", "Prometheus", "Elasticsearch/Fluentd"],
+    "container_registry": "AWS ECR (889199535989.dkr.ecr.us-east-1.amazonaws.com)",
+    "ci_cd": "GitLab CI",
+    "iac_tool": "Terraform via Terramisu wrapper"
+  },
+  "environments": {
+    "qa1": {
+      "account": "tm-nonprod",
+      "region": "us-east-1",
+      "url": "upload-service-qa1-us-east-1.titan.nonprod-tmaws.io"
+    },
+    "dev1": {
+      "account": "tm-nonprod",
+      "region": "us-east-1",
+      "url": "upload-service-dev1-us-east-1.titan.nonprod-tmaws.io"
+    },
+    "preprod1": {
+      "account": "tm-prod",
+      "region": "us-east-1",
+      "url": "upload-service-preprod1-us-east-1.titan.pub-tmaws.io"
+    },
+    "prod1": {
+      "account": "tm-prod",
+      "region": "us-east-1",
+      "url": "upload-service-prod1-us-east-1.titan.pub-tmaws.io"
+    }
+  },
+  "terraform_modules": {
+    "networks": "git::https://git.tmaws.io/AWS/terraform-module-networks.git?ref=v3.2.3",
+    "naming": "git::https://git.tmaws.io/AWS/terraform-module-naming.git?ref=v1.3.3",
+    "ami": "git::https://git.tmaws.io/AWS/terraform-module-ami.git?ref=v0.2.10",
+    "zones": "git::https://git.tmaws.io/AWS/terraform-module-zones.git?ref=v0.4.0"
+  }
+}

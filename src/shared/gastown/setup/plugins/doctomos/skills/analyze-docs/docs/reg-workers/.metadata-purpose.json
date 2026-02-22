@@ -1,0 +1,77 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:48:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      "kafka:campaign",
+      "kafka:registration",
+      "kafka:market",
+      "kafka:registered-market",
+      "kafka:event-mapping"
+    ],
+    "consumes_events": [
+      "dynamodb-stream:demand-table:INSERT",
+      "dynamodb-stream:demand-table:MODIFY",
+      "dynamodb-stream:demand-table:REMOVE",
+      "sqs:saveEntriesQueue",
+      "sqs:retryScoresQueue",
+      "sqs:saveSelectionQueue",
+      "sqs:refreshSelectionQueue",
+      "sqs:dataQueue",
+      "sqs:userInfoQueue",
+      "eventbridge:daily-midnight-pt",
+      "eventbridge:every-5-minutes",
+      "eventbridge:every-15-minutes",
+      "step-function:selection-workflow",
+      "step-function:notification-workflow",
+      "appsync:checkRegistrationEligibility"
+    ],
+    "depends_on_repos": [
+      "campaign-service",
+      "entry-service",
+      "user-service",
+      "code-service",
+      "exports-service"
+    ],
+    "depends_on_infrastructure": [
+      "dynamodb:demand-table",
+      "redis:campaign-cache",
+      "mongodb:campaigns-collection",
+      "mongodb:scoring-collection",
+      "mongodb:campaign-stats-collection",
+      "kafka-cluster",
+      "sns:dataSns",
+      "sqs:multiple-queues",
+      "step-functions:selection-and-notification"
+    ]
+  },
+  "analysis_summary": {
+    "total_workers": 14,
+    "domains": [
+      "registration",
+      "replication",
+      "selection",
+      "dataPipeline",
+      "notification"
+    ],
+    "primary_data_stores": [
+      "DynamoDB demand-table",
+      "Entry Service MongoDB",
+      "Redis campaign cache"
+    ],
+    "key_patterns": [
+      "eventual-consistency-replication",
+      "batch-processing-sqs",
+      "schema-validation-kafka",
+      "step-function-orchestration",
+      "middleware-pipeline",
+      "race-condition-detection"
+    ]
+  }
+}

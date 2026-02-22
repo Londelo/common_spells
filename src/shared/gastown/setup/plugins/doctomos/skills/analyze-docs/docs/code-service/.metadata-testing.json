@@ -1,0 +1,38 @@
+{
+  "agent": "testing",
+  "status": "success",
+  "files_written": [
+    "static/testing-strategy.md",
+    "static/testing-coverage.md"
+  ],
+  "test_framework": "jest",
+  "additional_frameworks": ["cucumber"],
+  "test_file_count": 4,
+  "unit_test_files": [
+    "app/managers/codes/index.spec.js",
+    "lib/config.spec.js",
+    "lib/featureUtils.spec.js",
+    "lib/middlewares/validators/ValidatorMiddleware.spec.js"
+  ],
+  "feature_file_count": 6,
+  "feature_files": [
+    "features/scenarios/codes.count.feature",
+    "features/scenarios/codes.reserve.feature",
+    "features/scenarios/codes.update.feature",
+    "features/scenarios/codes.upload.feature",
+    "features/scenarios/infrastructure.feature",
+    "features/scenarios/supremes.feature"
+  ],
+  "has_integration_tests": true,
+  "has_e2e_tests": true,
+  "has_coverage_reporting": false,
+  "ci_test_stages": [
+    "eslint",
+    "server-uts",
+    "lib-uts",
+    "features",
+    "dev features",
+    "preprod features"
+  ],
+  "test_docker_image": "tmhub.io/verifiedfan/docker-builder:xenial-node12-latest"
+}

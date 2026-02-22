@@ -1,0 +1,58 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Layered Architecture + REST API Service",
+  "entry_points": [
+    "app/index.js",
+    "app/router/index.js"
+  ],
+  "key_directories": [
+    "app/",
+    "app/datastore/",
+    "app/managers/",
+    "app/router/",
+    "app/services/",
+    "lib/",
+    "lib/middlewares/",
+    "lib/Router/"
+  ],
+  "design_patterns": [
+    "Layered Architecture",
+    "Context Adapter Pattern",
+    "Factory Pattern",
+    "Repository Pattern",
+    "Middleware Chain (Pipeline)",
+    "Dependency Injection",
+    "Stream Processing",
+    "Instrumentation/Decorator Pattern",
+    "Higher-Order Function Pattern"
+  ],
+  "external_integrations": [
+    "AWS S3 (scoringBucket) - Code file storage",
+    "MongoDB - Persistent code storage",
+    "Lightstep - Distributed tracing",
+    "Prometheus - Metrics collection",
+    "JWT - Authentication"
+  ],
+  "primary_operations": [
+    "Upload codes from CSV (S3 stream → MongoDB)",
+    "Reserve codes (mark as reserved with expiry)",
+    "Assign codes (terminal state)",
+    "Release codes (unreserve)",
+    "Count codes by status"
+  ],
+  "data_stores": [
+    "MongoDB collection: codes"
+  ],
+  "frameworks": [
+    "Koa (HTTP framework)",
+    "@verifiedfan/* (internal libraries)",
+    "OpenTracing/Lightstep (distributed tracing)",
+    "Prometheus (metrics)"
+  ]
+}

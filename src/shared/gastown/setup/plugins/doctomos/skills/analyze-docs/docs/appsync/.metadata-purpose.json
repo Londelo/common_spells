@@ -1,0 +1,63 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:50:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/vf/appsync/appsync",
+  "repo_name": "appsync",
+  "classification": "service",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      "livenessStatusUpdate (GraphQL subscription)"
+    ],
+    "consumes_events": [
+      "liveness vendor webhook (status updates)",
+      "campaign configuration changes (Redis cache)"
+    ],
+    "depends_on_repos": [
+      "campaign-service",
+      "tm-account-service",
+      "liveness-verification-vendor",
+      "bot-detection-service",
+      "phone-intelligence-service",
+      "event-discovery-service"
+    ],
+    "depends_on_infrastructure": [
+      "DynamoDB: account_fanscore table",
+      "DynamoDB: fan_identity table",
+      "DynamoDB: verification table",
+      "DynamoDB: demand table",
+      "DynamoDB: fan_artists table",
+      "Redis: campaign configuration cache",
+      "Lambda: proxy_campaign_service",
+      "Lambda: proxy_tm_account_service",
+      "Lambda: liveness vendor integration",
+      "EventBridge: event notifications",
+      "Kinesis: data streaming"
+    ]
+  },
+  "analysis_summary": {
+    "primary_purpose": "GraphQL API for Verified Fan program providing fan scoring, identity verification, and demand tracking",
+    "key_capabilities": [
+      "Fan trust scoring (fanscore 0-1 range)",
+      "Liveness verification (selfie + government ID)",
+      "Campaign registration management",
+      "Event demand tracking and reminders",
+      "Phone risk assessment",
+      "Bot detection and fraud prevention",
+      "Cluster detection for account fraud"
+    ],
+    "data_sources_analyzed": [
+      "GraphQL schema files (typeDefs.graphql, fan.graphql, demand.graphql, liveness.graphql, api.graphql, registration.graphql)",
+      "TypeScript resolvers and functions (getAccountFanscoreGlobalUserId, checkLiveness, saveDemandRecord, saveEntryRecord)",
+      "Terraform infrastructure (datasources.tf, iam.tf)",
+      "Feature test scenarios (api.feature, demand.feature, registration.feature)",
+      "README.md and package.json"
+    ],
+    "verification_method": "Code-first analysis with secondary README validation"
+  }
+}

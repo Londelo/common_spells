@@ -1,0 +1,149 @@
+{
+  "updates_for_vf_api_workers": {
+    "dynamodb_tables": {
+      "verification-table": {
+        "add_repo": "vf-api-workers",
+        "note": "vf-api-workers reads/writes verification records via loadScoresToDynamoDB"
+      },
+      "fan-identity-table": {
+        "add_repo": "vf-api-workers",
+        "note": "vf-api-workers reads/writes fan identity records via loadScoresToDynamoDB"
+      }
+    },
+    "kinesis_streams": {
+      "api-scores-stream": {
+        "publishers": ["vf-api-workers"],
+        "consumers": ["vf-api-workers"],
+        "stream_pattern": "prd2011-{env}-api-scores-stream",
+        "description": "Streams fan scoring data: loadScoresToStream publishes, loadScoresToDynamoDB consumes",
+        "note": "Internal loop within vf-api-workers"
+      },
+      "vf1-input-stream": {
+        "add_publisher": "vf-api-workers",
+        "note": "saveEntryScoring publishes rank-0 scores to this stream for entry-service consumption"
+      }
+    },
+    "sqs_queues": {
+      "verdict-reporter-queue": {
+        "consumers": ["vf-api-workers"],
+        "queue_pattern": "prd2011-{env}-us-east-1-api-queue-vdct",
+        "description": "Queue for verdict notifications consumed by verdictReporter worker",
+        "note": "Resolves orphaned queue from campaign-pipeline-workers"
+      }
+    },
+    "s3_buckets": {
+      "vf-scoring": {
+        "add_repo": "vf-api-workers",
+        "add_access_pattern": "read",
+        "note": "loadScoresToStream and saveFanlistScores read scored CSV files from S3"
+      }
+    },
+    "service_dependencies": {
+      "vf-api-workers": {
+        "depends_on": [
+          "campaign-service",
+          "entry-service",
+          "user-service",
+          "slack-api",
+          "telesign-api"
+        ],
+        "depended_by": [],
+        "note": "New worker repository for fan scoring and verification"
+      }
+    },
+    "internal_libraries": {
+      "@verifiedfan/aws": {
+        "add_version": "2.11.1",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/batch-fn": {
+        "add_version": "1.2.1",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/batch-transform-stream": {
+        "add_version": "0.3.1",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/cloudwatch-stdout": {
+        "add_version": "2.0.0",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/configs": {
+        "add_version": "1.2.4",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/date": {
+        "add_version": "1.2.1",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/delay": {
+        "add_version": "1.2.6",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/kafka": {
+        "add_version": "1.1.3",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/log": {
+        "add_version": "1.4.1",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/map-utils": {
+        "add_version": "1.3.1",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/normalizers": {
+        "add_version": "1.4.0",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/request": {
+        "add_version": "3.5.1",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/schemas": {
+        "add_version": "1.3.1",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/slack": {
+        "add_version": "1.1.0",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/titan-request": {
+        "add_version": "2.0.21",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/tracing": {
+        "add_version": "3.0.1",
+        "add_repo": "vf-api-workers"
+      },
+      "@verifiedfan/yaml": {
+        "add_version": "1.2.1",
+        "add_repo": "vf-api-workers"
+      }
+    },
+    "anomaly_resolutions": {
+      "verdict_reporter_queue": {
+        "status": "resolved",
+        "original_anomaly": "campaign-pipeline-workers publishes to verdict-reporter-queue but no known consumers documented",
+        "resolution": "vf-api-workers consumes this queue via verdictReporter worker to post scoring summaries to Slack"
+      }
+    },
+    "new_connections_discovered": {
+      "appSync_integration": {
+        "type": "lambda_resolver",
+        "description": "vf-api-workers provides proxyCampaignService and lookupPhoneScore as AppSync Lambda resolvers",
+        "repos": ["vf-api-workers", "appsync"]
+      },
+      "slack_integration": {
+        "type": "notification",
+        "description": "vf-api-workers posts scoring summaries to Slack channels for operations visibility",
+        "repos": ["vf-api-workers"]
+      },
+      "telesign_integration": {
+        "type": "external_api",
+        "description": "vf-api-workers integrates with Telesign API for phone score lookups",
+        "repos": ["vf-api-workers"]
+      }
+    }
+  }
+}

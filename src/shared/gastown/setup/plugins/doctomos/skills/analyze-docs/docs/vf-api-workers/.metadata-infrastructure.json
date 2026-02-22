@@ -1,0 +1,53 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T21:50:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "raw_connections": {
+    "lambda_functions": [
+      "loadScoresToDynamoDB",
+      "loadScoresToStream",
+      "lookupPhoneScore",
+      "processSavedScores",
+      "proxyCampaignService",
+      "saveEntryScoring",
+      "saveFanlistScores",
+      "verdictReporter"
+    ],
+    "dynamodb_tables": [
+      "demandTable"
+    ],
+    "kinesis_streams": [
+      "scoresStream",
+      "campaignDataStream"
+    ],
+    "sqs_queues": [
+      "verdictReporterQueue"
+    ],
+    "s3_buckets": [
+      "scoringBucket"
+    ],
+    "external_services": [
+      "Entry Service",
+      "Campaign Service",
+      "Slack API"
+    ],
+    "environments": [
+      "qa1",
+      "dev1",
+      "preprod1",
+      "prod1"
+    ],
+    "iac_tools": [
+      "terraform",
+      "terramisu"
+    ],
+    "ci_cd": [
+      "gitlab-ci"
+    ]
+  }
+}

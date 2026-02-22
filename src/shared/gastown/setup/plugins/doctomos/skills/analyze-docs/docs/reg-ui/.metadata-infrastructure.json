@@ -1,0 +1,73 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "raw_connections": {
+    "kubernetes_clusters": [
+      "prod9.us-east-1",
+      "prod10.us-west-2",
+      "preprod9.us-east-1",
+      "nonprod9.us-east-1"
+    ],
+    "elasticache_redis": [
+      "prd3292-prod1-dmnd.t5ssu1.ng.0001.use1.cache.amazonaws.com",
+      "prd3292-prod1-dmnd-ro.t5ssu1.ng.0001.use1.cache.amazonaws.com",
+      "prd3292-dev1-dmnd.i8ciyj.ng.0001.use1.cache.amazonaws.com",
+      "prd3292-dev1-dmnd-ro.i8ciyj.ng.0001.use1.cache.amazonaws.com"
+    ],
+    "alb_load_balancers": [
+      "prod9.us-east-1 (internet-facing)",
+      "prod10.us-west-2 (internet-facing)",
+      "preprod9.us-east-1 (internal)",
+      "nonprod9.us-east-1 (internal)"
+    ],
+    "ecr_repository": "889199535989.dkr.ecr.us-east-1.amazonaws.com/titan/reg-ui",
+    "fastly_cdn": [
+      "sJWkDDZbgiLhehjrxZmI46 (preprod)",
+      "jzcal6fzi3hxclocGLNTT6 (production)"
+    ],
+    "external_services": {
+      "appsync": "appsync-dev1.fanid.nonprod-tmaws.io",
+      "nudata": "api-ticketmaster.nd.nudatasecurity.com",
+      "discovery_api": "api.disco.prod1.us-east-1.prod-tmaws.io",
+      "monoql": "monoql.vf.prod9.us-east-1.pub-tktm.io",
+      "elasticsearch": "verifiedfan-logs.prod1.us-east-1.prod-tmaws.io",
+      "jaeger": "jaeger-collector.prd121.svc.cluster.local",
+      "transifex": "api.transifex.com"
+    },
+    "iam_roles": [
+      "arn:aws:iam::889199535989:role/prd1541.titan.us-east-1.prod1.iam-kube-default",
+      "arn:aws:iam::343550350117:role/prd1541.titan.us-east-1.dev1.iam-kube-default",
+      "arn:aws:iam::343550350117:role/prd1541.titan.us-east-1.qa1.iam-kube-default"
+    ],
+    "domains": [
+      "signup.ticketmaster.com",
+      "signup.livenation.com",
+      "signup.ticketmaster.ca",
+      "signup.ticketmaster.com.mx",
+      "signup.ticketmaster.com.au",
+      "signup.ticketmaster.ie",
+      "signup.ticketmaster.co.uk",
+      "signup.ticketmaster.co.nz",
+      "signup.ticketmaster.es",
+      "signup.ticketmaster.de",
+      "signup.ticketmaster.at",
+      "signup.ticketmaster.ch",
+      "signup.ticketmaster.cz",
+      "signup.ticketmaster.pl",
+      "signup.ticketmaster.nl",
+      "signup.ticketmaster.dk",
+      "signup.ticketmaster.be",
+      "signup.ticketmaster.se",
+      "signup.ticketmaster.no",
+      "signup.ticketmaster.fi",
+      "signup.ticketmaster.ae",
+      "signup.ticketmaster.co.za",
+      "signup.ticketmaster.sg"
+    ]
+  }
+}

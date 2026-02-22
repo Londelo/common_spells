@@ -1,0 +1,30 @@
+{
+  "agent": "api",
+  "status": "success",
+  "timestamp": "2026-02-13T21:54:00Z",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "workers",
+  "endpoints_count": 7,
+  "services_count": 6,
+  "workers": [
+    "processRequest",
+    "fanInfo",
+    "deleteFan",
+    "optOut",
+    "keepPrivate",
+    "updateDictionary",
+    "saveDisclosures"
+  ],
+  "services": [
+    "users",
+    "entries",
+    "campaigns",
+    "privacyCore",
+    "aws",
+    "mongo"
+  ],
+  "notes": "Lambda worker functions for CCPA privacy compliance with internal service APIs"
+}

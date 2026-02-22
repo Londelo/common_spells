@@ -1,0 +1,58 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "terraform",
+  "iac_tools": [
+    "terraform",
+    "terramisu"
+  ],
+  "deployment_platform": "gitlab-ci",
+  "raw_connections": {
+    "lambda_functions": [
+      "deleteFan",
+      "fanInfo",
+      "keepPrivate",
+      "optOut",
+      "processRequest",
+      "saveDisclosures",
+      "updateDictionary"
+    ],
+    "sqs_queues": [
+      "prd2011-{env}-us-east-1-{app-name}",
+      "prd2011-{env}-us-east-1-{app-name}-dlq"
+    ],
+    "kinesis_streams": [
+      "event_stream",
+      "log_stream"
+    ],
+    "dynamodb_tables": [
+      "prd2011*",
+      "prd3292*"
+    ],
+    "s3_buckets": [],
+    "cloudwatch_log_groups": [
+      "/aws/lambda/{function-name}"
+    ],
+    "iam_roles": [
+      "lambda_role",
+      "cw_log_lambda_role"
+    ]
+  },
+  "environments": [
+    "qa1",
+    "dev1",
+    "preprod1",
+    "prod1"
+  ],
+  "aws_regions": [
+    "us-east-1"
+  ],
+  "product_code": "PRD2011",
+  "runtime": "nodejs18.x"
+}

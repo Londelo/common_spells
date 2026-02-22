@@ -1,0 +1,89 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:48:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/demand-capture/workers",
+  "repo_name": "dmd-workers",
+  "classification": "worker",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [],
+    "consumes_events": [
+      "DynamoDB Stream (demand records)",
+      "DynamoDB Stream (notification records)",
+      "Kinesis Stream (SMS status updates)",
+      "SQS (short URL requests)",
+      "EventBridge (scheduled triggers)"
+    ],
+    "depends_on_services": [
+      "Ticketmaster Discovery API",
+      "SMS Service",
+      "Bitly API",
+      "DynamoDB",
+      "AWS Lambda",
+      "AWS Kinesis",
+      "AWS SQS",
+      "AWS AppSync",
+      "Redis",
+      "MongoDB"
+    ],
+    "provides_apis": [
+      "AppSync GraphQL (eventDetails query)",
+      "AppSync GraphQL (proxyTmAccountService query)"
+    ]
+  },
+  "workers": [
+    {
+      "name": "notificationScheduler",
+      "type": "scheduled",
+      "trigger": "EventBridge (every 30 minutes)",
+      "purpose": "Query upcoming sales and trigger notification generation"
+    },
+    {
+      "name": "notificationGenerator",
+      "type": "scheduled",
+      "trigger": "Manual/orchestrated",
+      "purpose": "Generate personalized notifications for sale"
+    },
+    {
+      "name": "notificationSend",
+      "type": "stream-consumer",
+      "trigger": "DynamoDB Stream (notification records)",
+      "purpose": "Send SMS/email via SMS service"
+    },
+    {
+      "name": "demandStreamToSqs",
+      "type": "stream-consumer",
+      "trigger": "DynamoDB Stream (demand records)",
+      "purpose": "Enqueue event IDs for URL shortening"
+    },
+    {
+      "name": "shortenEventUrl",
+      "type": "sqs-consumer",
+      "trigger": "SQS (shortUrlQueue)",
+      "purpose": "Create short URLs via Bitly and cache"
+    },
+    {
+      "name": "smsStatusConsumer",
+      "type": "kinesis-consumer",
+      "trigger": "Kinesis Stream (SMS service status)",
+      "purpose": "Update notification delivery status"
+    },
+    {
+      "name": "eventDetails",
+      "type": "appsync-resolver",
+      "trigger": "GraphQL query",
+      "purpose": "Fetch and cache event details from Discovery API"
+    },
+    {
+      "name": "proxyTmAccountService",
+      "type": "appsync-resolver",
+      "trigger": "GraphQL query",
+      "purpose": "Proxy requests to TM Account Service"
+    }
+  ]
+}

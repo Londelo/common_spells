@@ -1,0 +1,1159 @@
+{
+  "event_flows": {
+    "kafka": {
+      "campaigns": {
+        "publishers": ["registration-workers"],
+        "consumers": [],
+        "description": "Campaign-related events"
+      },
+      "events": {
+        "publishers": ["registration-workers"],
+        "consumers": [],
+        "description": "Event-related data"
+      },
+      "markets": {
+        "publishers": ["registration-workers"],
+        "consumers": [],
+        "description": "Market data updates"
+      },
+      "registered_markets": {
+        "publishers": ["registration-workers"],
+        "consumers": [],
+        "description": "Registered market status"
+      },
+      "registrations": {
+        "publishers": ["registration-workers"],
+        "consumers": [],
+        "description": "Registration events"
+      }
+    },
+    "internal_events": {
+      "campaign.created": {
+        "publishers": ["campaign-service"],
+        "consumers": [],
+        "description": "Published when a new campaign is created"
+      },
+      "campaign.updated": {
+        "publishers": ["campaign-service"],
+        "consumers": [],
+        "description": "Published when campaign data is modified"
+      },
+      "campaign.status_changed": {
+        "publishers": ["campaign-service"],
+        "consumers": [],
+        "description": "Published when campaign status transitions"
+      },
+      "market.created": {
+        "publishers": ["campaign-service"],
+        "consumers": [],
+        "description": "Published when a new market is created"
+      },
+      "market.updated": {
+        "publishers": ["campaign-service"],
+        "consumers": [],
+        "description": "Published when market data is modified"
+      },
+      "artist_extension.created": {
+        "publishers": ["campaign-service"],
+        "consumers": [],
+        "description": "Published when artist extension is created"
+      },
+      "artist_extension.updated": {
+        "publishers": ["campaign-service"],
+        "consumers": [],
+        "description": "Published when artist extension data changes"
+      },
+      "scheduled.refresh_trigger": {
+        "publishers": [],
+        "consumers": ["campaign-service"],
+        "description": "Scheduled trigger for refresh operations"
+      },
+      "campaign.registration.created": {
+        "publishers": ["entry-service"],
+        "consumers": [],
+        "description": "Published when a new campaign registration is created"
+      },
+      "campaign.registration.updated": {
+        "publishers": ["entry-service"],
+        "consumers": [],
+        "description": "Published when registration data is modified"
+      },
+      "campaign.phone.confirmed": {
+        "publishers": ["entry-service"],
+        "consumers": [],
+        "description": "Published when phone number is verified"
+      },
+      "campaign.entry.scored": {
+        "publishers": ["entry-service"],
+        "consumers": [],
+        "description": "Published when entry receives fan score"
+      },
+      "campaign.code.assigned": {
+        "publishers": ["entry-service"],
+        "consumers": [],
+        "description": "Published when presale code is assigned to entry"
+      },
+      "user.profile.requested": {
+        "publishers": [],
+        "consumers": ["entry-service"],
+        "description": "Request for user profile data"
+      },
+      "campaign.configuration.requested": {
+        "publishers": [],
+        "consumers": ["entry-service"],
+        "description": "Request for campaign configuration"
+      },
+      "fanscore.lookup.completed": {
+        "publishers": [],
+        "consumers": ["entry-service"],
+        "description": "Response with fan scoring results"
+      },
+      "liveness.verification.webhook": {
+        "publishers": ["external-idv-vendors"],
+        "consumers": ["appsync"],
+        "description": "Webhook callbacks from Persona and other IDV vendors for liveness check status updates"
+      }
+    }
+  },
+  "data_flows": {
+    "dynamodb": {
+      "demand-table": {
+        "repos": ["registration-workers", "demand-workers", "campaign-pipeline-workers"],
+        "access_patterns": ["read", "write", "stream"],
+        "environment_id": "prd3292"
+      },
+      "code-reserves-table": {
+        "repos": ["campaign-pipeline-workers"],
+        "access_patterns": ["read", "write"],
+        "table_pattern": "prd2011-{env}-us-east-1-code-reserves-table",
+        "description": "Tracks code reservations for campaigns"
+      },
+      "fan-identity-table": {
+        "repos": ["entry-service", "appsync"],
+        "access_patterns": ["read", "write"],
+        "table_pattern": "prd2011-{env}-us-east-1-fan-identity-table"
+      },
+      "acct-fanscore-table": {
+        "repos": ["entry-service", "appsync"],
+        "access_patterns": ["read", "write"],
+        "table_pattern": "prd2011-{env}-us-east-1-acct-fanscore-table"
+      },
+      "verification-table": {
+        "repos": ["appsync"],
+        "access_patterns": ["read", "write"],
+        "description": "Stores verification records for IDV and liveness checks"
+      },
+      "demand-table-appsync": {
+        "repos": ["appsync"],
+        "access_patterns": ["read", "write"],
+        "description": "Event interest tracking and notification sign-ups"
+      }
+    },
+    "mongodb": {
+      "entry-service": {
+        "repos": ["registration-workers", "entry-service", "campaign-pipeline-workers", "demand-workers"],
+        "access_patterns": ["read", "write"],
+        "description": "Primary data store for campaign entries and registrations"
+      },
+      "code-service": {
+        "repos": ["code-service"],
+        "access_patterns": ["read", "write"],
+        "description": "Primary data store for promotional code inventory (codes collection)",
+        "collections": ["codes"]
+      },
+      "campaign-service": {
+        "repos": ["campaign-service"],
+        "access_patterns": ["read", "write"],
+        "description": "Primary data store for campaigns, markets, artist extensions"
+      },
+      "user-service": {
+        "repos": ["user-service"],
+        "access_patterns": ["read", "write"],
+        "description": "Primary data store for users, permissions, supreme users, workers, code alphas, email tokens",
+        "collections": ["users", "permissions", "userSupremes", "workers", "codeAlphas", "emailTokens"]
+      },
+      "monoql-sessions": {
+        "repos": ["monoql"],
+        "access_patterns": ["read", "write"],
+        "description": "Session management for GraphQL clients"
+      },
+      "upload-service": {
+        "repos": ["upload-service"],
+        "access_patterns": ["read", "write"],
+        "description": "Primary data store for upload-service (exact collections not specified)",
+        "clusters": ["NonProd0-shard-0", "prod-cluster"]
+      }
+    },
+    "redis": {
+      "campaign-service-cache": {
+        "repos": ["campaign-service"],
+        "access_patterns": ["read", "write"],
+        "topology": "primary + read replicas"
+      },
+      "campaign-cache-appsync": {
+        "repos": ["appsync"],
+        "access_patterns": ["read"],
+        "description": "Campaign data caching via Lambda proxy"
+      },
+      "demand-workers-cache": {
+        "repos": ["demand-workers"],
+        "access_patterns": ["read", "write"],
+        "description": "Event details and account service caching for notification processing"
+      }
+    },
+    "kinesis": {
+      "campaign-data-stream": {
+        "publishers": ["campaign-service", "user-service"],
+        "consumers": [],
+        "description": "Streams campaign, market, and user authentication/profile data to analytics (vfLogin events from user-service)"
+      },
+      "vf1-input-stream": {
+        "publishers": ["entry-service"],
+        "consumers": ["campaign-pipeline-workers"],
+        "stream_pattern": "prd2011-{env}-vf1-input-stream",
+        "description": "Streams entry and registration data for campaign processing"
+      },
+      "save-codes-stream": {
+        "publishers": ["campaign-pipeline-workers"],
+        "consumers": [],
+        "stream_pattern": "prd1541-{env}-save-codes-stream",
+        "description": "Streams code assignment events"
+      },
+      "fanlist-ranks-stream": {
+        "publishers": ["campaign-pipeline-workers"],
+        "consumers": ["campaign-pipeline-workers"],
+        "stream_pattern": "prd2011-{env}-cmp-rnks-stream",
+        "description": "Fanlist scoring events for rank-to-score translation"
+      },
+      "dmnd-table-stream": {
+        "publishers": ["dynamodb"],
+        "consumers": ["demand-workers"],
+        "stream_pattern": "prd3292-*",
+        "description": "DynamoDB stream for demand table changes"
+      },
+      "sms-status-stream": {
+        "publishers": ["sms-service"],
+        "consumers": ["demand-workers", "campaign-pipeline-workers"],
+        "description": "SMS delivery status updates"
+      },
+      "upload-service-kinesis": {
+        "publishers": ["upload-service"],
+        "consumers": [],
+        "stream_pattern": "PRD1541*",
+        "description": "Kinesis streams for upload-service events (exact purpose not specified in metadata)"
+      }
+    },
+    "sqs": {
+      "refresh-selections-queue": {
+        "publishers": ["campaign-service"],
+        "consumers": [],
+        "description": "Queue for triggering selection refresh operations"
+      },
+      "data-pipeline-queue": {
+        "publishers": ["campaign-service"],
+        "consumers": [],
+        "description": "Queue for data pipeline processing"
+      },
+      "reg-replica-retry-score": {
+        "publishers": ["entry-service"],
+        "consumers": [],
+        "queue_pattern": "prd2011-{env}-us-east-1-reg-replica-retry-score",
+        "description": "Queue for retrying scoring operations"
+      },
+      "event-short-url-queue": {
+        "publishers": ["demand-workers"],
+        "consumers": ["demand-workers"],
+        "queue_pattern": "prd3292-{env}-us-east-1-event-short-url",
+        "description": "Queue for URL shortening tasks"
+      },
+      "move-merged-avro-queue": {
+        "publishers": ["campaign-pipeline-workers"],
+        "consumers": ["campaign-pipeline-workers"],
+        "queue_pattern": "prd2011-{env}-us-east-1-cmp-mv-mrgd-sqs",
+        "description": "Queue for archiving merged AVRO files"
+      },
+      "verdict-reporter-queue": {
+        "publishers": ["campaign-pipeline-workers"],
+        "consumers": [],
+        "queue_pattern": "prd2011-{env}-us-east-1-api-queue-vdct",
+        "description": "Queue for verdict notifications"
+      },
+      "sms-wave-email-queue": {
+        "publishers": ["campaign-pipeline-workers"],
+        "consumers": [],
+        "queue_pattern": "prd2011-{env}-us-east-1-sms-wave-email",
+        "description": "Queue for SMS wave email fallback requests"
+      }
+    },
+    "s3": {
+      "campaign-data": {
+        "repos": ["entry-service", "campaign-pipeline-workers"],
+        "access_patterns": ["read", "write"],
+        "bucket_pattern": "prd2011.{env}.us-east-1.campaign-data.tmaws",
+        "description": "Storage for campaign-related bulk data and exports"
+      },
+      "scoring-bucket": {
+        "repos": ["code-service"],
+        "access_patterns": ["read"],
+        "description": "CSV file storage for promotional code bulk uploads"
+      },
+      "vf-scoring": {
+        "repos": ["campaign-pipeline-workers"],
+        "access_patterns": ["read"],
+        "bucket_pattern": "prd2011.{env}.us-east-1.vf-scoring.tmaws",
+        "description": "Storage for scored campaign files from data science"
+      },
+      "tm-ds-fanscore": {
+        "repos": ["campaign-pipeline-workers"],
+        "access_patterns": ["read"],
+        "bucket_pattern": "tm-ds-fanscore",
+        "description": "Data science fanscore files"
+      },
+      "upload-service-buckets": {
+        "repos": ["upload-service"],
+        "access_patterns": ["read", "write"],
+        "buckets": [
+          "prd1541.titan.{env}.us-east-1.tmaws-upload-svc",
+          "prd2011.{env}.us-east-1.vf-scoring.tmaws",
+          "tmdev-fanpass"
+        ],
+        "description": "Storage for uploaded files, images, and CSV data"
+      }
+    }
+  },
+  "service_dependencies": {
+    "registration-workers": {
+      "depends_on": [
+        "campaign-service",
+        "entry-service",
+        "code-service",
+        "user-service",
+        "export-service"
+      ],
+      "depended_by": []
+    },
+    "campaign-pipeline-workers": {
+      "depends_on": [
+        "campaign-service",
+        "entry-service",
+        "code-service",
+        "user-service",
+        "sms-service",
+        "sfmc-service",
+        "admin-ui",
+        "registration-services",
+        "data-science-scoring"
+      ],
+      "depended_by": []
+    },
+    "demand-workers": {
+      "depends_on": [
+        "demand-capture/api",
+        "tm-discovery",
+        "sms-service",
+        "tm-account-service"
+      ],
+      "depended_by": []
+    },
+    "admin-ui": {
+      "depends_on": [
+        "monoql",
+        "fan-ui",
+        "reg-ui",
+        "discovery-api",
+        "s3"
+      ],
+      "depended_by": [],
+      "api_endpoints": {
+        "graphql_dev": "https://monoql-dev.vf.nonprod9.us-east-1.tktm.io/graphql",
+        "graphql_qa": "https://monoql-qa.vf.nonprod9.us-east-1.tktm.io/graphql",
+        "graphql_preprod": "https://registration.tmus.preprod.ticketmaster.net/graphql",
+        "graphql_prod": "https://registration.ticketmaster.com/graphql"
+      }
+    },
+    "admin-ui-next": {
+      "depends_on": [
+        "monoql",
+        "ticketmaster-identity-service",
+        "reg-ui"
+      ],
+      "depended_by": [
+        "campaign-pipeline-workers"
+      ],
+      "graphql_operations": {
+        "mutations": ["createCampaign", "updateCampaign", "upsertMarket", "deleteMarket", "upsertPromoter", "deletePromoter"],
+        "queries": ["admin_campaign", "campaignsList", "getPromoters", "searchVenues", "initApp"]
+      },
+      "api_endpoints": {
+        "graphql_dev": "https://monoql-dev.vf.nonprod9.us-east-1.tktm.io/graphql",
+        "graphql_qa": "https://monoql-qa.vf.nonprod9.us-east-1.tktm.io/graphql",
+        "graphql_preprod": "https://registration.tmus.preprod.ticketmaster.net/graphql",
+        "graphql_prod": "https://registration.ticketmaster.com/graphql"
+      }
+    },
+    "monoql": {
+      "depends_on": [
+        "vf-camp-srvc",
+        "vf-ent-srvc",
+        "vf-usr-srvc",
+        "code-service",
+        "export-service",
+        "upload-service",
+        "wave-service",
+        "ticketmaster-identity",
+        "ppc-service"
+      ],
+      "depended_by": [
+        "admin-ui",
+        "admin-ui-next"
+      ],
+      "api_type": "graphql",
+      "graphql_domains": [
+        "Campaign",
+        "Entry",
+        "Wave",
+        "Viewer",
+        "Metrics",
+        "Exports",
+        "Codes",
+        "Content",
+        "Identity",
+        "Ppc",
+        "Promoter",
+        "Markets",
+        "Stats",
+        "FilterList",
+        "Upload"
+      ]
+    },
+    "campaign-service": {
+      "depends_on": [
+        "discovery-api",
+        "email-service",
+        "selection-service",
+        "data-pipeline-service"
+      ],
+      "depended_by": [
+        "registration-workers",
+        "admin-ui",
+        "entry-service",
+        "monoql",
+        "appsync"
+      ]
+    },
+    "entry-service": {
+      "depends_on": [
+        "campaign-service",
+        "user-service",
+        "tm-accounts",
+        "sfmc"
+      ],
+      "depended_by": [
+        "registration-workers",
+        "monoql"
+      ]
+    },
+    "user-service": {
+      "depends_on": [
+        "entry-service",
+        "export-service",
+        "tm-accounts",
+        "tm-uapi",
+        "facebook-graph-api"
+      ],
+      "depended_by": [
+        "registration-workers",
+        "campaign-pipeline-workers",
+        "entry-service",
+        "monoql"
+      ]
+    },
+    "export-service": {
+      "depends_on": [
+        "entries-service",
+        "codes-service",
+        "auth-service",
+        "salesforce-marketing-cloud"
+      ],
+      "depended_by": [
+        "registration-workers",
+        "user-service",
+        "monoql"
+      ],
+      "api_type": "rest",
+      "api_endpoints": [
+        "POST /export/entries/:campaignId",
+        "POST /export/entries/select/:campaignId",
+        "POST /export/codes/:campaignId",
+        "POST /export/scoring/:campaignId"
+      ]
+    },
+    "appsync": {
+      "depends_on": [
+        "campaign-service",
+        "tm-account-service",
+        "event-details",
+        "phonescore-service",
+        "bot-or-not-service",
+        "arm-scoring-service",
+        "liveness-check-service",
+        "fan-location-service",
+        "cluster-lookup-service",
+        "upsert-entry-service"
+      ],
+      "depended_by": [],
+      "api_type": "graphql",
+      "graphql_queries": 11,
+      "graphql_mutations": 5,
+      "graphql_subscriptions": 1
+    },
+    "code-service": {
+      "depends_on": [
+        "JWT/Auth Service"
+      ],
+      "depended_by": [
+        "registration-workers",
+        "campaign-pipeline-workers",
+        "monoql"
+      ],
+      "api_type": "rest",
+      "api_endpoints": [
+        "POST /:campaignId/codes",
+        "GET /:campaignId/codes/count",
+        "GET /:campaignId/reserve",
+        "POST /:campaignId/assign",
+        "POST /:campaignId/release",
+        "GET /heartbeat",
+        "GET /metrics"
+      ]
+    },
+    "upload-service": {
+      "depends_on": [],
+      "depended_by": [
+        "monoql"
+      ],
+      "api_type": "rest",
+      "api_endpoints": [
+        "POST /images",
+        "POST /files",
+        "GET /files/list",
+        "GET /files/list/data",
+        "DELETE /files",
+        "POST /trigger/:function",
+        "GET /heartbeat",
+        "GET /metrics",
+        "GET /dev/token"
+      ],
+      "lambda_triggers": [
+        "prd2011-{env}-cmp-process-sms-wave",
+        "prd2011-{env}-ccpa-prcss-req",
+        "prd2011-{env}-cmp-prcss-scheduled",
+        "prd2011-{env}-cmp-gen-codes"
+      ],
+      "step_function_triggers": [
+        "prd2011-{env}-reg-sel"
+      ]
+    },
+    "verifiedfan-lib": {
+      "depends_on": [],
+      "depended_by": [
+        "admin-ui",
+        "campaign-service",
+        "entry-service",
+        "monoql",
+        "code-service",
+        "export-service",
+        "upload-service",
+        "user-service"
+      ],
+      "library_type": "shared-monorepo",
+      "package_count": 48
+    }
+  },
+  "library_usage": {
+    "internal": {
+      "@verifiedfan/lib": {
+        "versions": {
+          "1.0.0": ["admin-ui"],
+          "1.6.1": ["campaign-service", "entry-service", "monoql", "code-service", "export-service", "upload-service"],
+          "1.6.2": ["user-service"]
+        }
+      },
+      "@verifiedfan/locale": {
+        "versions": {
+          "^1.2.0": ["admin-ui"],
+          "1.3.0": ["admin-ui-next"],
+          "1.4.0": ["campaign-service"]
+        }
+      },
+      "@verifiedfan/log": {
+        "versions": {
+          "^1.4.0": ["admin-ui"],
+          "1.4.1": ["campaign-service", "entry-service", "monoql", "appsync", "user-service", "code-service", "export-service", "upload-service"]
+        }
+      },
+      "@verifiedfan/styled-components": {
+        "version": "MISSING",
+        "repos": ["admin-ui"],
+        "note": "Referenced but not in package.json"
+      },
+      "@verifiedfan/access-log": {
+        "versions": {
+          "1.4.0": ["campaign-service", "monoql", "user-service"],
+          "1.1.1": ["entry-service"]
+        }
+      },
+      "@verifiedfan/configs": {
+        "version": "1.2.4",
+        "repos": ["campaign-service", "entry-service", "appsync", "campaign-pipeline-workers", "demand-workers", "user-service", "code-service", "export-service"]
+      },
+      "@verifiedfan/date": {
+        "versions": {
+          "1.3.4": ["campaign-service"],
+          "1.2.1": ["entry-service", "monoql", "campaign-pipeline-workers", "user-service", "code-service", "export-service"],
+          "1.3.0": ["demand-workers"]
+        }
+      },
+      "@verifiedfan/map-utils": {
+        "version": "1.3.1",
+        "repos": ["campaign-service", "entry-service", "monoql", "campaign-pipeline-workers", "demand-workers", "code-service", "export-service", "upload-service"]
+      },
+      "@verifiedfan/mongodb": {
+        "versions": {
+          "2.1.0": ["campaign-service", "entry-service", "campaign-pipeline-workers", "demand-workers", "user-service", "export-service", "upload-service"],
+          "1.7.9": ["code-service"]
+        }
+      },
+      "@verifiedfan/prometheus": {
+        "versions": {
+          "2.0.4": ["campaign-service", "entry-service", "user-service", "code-service", "export-service", "upload-service"],
+          "2.0.5": ["monoql"]
+        }
+      },
+      "@verifiedfan/redis": {
+        "versions": {
+          "2.0.2": ["campaign-service"],
+          "1.4.2": ["appsync"],
+          "1.2.0": ["demand-workers"]
+        }
+      },
+      "@verifiedfan/schemas": {
+        "versions": {
+          "1.3.1": ["campaign-service", "campaign-pipeline-workers", "demand-workers"],
+          "1.3.0": ["appsync"]
+        }
+      },
+      "@verifiedfan/sfmc": {
+        "version": "1.1.0",
+        "repos": ["campaign-pipeline-workers"]
+      },
+      "@verifiedfan/slack": {
+        "version": "1.1.0",
+        "repos": ["campaign-pipeline-workers"]
+      },
+      "@verifiedfan/tm-pacman": {
+        "version": "1.1.0",
+        "repos": ["campaign-pipeline-workers"]
+      },
+      "@verifiedfan/tm-sms": {
+        "versions": {
+          "1.2.0": ["campaign-pipeline-workers"],
+          "1.1.0": ["demand-workers"]
+        }
+      },
+      "@verifiedfan/csv-write-stream": {
+        "versions": {
+          "2.0.3": ["campaign-pipeline-workers"],
+          "2.0.2": ["entry-service"]
+        }
+      },
+      "@verifiedfan/batch-transform-stream": {
+        "versions": {
+          "0.2.3": ["campaign-pipeline-workers"],
+          "0.3.1": ["entry-service", "code-service", "export-service"]
+        }
+      },
+      "@verifiedfan/flatten-transform-stream": {
+        "version": "0.2.0",
+        "repos": ["campaign-pipeline-workers"]
+      },
+      "@verifiedfan/jwt": {
+        "version": "0.1.1",
+        "repos": ["campaign-pipeline-workers"]
+      },
+      "@verifiedfan/request": {
+        "versions": {
+          "3.5.1": ["campaign-pipeline-workers"],
+          "3.2.4": ["entry-service"],
+          "3.4.0": ["demand-workers"]
+        }
+      },
+      "@verifiedfan/string-utils": {
+        "version": "1.1.1",
+        "repos": ["campaign-pipeline-workers", "export-service"]
+      },
+      "@verifiedfan/yaml": {
+        "versions": {
+          "1.2.1": ["campaign-pipeline-workers", "demand-workers"],
+          "1.2.0": ["appsync"]
+        }
+      },
+      "@verifiedfan/cloudwatch-stdout": {
+        "version": "2.0.0",
+        "repos": ["campaign-pipeline-workers", "demand-workers"]
+      },
+      "@verifiedfan/delay": {
+        "versions": {
+          "1.2.1": ["campaign-pipeline-workers"],
+          "1.2.6": ["demand-workers"]
+        }
+      },
+      "@verifiedfan/titan-request": {
+        "versions": {
+          "2.0.2": ["campaign-service", "entry-service", "user-service", "code-service", "upload-service"],
+          "2.0.4": ["monoql"],
+          "2.0.9": ["export-service"]
+        }
+      },
+      "@verifiedfan/tm-discovery": {
+        "versions": {
+          "2.10.0": ["campaign-service"],
+          "2.12.0": ["demand-workers"]
+        }
+      },
+      "@verifiedfan/tracing": {
+        "versions": {
+          "3.0.1": ["campaign-service", "entry-service", "monoql", "campaign-pipeline-workers", "demand-workers", "user-service", "export-service"],
+          "2.0.2": ["code-service", "upload-service"]
+        }
+      },
+      "@verifiedfan/aws": {
+        "versions": {
+          "2.4.0": ["entry-service"],
+          "1.8.0": ["appsync"],
+          "2.7.0": ["campaign-pipeline-workers"],
+          "2.8.0": ["demand-workers"],
+          "2.13.0": ["export-service"],
+          "2.2.1": ["upload-service"]
+        }
+      },
+      "@verifiedfan/avro": {
+        "version": "2.0.0",
+        "repos": ["campaign-pipeline-workers"]
+      },
+      "@verifiedfan/normalizers": {
+        "versions": {
+          "1.4.0": ["entry-service"],
+          "1.3.3": ["user-service"]
+        }
+      },
+      "@verifiedfan/tm-wallet": {
+        "versions": {
+          "1.3.0": ["entry-service"],
+          "1.1.0": ["user-service"]
+        }
+      },
+      "@verifiedfan/tm-accounts": {
+        "versions": {
+          "2.3.0": ["entry-service", "appsync"]
+        }
+      },
+      "@verifiedfan/batch-fn": {
+        "versions": {
+          "1.1.0": ["appsync"],
+          "1.2.1": ["campaign-pipeline-workers", "demand-workers"]
+        }
+      },
+      "@verifiedfan/cucumber-features": {
+        "versions": {
+          "1.0.4": ["appsync"],
+          "0.25.9": ["code-service"]
+        }
+      },
+      "@verifiedfan/object-utils": {
+        "version": "1.2.0",
+        "repos": ["appsync"]
+      },
+      "@verifiedfan/spotify": {
+        "version": "1.1.2",
+        "repos": ["appsync"]
+      },
+      "@verifiedfan/test-utils": {
+        "versions": {
+          "2.6.0": ["appsync"],
+          "2.3.0": ["code-service"]
+        }
+      },
+      "@verifiedfan/tm-users": {
+        "version": "2.0.3",
+        "repos": ["appsync"]
+      },
+      "@verifiedfan/bitly": {
+        "version": "1.1.0",
+        "repos": ["demand-workers"]
+      },
+      "@verifiedfan/kafka": {
+        "version": "1.1.3",
+        "repos": ["demand-workers"]
+      }
+    },
+    "external": {
+      "react": {
+        "versions": {
+          "16.14.0": ["admin-ui"],
+          "18.3.1": ["admin-ui-next"]
+        }
+      },
+      "next": {
+        "versions": {
+          "15.3.6": ["admin-ui-next"]
+        }
+      },
+      "@apollo/client": {
+        "versions": {
+          "3.13.8": ["admin-ui-next"]
+        }
+      },
+      "styled-components": {
+        "versions": {
+          "6.1.19": ["admin-ui-next"]
+        }
+      },
+      "zod": {
+        "versions": {
+          "3.25.67": ["admin-ui-next"]
+        }
+      },
+      "zustand": {
+        "versions": {
+          "4.5.7": ["admin-ui-next"]
+        }
+      },
+      "apollo-client": {
+        "versions": {
+          "^2.6.10": ["admin-ui"]
+        }
+      },
+      "graphql": {
+        "versions": {
+          "^0.13.0": ["admin-ui"],
+          "0.12.0": ["monoql"]
+        }
+      },
+      "ramda": {
+        "versions": {
+          "^0.24.1": ["admin-ui"],
+          "0.31.3": ["admin-ui-next"],
+          "used": ["campaign-service"],
+          "0.27.0": ["entry-service", "campaign-pipeline-workers", "demand-workers", "user-service", "code-service", "export-service", "upload-service"]
+        }
+      },
+      "avsc": {
+        "version": "5.4.7",
+        "repos": ["campaign-pipeline-workers"]
+      },
+      "moment": {
+        "version": "2.24.0",
+        "repos": ["campaign-pipeline-workers", "demand-workers", "export-service"]
+      },
+      "uuid": {
+        "versions": {
+          "3.2.1": ["campaign-pipeline-workers", "demand-workers"],
+          "3.3.2": ["export-service"]
+        }
+      },
+      "redux": {
+        "versions": {
+          "MISSING_FROM_PKG": ["admin-ui"]
+        },
+        "note": "Used in code but not in package.json"
+      },
+      "koa": {
+        "versions": {
+          "used": ["campaign-service", "monoql"],
+          "2.4.1": ["entry-service", "user-service", "code-service", "export-service", "upload-service"]
+        }
+      },
+      "koa-router": {
+        "versions": {
+          "7.3.0": ["entry-service", "user-service", "export-service"]
+        }
+      },
+      "@opentelemetry/api": {
+        "versions": {
+          "1.9.0": ["entry-service"],
+          "1.8.0": ["campaign-pipeline-workers", "demand-workers"]
+        }
+      },
+      "jest": {
+        "versions": {
+          "25.1.0": ["entry-service", "monoql"],
+          "29.6.2": ["appsync"],
+          "30.0.4": ["demand-workers", "user-service"]
+        }
+      },
+      "cucumber": {
+        "versions": {
+          "6.0.5": ["entry-service", "monoql", "demand-workers", "user-service", "code-service"],
+          "3.2.0": ["appsync"],
+          "9.6.0": ["campaign-pipeline-workers"],
+          "4.8.6": ["upload-service"]
+        }
+      },
+      "apollo-server-koa": {
+        "versions": {
+          "used": ["monoql"]
+        }
+      },
+      "dataloader": {
+        "versions": {
+          "used": ["monoql"]
+        }
+      },
+      "typescript": {
+        "versions": {
+          "5.x": ["admin-ui-next"],
+          "5.1.6": ["appsync"],
+          "5.2.2": ["demand-workers"]
+        }
+      },
+      "esbuild": {
+        "versions": {
+          "0.18.20": ["appsync"]
+        }
+      },
+      "jsonwebtoken": {
+        "versions": {
+          "8.5.0": ["user-service"]
+        }
+      },
+      "node-rsa": {
+        "versions": {
+          "0.4.2": ["user-service"]
+        }
+      },
+      "csv-parse": {
+        "versions": {
+          "4.8.6": ["code-service", "upload-service"]
+        }
+      },
+      "lightstep-tracer": {
+        "versions": {
+          "0.28.0": ["code-service", "upload-service"]
+        }
+      },
+      "opentracing": {
+        "versions": {
+          "0.14.4": ["code-service", "upload-service"]
+        }
+      }
+    }
+  },
+  "infrastructure_patterns": {
+    "sqs_consumers": {
+      "registration-workers": {
+        "queue_count": 23,
+        "processing_pattern": "event-driven"
+      }
+    },
+    "sqs_publishers": {
+      "campaign-service": {
+        "queue_count": 2,
+        "pattern": "async-task-dispatch"
+      },
+      "entry-service": {
+        "queue_count": 1,
+        "pattern": "retry-queue"
+      }
+    },
+    "kinesis_publishers": {
+      "campaign-service": {
+        "stream_count": 1,
+        "pattern": "analytics-streaming",
+        "description": "Campaign and market data"
+      },
+      "entry-service": {
+        "stream_count": 1,
+        "pattern": "event-streaming",
+        "description": "Entry and registration data"
+      },
+      "user-service": {
+        "stream_count": 1,
+        "pattern": "analytics-streaming",
+        "description": "User authentication and profile update events (vfLogin)"
+      },
+      "upload-service": {
+        "stream_count": 1,
+        "pattern": "event-streaming",
+        "description": "Upload-related events (PRD1541*)"
+      }
+    },
+    "kinesis_consumers": {
+      "demand-workers": {
+        "stream_count": 2,
+        "pattern": "event-processing",
+        "streams": ["dmnd-table-stream", "sms-status-stream"]
+      }
+    },
+    "step_functions": {
+      "registration-workers": {
+        "workflow_count": 2,
+        "orchestration_type": "batch-processing"
+      }
+    },
+    "kubernetes": {
+      "admin-ui": {
+        "platform": "EKS",
+        "ci_cd": "GitLab CI",
+        "environments": ["dev", "qa", "preprod", "prod"]
+      },
+      "admin-ui-next": {
+        "platform": "Unknown",
+        "ci_cd": "Unknown",
+        "environments": ["dev", "qa", "preprod", "prod"]
+      },
+      "entry-service": {
+        "platform": "EKS",
+        "ci_cd": "GitLab CI",
+        "environments": ["qa", "dev", "preprod", "prod-east", "prod-west"],
+        "clusters": ["nonprod9.us-east-1", "preprod9.us-east-1", "prod9.us-east-1", "prod10.us-west-2"]
+      },
+      "user-service": {
+        "platform": "EKS",
+        "ci_cd": "GitLab CI",
+        "environments": ["qa", "dev", "preprod", "prod-east", "prod-west"],
+        "clusters": ["nonprod9.us-east-1", "preprod9.us-east-1", "prod9.us-east-1", "prod10.us-west-2"]
+      },
+      "monoql": {
+        "platform": "EKS",
+        "ci_cd": "Docker",
+        "environments": ["dev", "qa", "preprod", "prod"]
+      }
+    },
+    "ec2_autoscaling": {
+      "upload-service": {
+        "asg_count": 1,
+        "deployment_pattern": "classic-load-balanced",
+        "environments": ["qa1", "dev1", "preprod1", "prod1"]
+      }
+    },
+    "appsync": {
+      "appsync": {
+        "platform": "AWS AppSync",
+        "infrastructure": "Terraform",
+        "ci_cd": "GitLab CI",
+        "environments": ["qa1", "qa2", "dev1", "preprod1", "prod1"],
+        "resolvers": 21,
+        "pipeline_functions": 51
+      }
+    },
+    "graphql_gateway": {
+      "monoql": {
+        "pattern": "BFF-Gateway",
+        "downstream_services": 9,
+        "queries": 15,
+        "mutations": 29,
+        "uses_dataloader": true
+      },
+      "appsync": {
+        "pattern": "Managed-GraphQL-API",
+        "downstream_services": 10,
+        "queries": 11,
+        "mutations": 5,
+        "subscriptions": 1,
+        "uses_pipeline_resolvers": true
+      }
+    },
+    "mongodb_users": {
+      "campaign-service": {
+        "usage": "primary-data-store",
+        "description": "Primary data store for campaigns, markets, artist extensions"
+      },
+      "entry-service": {
+        "usage": "primary-data-store",
+        "description": "Primary data store for campaign entries and registrations"
+      },
+      "user-service": {
+        "usage": "primary-data-store",
+        "description": "Primary data store for users, permissions, supreme users, workers, code alphas, email tokens"
+      },
+      "code-service": {
+        "usage": "primary-data-store",
+        "description": "Primary data store for promotional code inventory management"
+      },
+      "monoql": {
+        "usage": "session-management",
+        "description": "Session store for GraphQL clients"
+      },
+      "demand-workers": {
+        "usage": "data-lookup",
+        "description": "Read-only access to entry-service database for notification data"
+      },
+      "export-service": {
+        "usage": "data-read",
+        "description": "Read-only access to campaign data across multiple MongoDB collections (campaigns, entries, markets, scoring, users, exports, promoters)"
+      },
+      "upload-service": {
+        "usage": "primary-data-store",
+        "description": "Primary data store for upload-service (exact collections not specified)"
+      }
+    },
+    "dynamodb_users": {
+      "appsync": {
+        "table_count": 4,
+        "usage": "primary-data-store",
+        "description": "Fan identity, fanscore, verification, demand tracking"
+      }
+    },
+    "s3_users": {
+      "monoql": {
+        "usage": "file-storage",
+        "description": "File storage for uploads and exports"
+      },
+      "code-service": {
+        "usage": "csv-storage",
+        "description": "CSV file storage for promotional code bulk uploads"
+      },
+      "export-service": {
+        "usage": "export-storage",
+        "description": "Writes campaign export files to multiple S3 buckets for SFMC integration and analytics"
+      },
+      "upload-service": {
+        "usage": "file-storage",
+        "description": "Storage for uploaded files and images"
+      }
+    },
+    "lambda_integrations": {
+      "appsync": {
+        "lambda_count": 9,
+        "pattern": "service-proxy",
+        "description": "Lambda functions proxy requests to downstream services"
+      },
+      "demand-workers": {
+        "lambda_count": 8,
+        "pattern": "event-processing",
+        "description": "Lambda workers for demand notification processing"
+      },
+      "campaign-pipeline-workers": {
+        "lambda_count": 15,
+        "pattern": "pipeline-processing",
+        "description": "Lambda workers for campaign data pipeline processing"
+      },
+      "upload-service": {
+        "lambda_count": 4,
+        "pattern": "async-triggers",
+        "description": "Lambda functions triggered by upload-service for campaign processing"
+      }
+    },
+    "redis_users": {
+      "campaign-service": {
+        "usage": "caching",
+        "description": "Campaign data caching with read replicas"
+      },
+      "demand-workers": {
+        "usage": "caching",
+        "description": "Cache for notification processing"
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "timestamp": "2026-02-13T21:45:00Z",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Monorepo Library Collection (Lerna)",
+  "package_count": 48,
+  "entry_points": [
+    "Each package has independent entry point: packages/*/src/index.{js|ts}",
+    "Published as scoped npm packages: @verifiedfan/*"
+  ],
+  "key_directories": [
+    "packages/",
+    "packages/*/src/",
+    "packages/*/integrationTests/",
+    "node_modules/@verifiedfan/",
+    "src/"
+  ],
+  "package_categories": {
+    "api_clients": [
+      "spotify",
+      "apple-music",
+      "bitly",
+      "facebook"
+    ],
+    "tm_services": [
+      "tm-accounts",
+      "tm-discovery",
+      "tm-orders",
+      "tm-users",
+      "tm-wallet",
+      "tm-pacman",
+      "tm-sms"
+    ],
+    "aws_utilities": [
+      "aws"
+    ],
+    "data_processing": [
+      "batch-fn",
+      "batch-transform-stream",
+      "flatten-transform-stream",
+      "reduce-lines-from-stream",
+      "csv-write-stream"
+    ],
+    "testing": [
+      "test-utils",
+      "cucumber-features"
+    ],
+    "infrastructure": [
+      "tracing",
+      "log",
+      "jwt",
+      "crypto",
+      "request",
+      "vf-error",
+      "prometheus",
+      "pager-duty",
+      "slack",
+      "access-log",
+      "cloudwatch-stdout"
+    ],
+    "data_stores": [
+      "mongodb",
+      "redis",
+      "kafka",
+      "snowflake"
+    ],
+    "utilities": [
+      "date",
+      "delay",
+      "timer",
+      "object-utils",
+      "string-utils",
+      "map-utils",
+      "normalizers",
+      "locale",
+      "configs",
+      "schemas",
+      "yaml",
+      "avro",
+      "sfmc",
+      "titan-request"
+    ]
+  },
+  "languages": {
+    "javascript": [
+      "jwt",
+      "spotify",
+      "apple-music",
+      "bitly",
+      "facebook",
+      "normalizers",
+      "test-utils",
+      "request",
+      "log",
+      "date",
+      "timer",
+      "delay",
+      "and more..."
+    ],
+    "typescript": [
+      "tracing",
+      "crypto",
+      "locale",
+      "aws"
+    ]
+  },
+  "build_tools": {
+    "javascript": "Babel (babel.config.json)",
+    "typescript": "TypeScript Compiler (tsconfig.json)"
+  },
+  "monorepo_manager": "Lerna",
+  "versioning_strategy": "independent",
+  "publishing": {
+    "npm_scope": "@verifiedfan",
+    "automation": "GitLab CI + Semantic Release",
+    "commit_convention": "Conventional Commits"
+  },
+  "design_patterns": [
+    "Factory Pattern (API clients)",
+    "Dependency Injection (request injection)",
+    "Adapter Pattern (AWS services)",
+    "Middleware/Transform Streams (data processing)",
+    "Singleton Pattern (GlobalTracer)",
+    "Retry Pattern with Exponential Backoff (HTTP requests)",
+    "Repository/Client Pattern (database clients)",
+    "Normalizer Pattern (API response transformation)",
+    "Functional Composition (Ramda)",
+    "Test Builder Pattern (test data generation)"
+  ],
+  "notable_dependencies": {
+    "shared_root": [
+      "ramda",
+      "debug"
+    ],
+    "common_package_deps": [
+      "jsonwebtoken",
+      "winston",
+      "request-promise-native",
+      "async-retry",
+      "mongodb",
+      "redis",
+      "kafkajs",
+      "@opentelemetry/sdk-trace-node",
+      "@opentelemetry/exporter-trace-otlp-http"
+    ]
+  },
+  "observations": {
+    "strengths": [
+      "Clear separation of concerns by package",
+      "Reusable across VerifiedFan services",
+      "Independent versioning and publishing",
+      "Comprehensive API client coverage",
+      "Good test utilities for consumers"
+    ],
+    "tech_debt": [
+      "Language inconsistency (JS vs TS)",
+      "Legacy src/ directory for git history",
+      "Shared root dependencies may cause implicit deps",
+      "Integration test coverage is inconsistent"
+    ]
+  }
+}

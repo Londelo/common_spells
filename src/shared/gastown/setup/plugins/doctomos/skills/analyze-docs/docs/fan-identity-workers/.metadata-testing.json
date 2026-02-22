@@ -1,0 +1,30 @@
+{
+  "agent": "testing",
+  "status": "success",
+  "timestamp": "2026-02-16T00:00:00.000Z",
+  "files_written": [
+    "static/testing-strategy.md",
+    "static/testing-coverage.md"
+  ],
+  "test_framework": "jest",
+  "cucumber_framework": "cucumber@6.0.5",
+  "test_file_count": 70,
+  "test_breakdown": {
+    "unit_tests_ts": 31,
+    "unit_tests_js": 24,
+    "integration_tests": 2,
+    "feature_tests": 13
+  },
+  "has_integration_tests": true,
+  "has_e2e_tests": false,
+  "has_coverage_reporting": false,
+  "ci_environments": ["qa", "dev", "preprod"],
+  "test_domains": {
+    "auth": 3,
+    "scoring": 29,
+    "idv": 9,
+    "clustering": 1,
+    "shared": 24,
+    "middlewares": 4
+  }
+}

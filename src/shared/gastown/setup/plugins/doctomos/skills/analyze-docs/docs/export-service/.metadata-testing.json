@@ -1,0 +1,113 @@
+{
+  "agent": "testing",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00.000Z",
+  "files_written": [
+    "static/testing-strategy.md",
+    "static/testing-coverage.md"
+  ],
+  "test_framework": "jest",
+  "test_file_count": 30,
+  "unit_test_files": 15,
+  "e2e_test_files": 15,
+  "has_integration_tests": true,
+  "has_e2e_tests": true,
+  "has_unit_tests": true,
+  "frameworks": {
+    "unit": {
+      "name": "Jest",
+      "version": "^25.1.0",
+      "config_location": "package.json"
+    },
+    "e2e": {
+      "name": "Cucumber",
+      "version": "^6.0.5",
+      "config_location": "features/cucumberSetup.js"
+    },
+    "assertion": {
+      "name": "Chai",
+      "version": "^4.1.2",
+      "plugins": [
+        "chai-json-equal",
+        "chai-json-schema-ajv",
+        "chai-match",
+        "chai-subset"
+      ]
+    }
+  },
+  "test_locations": {
+    "unit_tests": [
+      "app/managers/exports/**/*.spec.js",
+      "lib/**/*.spec.js"
+    ],
+    "e2e_tests": [
+      "features/scenarios/**/*.feature"
+    ],
+    "step_definitions": [
+      "features/step_definitions/"
+    ]
+  },
+  "ci_integration": {
+    "platform": "GitLab CI",
+    "config_file": ".gitlab-ci.yml",
+    "stages": [
+      "test",
+      "features",
+      "dev post deploy",
+      "preprod post deploy"
+    ],
+    "test_commands": {
+      "unit_server": "npx run server:test",
+      "unit_lib": "npx run lib:test",
+      "e2e_docker": "npx run docker:features reports/all",
+      "e2e_deployed": "DEBUG='titan:lib:config' DEBUG_DEPTH=8 npx run features ' --fail-fast'"
+    }
+  },
+  "coverage": {
+    "enabled": false,
+    "command": "jest --coverage",
+    "thresholds": null,
+    "reports_generated": false
+  },
+  "test_categories": [
+    "CSV file generation",
+    "ZIP file creation",
+    "Data formatting",
+    "Row transformations",
+    "Export lifecycle",
+    "API endpoints",
+    "Permissions",
+    "S3 uploads",
+    "Email opt-ins",
+    "Reminder emails"
+  ],
+  "export_types_tested": [
+    "entries",
+    "scoring",
+    "codeAssignments",
+    "artistOptIn",
+    "artistSmsOptIn",
+    "livenationOptIn",
+    "codes",
+    "fanlist",
+    "reminderEmail",
+    "autoReminderEmail",
+    "promoterEmailOptIns"
+  ],
+  "gaps_identified": [
+    "API route handlers not unit tested",
+    "Database layer lacks unit tests",
+    "No automated coverage reports",
+    "No load/performance tests",
+    "Limited external service failure testing",
+    "No cross-campaign data isolation tests"
+  ],
+  "recommendations": [
+    "Enable Jest coverage collection",
+    "Add unit tests for route handlers",
+    "Add database layer tests",
+    "Implement load testing",
+    "Add security tests for data isolation",
+    "Set up coverage thresholds in CI"
+  ]
+}

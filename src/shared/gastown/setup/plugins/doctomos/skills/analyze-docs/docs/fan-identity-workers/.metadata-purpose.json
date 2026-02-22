@@ -1,0 +1,56 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-16T10:08:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      "DynamoDB Stream: fan-identity-table (score updates, ARAI cache inserts, rescore record deletions)",
+      "SQS: accountActivityQueue (filtered user activities for scoring)",
+      "SQS: onDemandScoringQueue (VerifiedFan login activities for real-time scoring)",
+      "DynamoDB: fan-identity-table writes (scores, ARAI cache, rescore records)",
+      "AWS Glue: start workflows for BotOrNot and Clustering data imports"
+    ],
+    "consumes_events": [
+      "Kafka: user-activity-stream (user account activities)",
+      "Kafka: purchaserequests.v1 (purchase events)",
+      "Kafka: gateway.queue.journey (SmartQueue join events)",
+      "Kinesis: VerifiedFan login stream",
+      "DynamoDB Stream: demand-table (registration/entry changes)",
+      "DynamoDB Stream (Kinesis): fan-identity-table (ARAI inserts, rescore deletions)",
+      "SQS: accountActivityQueue (user activities for ARAI lookup)",
+      "S3: Clustering dataset uploads",
+      "S3: BotOrNot dataset uploads",
+      "AppSync: GraphQL authorization requests",
+      "AppSync: GraphQL queries/mutations (liveness, ARM scores)"
+    ],
+    "depends_on_repos": [
+      "fan-identity/api (GraphQL API consuming these workers)",
+      "fan-identity/demand-service (consumes risk scores)",
+      "workers-template (shared Lambda infrastructure)",
+      "@verifiedfan/aws (AWS client library)",
+      "@verifiedfan/kafka (Kafka client library)",
+      "@verifiedfan/tracing (OpenTelemetry instrumentation)",
+      "@verifiedfan/log (logging library)",
+      "@verifiedfan/tm-accounts (TM Accounts service client)"
+    ],
+    "external_services": [
+      "TM Accounts ARAI API (Account Risk Activity Intelligence)",
+      "TM Accounts User Info API (AUPO/AUUM)",
+      "Persona Identity Verification (liveness detection)",
+      "Databricks ML Model (scoring inference)",
+      "Unleash Feature Flags",
+      "ARM Team Redis Cluster (ARM risk scores)",
+      "AWS DynamoDB (fan-identity-table, demand-table)",
+      "AWS SQS (accountActivityQueue, onDemandScoringQueue)",
+      "AWS Kinesis (VerifiedFan login stream, DynamoDB streams)",
+      "AWS S3 (BotOrNot and Clustering datasets)",
+      "AWS Glue (data import workflows)",
+      "Kafka/Confluent (user activity, purchase, SmartQueue streams)"
+    ]
+  }
+}

@@ -1,7 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
-import { BedrockConfig, SANDBOX_DIR, PROXY_CONFIG_PATH, ProxyConfig } from '../types'
+import { echo } from 'shelljs'
+import { green } from '../../colors'
+import { BedrockConfig, SANDBOX_DIR, PROXY_CONFIG_PATH, ProxyConfig, GT_DIR } from '../types'
 
 // --- File Reading Helpers ---
 
@@ -68,4 +70,38 @@ export const compareVersions = (a: string, b: string): number => {
 export const statusIcon = (status: 'ok' | 'warn' | 'error'): string => {
   const icons: Record<string, string> = { ok: '✓', warn: '⚠', error: '✗' }
   return icons[status]
+}
+
+// --- AWS Helpers ---
+
+export const copyAwsCredentials = (): void => {
+  const sourceDir = path.join(os.homedir(), '.aws')
+  const targetDir = path.join(GT_DIR, '.aws')
+
+  if (!fs.existsSync(sourceDir)) {
+    throw new Error(`AWS credentials not found at ${sourceDir}. Run 'aws configure' or set up SSO first.`)
+  }
+
+  if (fs.existsSync(targetDir)) {
+    fs.rmSync(targetDir, { recursive: true })
+  }
+
+  fs.cpSync(sourceDir, targetDir, { recursive: true })
+  echo(green(`✓ AWS credentials copied to build context`))
+}
+
+export const copyPlugin = (plugin: string): void => {
+  const sourceDir = path.join(__dirname, 'plugins', plugin)
+  const targetDir = path.join(GT_DIR, plugin)
+
+  if (fs.existsSync(targetDir)) {
+    fs.rmSync(targetDir, { recursive: true })
+  }
+
+  if (!fs.existsSync(sourceDir)) {
+    throw new Error(`Plugin not found: ${sourceDir}`)
+  }
+
+  fs.cpSync(sourceDir, targetDir, { recursive: true })
+  echo(green(`✓ Plugin '${plugin}' copied to build context`))
 }

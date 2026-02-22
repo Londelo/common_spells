@@ -1,0 +1,99 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "timestamp": "2026-02-13T21:57:00Z",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Serverless + Event-Driven",
+  "entry_points": [
+    "shared/entryFiles/lambda.js",
+    "shared/appResolver/index.js",
+    "shared/middlewares/index.js"
+  ],
+  "key_directories": [
+    "apps/",
+    "shared/",
+    "shared/middlewares/",
+    "shared/services/",
+    "shared/avro/",
+    "configs/",
+    "terraform/",
+    "features/",
+    "tools/"
+  ],
+  "worker_count": 16,
+  "middleware_types": [
+    "kinesisConsumer",
+    "s3Consumer",
+    "sqsConsumer",
+    "scheduled",
+    "sdkInvoked",
+    "dynamodbKinesisConsumer",
+    "appsyncResolver",
+    "dynamodbConsumer",
+    "fanoutController",
+    "firehoseProcessor",
+    "snsSubscriber"
+  ],
+  "data_stores": {
+    "s3": [
+      "campaignDataBucket",
+      "scoringBucket"
+    ],
+    "dynamodb": [
+      "demandTable"
+    ],
+    "mongodb": [
+      "campaigns",
+      "entries",
+      "markets",
+      "adminStats"
+    ]
+  },
+  "event_sources": {
+    "kinesis": [
+      "inputStream",
+      "saveSelectionStream",
+      "vfInputStream",
+      "fanlistRanksStream"
+    ],
+    "sqs": [
+      "moveMergedAvroQueue",
+      "verdictQueue"
+    ],
+    "s3_triggers": [
+      "scoringBucket/scored/",
+      "scoringBucket/fanlist/uploaded/",
+      "scoringBucket/smsWaves/triggered/"
+    ],
+    "cloudwatch_schedule": [
+      "mergeAvroFiles (daily/monthly)",
+      "saveStats (every 5 min)",
+      "slackStats (every 30 min)",
+      "smsWaveScheduler (every 5 min)"
+    ]
+  },
+  "external_integrations": [
+    "Campaign Service",
+    "Code Service",
+    "Entry Service",
+    "User Service",
+    "Pacman API",
+    "SMS Service",
+    "Salesforce Marketing Cloud (SFMC)",
+    "Slack API",
+    "AWS Athena"
+  ],
+  "design_patterns": [
+    "Middleware Chain",
+    "Functional Composition (Ramda)",
+    "Service Locator",
+    "Schema-Driven Validation (Avro)",
+    "Stream Processing",
+    "Configuration as Code",
+    "Repository Pattern (implicit)"
+  ]
+}

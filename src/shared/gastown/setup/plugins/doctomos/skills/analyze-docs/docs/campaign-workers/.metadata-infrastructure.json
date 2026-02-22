@@ -1,0 +1,64 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "repository": "git.tmaws.io/verifiedfan/campaign-pipeline/workers",
+  "product_code": "PRD2011",
+  "infrastructure_type": "terraform",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "raw_connections": {
+    "lambda_functions": [
+      "saveCampaignData",
+      "generateSmsWaveCodes",
+      "loadCodeAssignmentsToStream",
+      "mergeAvroFiles",
+      "moveMergedAvroFiles",
+      "processScheduledWave",
+      "processScoredFiles",
+      "processSmsWaveFiles",
+      "saveSelection",
+      "saveStats",
+      "slackStats",
+      "smsWaveScheduler",
+      "smsWaveSend",
+      "template",
+      "transformCodeAssignments",
+      "translateRanksToScores"
+    ],
+    "kinesis_streams": [
+      "vf1-input-stream"
+    ],
+    "sqs_queues": [
+      "prd2011-{env}-us-east-1-cmp-mv-mrgd-sqs"
+    ],
+    "s3_buckets": [
+      "prd2011.{env}.us-east-1.campaign-data.tmaws",
+      "prd2011.{env}.us-east-1.vf-scoring.tmaws"
+    ],
+    "dynamodb_tables": [
+      "prd2011*"
+    ],
+    "cloudwatch_log_groups": [
+      "/aws/lambda/prd2011-{env}-us-east-1-*"
+    ],
+    "sns_topics": [],
+    "firehose_streams": [
+      "prd2011*"
+    ],
+    "athena_workgroups": [
+      "*"
+    ]
+  },
+  "environments": [
+    "qa1",
+    "dev1",
+    "preprod1",
+    "prod1"
+  ],
+  "deployment_tool": "terramisu",
+  "cicd_platform": "gitlab-ci"
+}
