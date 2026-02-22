@@ -32,8 +32,8 @@ const configureNetworkPolicy = async (): Promise<void> => {
 
 const buildDockerSandboxTemplate = async (plugin: string = 'empty'): Promise<void> => {
   const bedrockConfig = readBedrockConfig()
-  const templateName = 'dockerSandbox:latest'
-  const dockerfilePath = path.join(DS_DIR, 'Dockerfile.dockerSandbox')
+  const templateName = 'docker-sandbox:latest'
+  const dockerfilePath = path.join(DS_DIR, 'Dockerfile.docker-sandbox')
 
   fs.mkdirSync(DS_DIR, { recursive: true })
   fs.writeFileSync(dockerfilePath, createDockerfileContent(plugin), 'utf-8')
@@ -58,7 +58,7 @@ const buildDockerSandboxTemplate = async (plugin: string = 'empty'): Promise<voi
 
   const buildCommand = `docker build ${buildArgs} -f "${dockerfilePath}" -t ${templateName} "${DS_DIR}"`
 
-  echo(yellow('\nBuilding dockerSandbox Docker template...'))
+  echo(yellow('\nBuilding docker-sandbox Docker template...'))
   echo(yellow(buildCommand))
   echo('')
 

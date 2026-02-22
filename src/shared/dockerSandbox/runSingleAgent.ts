@@ -7,7 +7,7 @@ import { SandboxConfig, SandboxResult, DS_DIR } from './types'
 import { resolveWorkspace, sandboxExists } from './helpers'
 
 const checkDockerSandboxTemplate = (): void => {
-  const dockerfilePath = path.join(DS_DIR, 'Dockerfile.dockerSandbox')
+  const dockerfilePath = path.join(DS_DIR, 'Dockerfile.docker-sandbox')
 
   if (!fs.existsSync(dockerfilePath)) {
     throw new Error(
@@ -35,11 +35,11 @@ export const buildSandboxCommand = (
   workspace: string,
   options?: { prompt?: string; isExisting?: boolean }
 ): string => {
-  const templateName = 'dockerSandbox:latest'
+  const templateName = 'docker-sandbox:latest'
   const { prompt, isExisting } = options ?? {}
 
   // Existing sandbox: docker sandbox run <name> [-- --print "prompt"]
-  // New sandbox: docker sandbox run --name "<name>" -t dockerSandbox:latest claude "<workspace>" [-- --print "prompt"]
+  // New sandbox: docker sandbox run --name "<name>" -t docker-sandbox:latest claude "<workspace>" [-- --print "prompt"]
 
   const baseCommand = isExisting
     ? ['docker', 'sandbox', 'run', name]
