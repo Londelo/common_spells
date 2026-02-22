@@ -19,6 +19,7 @@
     "vars": "./dist/spells/gitlab/getVariable.js",
     "release": "./dist/spells/gitlab/createRelease.js",
     "document-repos": "./dist/spells/claude/documentRepos.js",
+    "cmon": "./dist/spells/claude/cmon.js",
     "repos": "./dist/spells/repos.js",
     "ds-setup": "./dist/spells/dockerSandbox/setup.js",
     "ds-run": "./dist/spells/dockerSandbox/run.js",

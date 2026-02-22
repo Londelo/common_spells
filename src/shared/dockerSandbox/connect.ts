@@ -30,7 +30,7 @@ const selectSandbox = async (sandboxes: readonly SandboxInfo[]): Promise<string>
   return selection.split(' ')[0]
 }
 
-const buildConnectCommand = (sandboxName: string): string => `docker sandbox run ${sandboxName} -- continue`
+const buildConnectCommand = (sandboxName: string): string => `docker sandbox run ${sandboxName} -- --continue`
 
 const connectToSandbox = async (sandboxName: string): Promise<ConnectResult> => {
   const command = buildConnectCommand(sandboxName)
