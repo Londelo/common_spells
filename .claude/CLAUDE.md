@@ -597,8 +597,6 @@ Docker Sandbox commands allow running Claude Code in isolated Docker containers.
 ### Build & Install
 ```bash
 npm run local:install    # Full rebuild + link
-npm run build           # Build only
-npm run link            # Link only
 ```
 
 ### Key Files
