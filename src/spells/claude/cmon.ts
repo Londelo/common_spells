@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 import { echo } from 'shelljs'
+import inquirer from 'inquirer'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { execute } from '../../shared/shell'
-import { cyan, green } from '../../shared/colors'
+import { cyan, green, red, yellow } from '../../shared/colors'
 import setup from '../../shared/dockerSandbox/setup'
 import runSingleAgent from '../../shared/dockerSandbox/runSingleAgent'
 
 const CODEMON_PLUGIN = 'codemon'
+const PROTECTED_BRANCHES = ['main', 'master', 'develop']
 
 const extractDirName = (pwd: string): string => pwd.split('/').filter(Boolean).pop() || 'unknown'
 
@@ -15,9 +17,31 @@ const getCurrentDirName = async (): Promise<string> => {
   return extractDirName(pwd.trim())
 }
 
-const getCurrentBranch = async (): Promise<string> => {
-  const branch = await execute('git branch --show-current', 'Failed to get current branch')
-  return branch.trim()
+const getCurrentBranch = async (): Promise<string | null> => {
+  try {
+    const branch = await execute('git branch --show-current', 'Failed to get current branch')
+    return branch.trim()
+  } catch {
+    return null
+  }
+}
+
+const isProtectedBranch = (branch: string): boolean =>
+  PROTECTED_BRANCHES.includes(branch.toLowerCase())
+
+const confirmProtectedBranch = async (branch: string): Promise<boolean> => {
+  echo(yellow(`\n⚠ Warning: You are on the '${branch}' branch`))
+
+  const { confirmed } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'confirmed',
+      message: 'Are you sure you want to run CodeMon on this branch?',
+      default: false,
+    },
+  ])
+
+  return confirmed
 }
 
 const errorMessage = 'Error in cmon'
@@ -27,6 +51,21 @@ const cmon = async () => {
 
   const dirName = await getCurrentDirName()
   const branch = await getCurrentBranch()
+
+  if (!branch) {
+    echo(red('✗ Error: Not in a Git repository'))
+    echo(yellow('\nPlease run this command from within a Git repository.'))
+    return
+  }
+
+  if (isProtectedBranch(branch)) {
+    const confirmed = await confirmProtectedBranch(branch)
+    if (!confirmed) {
+      echo(yellow('\nCancelled'))
+      return
+    }
+  }
+
   const sandboxName = `${dirName}-${branch}`
 
   echo(green(`Directory: ${dirName}`))
