@@ -1,4 +1,4 @@
-export const createDockerfileContent = (plugin: string): string => `
+export const createDockerfileContent = (plugin?: string): string => `
 FROM docker/sandbox-templates:claude-code
 
 ARG CLAUDE_CODE_USE_BEDROCK=""
@@ -15,8 +15,6 @@ ENV DS_DIR=\${DS_DIR}
 
 COPY --chown=agent:agent .aws /home/agent/.aws
 RUN chmod 555 /home/agent/.aws && chmod 444 /home/agent/.aws/*
-
-COPY --chown=agent:agent ${plugin}/ /home/agent/.claude/
-
+${plugin ? `COPY --chown=agent:agent ${plugin}/ /home/agent/.claude/` : ''}
 WORKDIR /workspace
 `

@@ -30,7 +30,7 @@ const configureNetworkPolicy = async (): Promise<void> => {
   }
 }
 
-const buildDockerSandboxTemplate = async (plugin: string = 'empty'): Promise<void> => {
+const buildDockerSandboxTemplate = async (plugin?: string): Promise<void> => {
   const bedrockConfig = readBedrockConfig()
   const templateName = 'docker-sandbox:latest'
   const dockerfilePath = path.join(DS_DIR, 'Dockerfile.docker-sandbox')
@@ -44,7 +44,7 @@ const buildDockerSandboxTemplate = async (plugin: string = 'empty'): Promise<voi
   }
 
   copyAwsCredentials()
-  if (plugin !== 'empty') {
+  if (plugin) {
     copyPlugin(plugin)
   }
 
@@ -309,7 +309,7 @@ const printSummary = (report: SetupReport): void => {
   }
 }
 
-const setup = async (plugin: string = 'empty'): Promise<SetupReport> => {
+const setup = async (plugin?: string): Promise<SetupReport> => {
   echo(cyan('=== Docker Claude Code Setup ==='))
   echo('')
 
