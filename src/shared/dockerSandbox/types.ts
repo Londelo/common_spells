@@ -11,7 +11,8 @@ export const PROXY_CONFIG_PATH = path.join(SANDBOX_DIR, 'proxy-config.json')
 
 export type SandboxConfig = {
   readonly sandboxName: string
-  readonly workspace: string
+  readonly workspace?: string // Deprecated: use workspaces instead
+  readonly workspaces?: string // Comma-separated paths with optional :ro suffix (e.g., "/path1,/path2:ro")
   readonly prompt?: string
   readonly promptFile?: string
 }

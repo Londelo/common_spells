@@ -41,6 +41,9 @@ const errorMessage = 'Error in cmon'
 const cmon = async () => {
   echo(cyan('=== CodeMon - Starting Docker Sandbox ===\n'))
 
+  // Parse additional workspaces from command-line arguments
+  const additionalWorkspaces = process.argv.slice(2)
+
   const dirName = await getCurrentDirName()
 
   let branch: string
@@ -62,19 +65,23 @@ const cmon = async () => {
 
   const sandboxName = `${dirName}-${branch}`
 
+  // Build workspaces list: PWD first, then additional workspaces
+  const allWorkspaces = ['./', ...additionalWorkspaces]
+
   echo(green(`Directory: ${dirName}`))
   echo(green(`Branch: ${branch}`))
-  echo(green(`Sandbox: ${sandboxName}\n`))
+  echo(green(`Sandbox: ${sandboxName}`))
+  echo(green(`Workspaces: ${allWorkspaces.join(', ')}\n`))
 
   // Run setup with codemon plugin
   echo(cyan('=== Setting up Docker Sandbox with codemon plugin ===\n'))
   await setup(CODEMON_PLUGIN)
 
-  // Launch sandbox
+  // Launch sandbox with all workspaces
   echo(cyan('\n=== Launching CodeMon Sandbox ===\n'))
   await runSingleAgent({
     sandboxName,
-    workspace: './',
+    workspaces: allWorkspaces.join(','),
   })
 
   echo(green('\n=== CodeMon session complete ==='))

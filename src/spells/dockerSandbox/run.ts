@@ -8,7 +8,7 @@ const errorMessage = 'Error in dockerSandbox run'
 
 type ParsedArgs = {
   readonly sandboxName?: string
-  readonly workspace?: string
+  readonly workspaces: readonly string[]
   readonly prompt?: string
   readonly promptFile?: string
 }
@@ -18,7 +18,7 @@ const generateSandboxName = (): string => `ds-${Date.now()}`
 const parseArgs = (argv: readonly string[]): ParsedArgs => {
   const defaults: ParsedArgs = {
     sandboxName: undefined,
-    workspace: undefined,
+    workspaces: [],
     prompt: undefined,
     promptFile: undefined,
   }
@@ -37,8 +37,9 @@ const parseArgs = (argv: readonly string[]): ParsedArgs => {
       const prevArg = arr[index - 1]
       const isPrevOption = prevArg && prevArg.match(/^-[nfp]|^--(name|prompt-file|prompt)$/)
 
-      if (!isPrevOption && !acc.workspace) {
-        return { ...acc, workspace: arg }
+      if (!isPrevOption) {
+        // Collect all non-option arguments as workspaces
+        return { ...acc, workspaces: [...acc.workspaces, arg] }
       }
     }
 
@@ -50,21 +51,29 @@ const main = async (): Promise<void> => {
   const args = process.argv.slice(2)
   const options = parseArgs(args)
 
-  if (!options.workspace) {
-    echo(red('Error: Workspace path required'))
+  if (options.workspaces.length === 0) {
+    echo(red('Error: At least one workspace path required'))
     echo('')
-    echo('Usage: ds-run [options] <workspace>')
+    echo('Usage: ds-run [options] <workspace1> [workspace2:ro] [workspace3] ...')
     echo('')
     echo('Options:')
-    echo('  -n, --name NAME      Sandbox name (default: ds-<timestamp>)')
-    echo('  -p, --prompt TEXT    Prompt to send to Claude (headless mode)')
-    echo('  -f, --prompt-file    Read prompt from file (headless mode)')
+    echo('  -n, --name NAME        Sandbox name (default: ds-<timestamp>)')
+    echo('  -p, --prompt TEXT      Prompt to send to Claude (headless mode)')
+    echo('  -f, --prompt-file      Read prompt from file (headless mode)')
+    echo('')
+    echo('Examples:')
+    echo('  ds-run /path/to/workspace')
+    echo('  ds-run /path/to/workspace /path/to/readonly:ro')
+    echo('  ds-run ./project1 ./project2:ro ./project3')
     process.exit(1)
   }
 
+  // Convert array of workspaces to comma-separated string
+  const workspacesStr = options.workspaces.join(',')
+
   await runSingleAgent({
     sandboxName: options.sandboxName || generateSandboxName(),
-    workspace: options.workspace,
+    workspaces: workspacesStr,
     prompt: options.prompt,
     promptFile: options.promptFile,
   })

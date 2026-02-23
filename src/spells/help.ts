@@ -46,10 +46,11 @@ const displayCommands = async () => {
   echo('\t- Auto-generates documentation for local git repos using Claude AI sessions.')
   echo('\t- Run from a parent directory containing the repos you want to document.')
 
-  echo(yellow('\ncmon').underline)
+  echo(yellow('\ncmon').underline + '  ->  cmon [workspace2:ro] [workspace3] ...')
   echo('\t- Launches CodeMon, an elite SWE agent in a Docker sandbox for the current project.')
   echo('\t- Uses current directory name and git branch to name the sandbox.')
-  echo('\t- Workspace is set to current directory (./).')
+  echo('\t- Primary workspace is current directory (./). Additional workspaces can be passed as arguments.')
+  echo('\t- Use :ro suffix for read-only mounts (e.g., cmon /shared-libs:ro /docs:ro).')
 
   echo(yellow('\nrepos').underline + '  ->  repos [--config | --open]')
   echo('\t- Manages shell aliases for quick cd + IDE open into git repositories.')
@@ -61,9 +62,11 @@ const displayCommands = async () => {
   echo('\t- Validates environment for Docker Claude Code sandboxes.')
   echo('\t- Checks TechPass version, Claude settings, AWS credentials, Docker sandbox support, and Bedrock config.')
 
-  echo(yellow('\nds-run').underline + '  ->  ds-run [options] <workspace>')
-  echo('\t- Run Claude Code in a Docker sandbox.')
-  echo('\t- Options: -n (name), -p (prompt), -f (prompt file), -d (detached), -o (output), -c (continue)')
+  echo(yellow('\nds-run').underline + '  ->  ds-run [options] <workspace1> [workspace2:ro] ...')
+  echo('\t- Run Claude Code in a Docker sandbox with one or more workspaces.')
+  echo('\t- Options: -n (name), -p (prompt), -f (prompt file)')
+  echo('\t- Supports multiple workspaces: ds-run /project1 /project2:ro')
+  echo('\t- Use :ro suffix for read-only mounts (e.g., /shared-libs:ro)')
 
   echo(yellow('\nds-cleanup').underline + '  ->  ds-cleanup [sandbox|--all]')
   echo('\t- Remove sandboxes and temporary files.')
