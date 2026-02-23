@@ -18,15 +18,6 @@ const getCurrentDirName = async (): Promise<string> => {
   return extractDirName(pwd.trim())
 }
 
-const getCurrentBranch = async (): Promise<string | null> => {
-  try {
-    const branch = await selectCurrentBranch()
-    return branch
-  } catch {
-    return null
-  }
-}
-
 const isProtectedBranch = (branch: string): boolean =>
   PROTECTED_BRANCHES.includes(branch.toLowerCase())
 
@@ -51,9 +42,11 @@ const cmon = async () => {
   echo(cyan('=== CodeMon - Starting Docker Sandbox ===\n'))
 
   const dirName = await getCurrentDirName()
-  const branch = await getCurrentBranch()
 
-  if (!branch) {
+  let branch: string
+  try {
+    branch = await selectCurrentBranch()
+  } catch {
     echo(red('✗ Error: Not in a Git repository'))
     echo(yellow('\nPlease run this command from within a Git repository.'))
     return
