@@ -1,0 +1,89 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:30:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/titan/admin-ui",
+  "repo_name": "admin-ui",
+  "classification": "frontend",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [],
+    "consumes_events": [],
+    "depends_on_repos": [
+      "monoql",
+      "fan-ui",
+      "reg-ui"
+    ],
+    "graphql_operations": {
+      "queries": [
+        "identity",
+        "ppc",
+        "searchArtists",
+        "searchContacts",
+        "searchVenues",
+        "codes",
+        "viewer",
+        "campaignExportList",
+        "campaignExport",
+        "campaignScoredList",
+        "wavePrepList",
+        "waveList",
+        "metrics",
+        "stats"
+      ],
+      "mutations": [
+        "upsertViewerEntry",
+        "logout",
+        "upsertCampaign",
+        "upsertMarket",
+        "deleteMarket",
+        "cloneMarkets",
+        "saveCampaignContacts",
+        "submitConfirm",
+        "refreshEntryAttribute",
+        "uploadCodes",
+        "authenticate",
+        "scheduleExport",
+        "uploadImage",
+        "uploadBlacklist",
+        "uploadScored",
+        "uploadFanlist",
+        "uploadWavePrepFile",
+        "uploadWave",
+        "cancelWave",
+        "triggerWavePrep",
+        "triggerSelection",
+        "addTags",
+        "flipVerdicts",
+        "upsertStat"
+      ]
+    },
+    "external_apis": {
+      "monoql_graphql_api": "https://monoql-dev.vf.nonprod9.us-east-1.tktm.io/graphql",
+      "fan_ui": "https://fan-ui-dev.vf.nonprod9.us-east-1.tktm.io/",
+      "reg_ui": "https://reg-ui-dev.vf.nonprod9.us-east-1.tktm.io/"
+    }
+  },
+  "notes": [
+    "Admin-UI is a React-based single-page application (SPA) for internal campaign management",
+    "Architecture: React frontend + Koa backend server (serves static files and handles auth)",
+    "All business logic executes via GraphQL API calls to monoql backend service",
+    "Frontend uses Redux for state management, Redux-Saga for side effects",
+    "Polling-based architecture: UI polls GraphQL API for state changes (no WebSockets or SSE)",
+    "Authentication via identity service (session-based, cookies)",
+    "Main operations: campaign CRUD, code management, selection triggering, metrics viewing, wave scheduling",
+    "Key user flows: create campaign → monitor registrations → trigger selection → assign codes → send waves",
+    "Metrics are polled every 3-10 seconds during active operations (selection, wave processing)",
+    "Exports are asynchronous with polling to check completion status",
+    "Images uploaded to CDN via GraphQL uploadImage mutation",
+    "Supports multi-locale campaigns (en_US, en_CA, fr_CA, es_MX, etc.)",
+    "Markets provide geographic segmentation with independent quotas",
+    "Scoring can be custom (uploaded fanlist) or algorithm-based",
+    "Blacklist is global and enforced during selection and code assignment",
+    "Wave notifications are timezone-aware and cannot be cancelled close to send time"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "agent": "api",
+  "status": "success",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "rest",
+  "endpoints_count": 8,
+  "export_types_count": 15,
+  "timestamp": "2024-02-13T21:52:00.000Z",
+  "notes": [
+    "REST API with Koa.js framework",
+    "JWT authentication required for most endpoints",
+    "Permission-based authorization using REPORT permission",
+    "15 export types supported (entries, codes, scoring, etc.)",
+    "Asynchronous export processing with status polling",
+    "S3-based file storage with signed URLs",
+    "CCPA compliance endpoint for user data deletion",
+    "Development endpoints available in dev mode",
+    "SFMC integration for autoReminderEmail export type",
+    "Prometheus metrics and health check endpoints"
+  ]
+}

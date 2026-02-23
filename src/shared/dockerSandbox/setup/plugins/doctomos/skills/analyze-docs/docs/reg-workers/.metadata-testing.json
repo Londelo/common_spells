@@ -1,0 +1,111 @@
+{
+  "agent": "testing",
+  "status": "success",
+  "generated_at": "2026-02-13T21:58:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/vf/registration/workers",
+  "repo_name": "reg-workers",
+  "classification": "worker",
+  "files_written": [
+    "static/testing-strategy.md",
+    "static/testing-coverage.md"
+  ],
+  "test_framework": "jest",
+  "test_framework_version": "25.1.0",
+  "bdd_framework": "cucumber",
+  "bdd_framework_version": "6.0.5",
+  "test_file_count": 58,
+  "test_file_breakdown": {
+    "typescript_specs": 20,
+    "javascript_specs": 38
+  },
+  "integration_test_count": 15,
+  "has_integration_tests": true,
+  "has_e2e_tests": true,
+  "has_coverage_tracking": false,
+  "coverage_metrics": {
+    "tracked": false,
+    "reason": "No Jest coverage configuration found in package.json or CI pipeline"
+  },
+  "test_organization": {
+    "unit_tests_location": "co-located with source files",
+    "integration_tests_location": "features/integrationTests/",
+    "e2e_tests_location": "features/e2eTests/"
+  },
+  "test_commands": {
+    "unit_all": "npx run tests:unit",
+    "unit_apps": "npx run tests:unit ./apps",
+    "unit_shared": "npx run tests:unit ./shared",
+    "integration": "npx run tests:integration",
+    "e2e": "npx run tests:e2e",
+    "lint": "npx run eslint:lint",
+    "type_check": "npx run types:check"
+  },
+  "ci_pipeline": {
+    "unit_tests_run": true,
+    "integration_tests_run": true,
+    "e2e_tests_run": true,
+    "lint_check": true,
+    "type_check": true,
+    "coverage_report": false
+  },
+  "test_artifacts": {
+    "integration_reports": "reports/",
+    "e2e_reports": "e2eTests/reports/",
+    "html_reporter": "cucumber-html-reporter"
+  },
+  "code_quality": {
+    "eslint_enforced": true,
+    "functional_programming": true,
+    "max_complexity": 6,
+    "max_depth": 2,
+    "typescript_strict": true
+  },
+  "testing_gaps": [
+    "No coverage metrics tracked",
+    "Limited worker unit tests",
+    "Limited error scenario coverage",
+    "No end-to-end workflow tests",
+    "No performance/load tests",
+    "Limited tools testing",
+    "No contract tests",
+    "Limited data validation tests",
+    "No security tests"
+  ],
+  "well_tested_areas": [
+    "Shared utilities (fetchMarketById, paginateRecords, generator)",
+    "Shared configuration (config loading, overrides, bundling)",
+    "Middleware layer (SQS, Kinesis, Kafka transformations)",
+    "Services layer (SNS DataTopicManager, QueueManager)",
+    "Registration domain (checkEligibility)",
+    "Replication domain (enqueueEntries integration)",
+    "Selection domain (market selections, code assignment)",
+    "Data pipeline domain (processData)",
+    "Notification domain (planSends, triggerReminderEmail)",
+    "Stream utilities (Kinesis, Firehose)"
+  ],
+  "recommendations": [
+    "Enable Jest coverage reporting with thresholds",
+    "Add unit tests for each worker's business logic",
+    "Add error scenario tests (timeouts, throttling, failures)",
+    "Add E2E workflow tests for complete user journeys",
+    "Add contract tests for external service APIs",
+    "Add performance benchmarks for Lambda workers",
+    "Add security tests for authentication and authorization",
+    "Test operational tools (uploadInvites, replicateEntries)"
+  ],
+  "estimated_coverage": {
+    "overall": "45-50%",
+    "by_domain": {
+      "registration": "40%",
+      "replication": "45%",
+      "selection": "40%",
+      "dataPipeline": "35%",
+      "notification": "40%",
+      "sharedUtilities": "70%",
+      "sharedMiddlewares": "75%",
+      "sharedServices": "60%",
+      "sharedConfig": "90%",
+      "tools": "10%"
+    }
+  }
+}

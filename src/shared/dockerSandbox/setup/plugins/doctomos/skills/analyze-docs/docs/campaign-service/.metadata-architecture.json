@@ -1,0 +1,71 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "3-Tier Layered Architecture with Functional Programming paradigm",
+  "entry_points": [
+    "app/index.js",
+    "app/router/index.js",
+    "lib/KoaCtxToManagerCtx.js"
+  ],
+  "key_directories": [
+    "app/router/",
+    "app/managers/",
+    "app/datastore/",
+    "app/services/",
+    "lib/",
+    "configs/",
+    "schemas/",
+    "features/"
+  ],
+  "key_patterns": [
+    "Context Propagation Pattern",
+    "Factory Function Pattern",
+    "Manager-Datastore Pattern",
+    "Selector Pattern",
+    "Validator Pattern (throwIf*)",
+    "Error Factory Pattern",
+    "Instrumentation Wrapper Pattern",
+    "Schema Validation Pattern",
+    "Functional Composition Pattern",
+    "Middleware Pipeline Pattern"
+  ],
+  "technology_stack": {
+    "runtime": "Node.js",
+    "framework": "Koa.js",
+    "language": "JavaScript (Babel transpiled)",
+    "database": "MongoDB",
+    "cache": "Redis",
+    "observability": "OpenTelemetry + Prometheus",
+    "testing": "Jest + Cucumber",
+    "fp_library": "Ramda",
+    "schema_validation": "JSON Schema + AJV"
+  },
+  "external_integrations": [
+    "Ticketmaster Discovery API",
+    "AWS Kinesis",
+    "AWS SQS",
+    "Fastly CDN",
+    "GitLab API",
+    "Redis"
+  ],
+  "layer_structure": {
+    "router": "HTTP routing and parameter extraction",
+    "manager": "Business logic, validation, orchestration",
+    "datastore": "MongoDB CRUD operations",
+    "services": "External API integrations"
+  },
+  "functional_programming_rules": {
+    "no_let_or_var": true,
+    "no_mutations": true,
+    "no_loops": true,
+    "no_classes": true,
+    "max_complexity": 7,
+    "max_nesting": 2,
+    "max_lines_per_file": 200
+  }
+}

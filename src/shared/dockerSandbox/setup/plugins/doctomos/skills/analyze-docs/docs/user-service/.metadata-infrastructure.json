@@ -1,0 +1,79 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T21:46:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "kubernetes_helm",
+  "deployment_platform": "gitlab_ci",
+  "raw_connections": {
+    "kubernetes_clusters": [
+      "nonprod9.us-east-1",
+      "preprod9.us-east-1",
+      "prod9.us-east-1",
+      "prod10.us-west-2"
+    ],
+    "container_registry": "889199535989.dkr.ecr.us-east-1.amazonaws.com/titan/users-service",
+    "mongodb_clusters": [
+      "nonprod0-shard-00-00-iottj.mongodb.net",
+      "nonprod0-shard-00-01-iottj.mongodb.net",
+      "nonprod0-shard-00-02-iottj.mongodb.net"
+    ],
+    "mongodb_replica_set": "NonProd0-shard-0",
+    "helm_chart": "tm/webservice:11.6.0",
+    "helm_release_names": {
+      "dev": "vf-usr-srvc-dev",
+      "qa": "vf-usr-srvc-qa",
+      "preprod": "vf-usr-srvc",
+      "prod": "vf-usr-srvc"
+    },
+    "service_endpoints": {
+      "dev": "https://vf-usr-srvc-dev.vf.nonprod9.us-east-1.tktm.io",
+      "qa": "https://vf-usr-srvc-qa.vf.nonprod9.us-east-1.tktm.io",
+      "preprod": "https://vf-usr-srvc.vf.preprod9.us-east-1.tktm.io",
+      "prod_east": "https://vf-usr-srvc.vf.prod9.us-east-1.tktm.io",
+      "prod_west": "https://vf-usr-srvc.vf.prod10.us-west-2.tktm.io"
+    },
+    "external_dependencies": [
+      "https://dev1.identity.nonprod-tmaws.io",
+      "https://acoe-s-qa-us-east-1.accounts.nonprod-tmaws.io:8443",
+      "https://app.slas-service.qa1.prd2166.nonprod9.us-east-1.tktm.io:8443",
+      "https://api.payment.qa3.us-east-1.nonprod-tmaws.io",
+      "https://vf-ent-srvc-dev.vf.nonprod9.us-east-1.tktm.io",
+      "https://vf-export-dev1-us-east-1.titan.nonprod-tmaws.io"
+    ],
+    "observability": {
+      "metrics": "/metrics (Prometheus)",
+      "logging": "AWS Elasticsearch via Fluentd",
+      "tracing": "OpenTelemetry to otel-collector-agent.prd3786.svc.cluster.local:4318",
+      "health_check": "/heartbeat"
+    },
+    "aws_resources": {
+      "iam_roles": [
+        "arn:aws:iam::343550350117:role/prd1541.titan.us-east-1.dev1.iam-kube-default",
+        "arn:aws:iam::889199535989:role/prd1541.titan.us-east-1.prod1.iam-kube-default"
+      ],
+      "kinesis_streams": [
+        "prd2011-dev1-vf1-input-stream"
+      ],
+      "acm_certificates": [
+        "arn:aws:acm:us-east-1:234212695392:certificate/182d62fa-7cd8-4625-b6b5-86a2d4bea0dd",
+        "arn:aws:acm:us-east-1:667096744268:certificate/763fdb83-0bc0-4398-8687-8245469626d8"
+      ]
+    }
+  },
+  "analysis_notes": {
+    "iac_tool": "Helm + Kubernetes",
+    "ci_cd": "GitLab CI/CD with multi-stage pipeline",
+    "deployment_strategy": "Rolling updates with health checks",
+    "multi_region": true,
+    "autoscaling": "HPA based on CPU (25% target)",
+    "monitoring": "Prometheus + Fluentd + OpenTelemetry",
+    "database": "MongoDB Atlas (managed)",
+    "container_platform": "Docker + Kubernetes",
+    "base_image": "node:18.18.2-alpine"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "kubernetes",
+  "deployment_platform": "gitlab-ci",
+  "raw_connections": {
+    "ecr_repositories": [
+      "889199535989.dkr.ecr.us-east-1.amazonaws.com/titan/monoql"
+    ],
+    "kubernetes_clusters": [
+      "nonprod9.us-east-1",
+      "preprod9.us-east-1",
+      "prod9.us-east-1",
+      "prod10.us-west-2"
+    ],
+    "s3_buckets": [
+      "prd2011.prod1.us-east-1.vf-scoring.tmaws"
+    ],
+    "elasticsearch_endpoints": [
+      "verifiedfan-logs.dev1.us-east-1.nonprod-tmaws.io",
+      "verifiedfan-logs.prod1.us-east-1.prod-tmaws.io"
+    ],
+    "backend_services": [
+      "vf-usr-srvc.vf.prod9.us-east-1.tktm.io",
+      "vf-camp-srvc.vf.prod9.us-east-1.tktm.io",
+      "vf-code-srvc.vf.prod9.us-east-1.tktm.io",
+      "vf-ent-srvc.vf.prod9.us-east-1.tktm.io",
+      "uploads-prod1-us-east-1.titan.prod-tmaws.io",
+      "vf-export-prod1-us-east-1.titan.prod-tmaws.io",
+      "wave-svc-prod1-us-east-1.titan.prod-tmaws.io",
+      "identity.ticketmaster.com",
+      "identity.ticketmaster.ca",
+      "identity.livenation.com",
+      "identity.ticketmaster.com.mx"
+    ],
+    "public_domains": [
+      "registration.ticketmaster.com",
+      "registration.ticketmaster.ca",
+      "registration.livenation.com",
+      "registration.ticketmaster.com.mx",
+      "verifiedfan.ticketmaster.com",
+      "verifiedfan.ticketmaster.ca",
+      "verifiedfan.livenation.com",
+      "verifiedfan.ticketmaster.com.mx"
+    ],
+    "iam_roles": [
+      "arn:aws:iam::343550350117:role/prd1541.titan.us-east-1.dev1.iam-kube-default",
+      "arn:aws:iam::889199535989:role/prd1541.titan.us-east-1.prod1.iam-kube-default"
+    ],
+    "acm_certificates": [
+      "arn:aws:acm:us-east-1:234212695392:certificate/182d62fa-7cd8-4625-b6b5-86a2d4bea0dd",
+      "arn:aws:acm:us-east-1:667096744268:certificate/2e5e6799-0ea6-48ce-b560-56bc8398e768"
+    ]
+  },
+  "technologies": {
+    "container_platform": "docker",
+    "orchestration": "kubernetes",
+    "helm_chart": "tm/webservice:11.6.0",
+    "cicd": "gitlab-ci",
+    "log_aggregation": "fluentd",
+    "log_storage": "elasticsearch",
+    "metrics": "prometheus",
+    "runtime": "node:18.18.2-alpine",
+    "application_framework": "koa"
+  },
+  "environments": {
+    "qa": {
+      "cluster": "nonprod9.us-east-1",
+      "fqdn": "monoql-qa.vf.nonprod9.us-east-1.tktm.io",
+      "replicas": "1-1"
+    },
+    "dev": {
+      "cluster": "nonprod9.us-east-1",
+      "fqdn": "monoql-dev.vf.nonprod9.us-east-1.tktm.io",
+      "replicas": "1-1"
+    },
+    "preprod": {
+      "cluster": "preprod9.us-east-1",
+      "fqdn": "monoql.vf.preprod9.us-east-1.pub-tktm.io",
+      "replicas": "5-15"
+    },
+    "prod-east": {
+      "cluster": "prod9.us-east-1",
+      "fqdn": "monoql.vf.prod9.us-east-1.pub-tktm.io",
+      "replicas": "5-15"
+    },
+    "prod-west": {
+      "cluster": "prod10.us-west-2",
+      "fqdn": "monoql.vf.prod10.us-west-2.pub-tktm.io",
+      "replicas": "5-15"
+    }
+  }
+}

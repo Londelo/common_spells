@@ -19,11 +19,18 @@
     "vars": "./dist/spells/gitlab/getVariable.js",
     "release": "./dist/spells/gitlab/createRelease.js",
     "document-repos": "./dist/spells/claude/documentRepos.js",
-    "repos": "./dist/spells/repos.js"
+    "cmon": "./dist/spells/claude/cmon.js",
+    "repos": "./dist/spells/repos.js",
+    "ds-setup": "./dist/spells/dockerSandbox/setup.js",
+    "ds-run": "./dist/spells/dockerSandbox/run.js",
+    "ds-cleanup": "./dist/spells/dockerSandbox/cleanup.js",
+    "ds-status": "./dist/spells/dockerSandbox/status.js",
+    "ds-open": "./dist/spells/dockerSandbox/open.js",
+    "ds-connect": "./dist/spells/dockerSandbox/connect.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "npm run clean && babel src --out-dir dist --extensions '.ts,.tsx'",
+    "build": "npm run clean && babel src --out-dir dist --extensions '.ts,.tsx' --copy-files",
     "link": "npm link",
     "unlink": "npm unlink -g common_spells && npm uninstall -g common_spells",
     "permissions": "chmod +x ./dist/spells/**/*",

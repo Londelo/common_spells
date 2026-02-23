@@ -1,0 +1,58 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T23:45:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      "kinesis:saveSelectionStream (scored fan records)",
+      "kinesis:inputStream (code assignments)",
+      "sqs:moveMergedAvroQueue (merge completion)",
+      "sqs:smsWaveEmailQueue (email notifications)",
+      "slack:notifications (errors and stats)"
+    ],
+    "consumes_events": [
+      "s3:scoringBucket (scored files, wave configs, wave CSVs)",
+      "s3:campaignDataBucket (avro files, merged files)",
+      "sqs:moveMergedAvroQueue (merge completion)",
+      "stepfunction:wave-triggers (scheduled wave execution)",
+      "cloudwatch:scheduled-events (daily/monthly merge)"
+    ],
+    "depends_on_repos": [
+      "campaign-service (campaign configuration)",
+      "code-service / tm-pacman (code generation and assignment)",
+      "entry-service (fan registration data)",
+      "tm-sms-service (SMS delivery)",
+      "salesforce-marketing-cloud (email delivery)"
+    ],
+    "worker_types": [
+      "processScoredFiles - validates and scores fan data",
+      "translateRanksToScores - converts rankings to normalized scores",
+      "generateSmsWaveCodes - generates access codes via Pacman",
+      "processScheduledWave - assigns codes to campaigns",
+      "processSmsWaveFiles - prepares wave files with selected fans",
+      "smsWaveSend - sends SMS/email notifications",
+      "loadCodeAssignmentsToStream - publishes code assignments to Kinesis",
+      "transformCodeAssignments - enriches code records with IDs",
+      "saveCampaignData - writes records to Avro data lake",
+      "saveSelection - persists selection data",
+      "saveStats - refreshes admin statistics",
+      "slackStats - publishes statistics to Slack",
+      "mergeAvroFiles - consolidates Avro files via Athena",
+      "moveMergedAvroFiles - archives source files after merge"
+    ]
+  },
+  "analysis_notes": {
+    "repository_type": "AWS Lambda workers",
+    "deployment_model": "Serverless functions triggered by S3, SQS, Step Functions, CloudWatch",
+    "primary_purpose": "Campaign pipeline automation from scoring to notification",
+    "key_business_value": "Enables fair, scalable fan selection and notification at massive scale",
+    "data_flow": "S3 → Lambda → Kinesis → Lambda → Avro/S3 → Athena → Notification Services",
+    "critical_dependencies": "Campaign Service, Code Service (Pacman), Entry Service, TM SMS, SFMC",
+    "monitoring": "Slack notifications for all errors and completion stats"
+  }
+}

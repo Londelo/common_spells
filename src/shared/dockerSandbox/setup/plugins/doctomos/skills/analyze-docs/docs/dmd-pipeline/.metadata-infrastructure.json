@@ -1,0 +1,60 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T21:48:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "raw_connections": {
+    "lambda_functions": [
+      "deliveryWorker"
+    ],
+    "dynamodb_tables": [
+      "prd3292-dev1-us-east-1-demand-table",
+      "prd3292-qa1-us-east-1-demand-table",
+      "prd3292-preprod1-us-east-1-demand-table",
+      "prd3292-prod1-us-east-1-demand-table"
+    ],
+    "kinesis_streams": [
+      "prd3292-dev1-dmnd-table-stream"
+    ],
+    "s3_buckets": [
+      "prd3292.dev1.us-east-1.demand-capture.tmaws",
+      "prd3292.qa1.us-east-1.demand-capture.tmaws",
+      "prd3292.preprod1.us-east-1.demand-capture.tmaws",
+      "prd3292.prod1.us-east-1.demand-capture.tmaws"
+    ],
+    "athena_databases": [
+      "prd3292_dev1_dmnd_pipeline",
+      "prd3292_dev1_dmnd_pipeline_parquet",
+      "prd3292_qa1_dmnd_pipeline",
+      "prd3292_qa1_dmnd_pipeline_parquet",
+      "prd3292_preprod1_dmnd_pipeline",
+      "prd3292_preprod1_dmnd_pipeline_parquet",
+      "prd3292_prod1_dmnd_pipeline",
+      "prd3292_prod1_dmnd_pipeline_parquet"
+    ],
+    "glue_tables": [
+      "demand",
+      "event",
+      "notification",
+      "sale"
+    ],
+    "iam_roles": [
+      "deliveryWorker-execution-role",
+      "log-producer",
+      "ci-role"
+    ],
+    "iac_tool": "terraform",
+    "terraform_version": ">=1.5.6",
+    "ci_cd_platform": "gitlab",
+    "environments": [
+      "dev1",
+      "qa1",
+      "preprod1",
+      "prod1"
+    ]
+  }
+}

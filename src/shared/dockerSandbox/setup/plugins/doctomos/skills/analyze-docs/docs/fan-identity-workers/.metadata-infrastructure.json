@@ -1,0 +1,89 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-16T00:00:00Z",
+  "repository": "fan-identity-workers",
+  "classification": "worker",
+  "iac_tool": "terraform",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "stacks": [
+    "auth",
+    "botornot",
+    "clustering",
+    "idv",
+    "scoring"
+  ],
+  "raw_connections": {
+    "lambda_functions": [
+      "validateToken",
+      "startBotOrNotImport",
+      "startClusterImport",
+      "handleEvent",
+      "checkLiveness",
+      "scoreUsers",
+      "getArmScore",
+      "enqueueFromVfStream",
+      "enqueueFromDemandStream",
+      "enqueueFromPurchaseStream",
+      "enqueueFromSQJourneyStream",
+      "lookupArai",
+      "processRescoreEvents",
+      "stagingScoreUsers"
+    ],
+    "dynamodb_tables": [
+      "fan-identity-table"
+    ],
+    "sqs_queues": [
+      "account-activity-sqs.fifo",
+      "on-demand-scoring-sqs"
+    ],
+    "kinesis_streams": [
+      "fan-identity-table-stream",
+      "vf-input-stream",
+      "dmnd-table-stream",
+      "purchase-stream",
+      "sq-journey-stream"
+    ],
+    "api_gateways": [
+      "identity-verification-api"
+    ],
+    "elasticache": [
+      "arm-redis"
+    ],
+    "s3_buckets": [
+      "ds-exports-bucket"
+    ],
+    "glue_workflows": [
+      "bot-detection-workflow",
+      "clustering-workflow"
+    ]
+  },
+  "deployment": {
+    "ci_cd": "gitlab-ci",
+    "terraform_version": ">=1.5.6",
+    "aws_provider_version": "~>5.0",
+    "runtime": "node18",
+    "environments": [
+      "qa1",
+      "dev1",
+      "preprod1",
+      "prod1"
+    ],
+    "multi_region": true,
+    "regions": [
+      "us-east-1",
+      "us-west-2"
+    ]
+  },
+  "terraform_modules": {
+    "tm-env": "v1.0.0",
+    "terraform-module-account": "v1.1.1-v1.1.2",
+    "terraform-module-naming": "v1.3.3",
+    "terraform-module-networks": "v3.2.3",
+    "nodejs-lambda": "v2.0.0-v2.1.0"
+  }
+}

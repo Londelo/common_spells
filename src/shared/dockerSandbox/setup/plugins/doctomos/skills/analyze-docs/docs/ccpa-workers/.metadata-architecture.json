@@ -1,0 +1,82 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "timestamp": "2026-02-13T21:48:00Z",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Serverless + Event-Driven + Microservices",
+  "entry_points": [
+    "shared/entryFiles/lambda.js",
+    "shared/appResolver/index.js",
+    "apps/processRequest/index.js",
+    "apps/deleteFan/index.js",
+    "apps/fanInfo/index.js",
+    "apps/keepPrivate/index.js",
+    "apps/optOut/index.js",
+    "apps/saveDisclosures/index.js",
+    "apps/updateDictionary/index.js"
+  ],
+  "key_directories": [
+    "apps/",
+    "shared/",
+    "shared/middlewares/",
+    "shared/services/",
+    "configs/",
+    "terraform/",
+    "tools/",
+    "features/"
+  ],
+  "workers": [
+    "processRequest",
+    "deleteFan",
+    "fanInfo",
+    "keepPrivate",
+    "optOut",
+    "saveDisclosures",
+    "updateDictionary"
+  ],
+  "middleware_types": [
+    "sqsConsumer",
+    "sdkInvoked",
+    "kinesisConsumer",
+    "dynamodbConsumer",
+    "kafkaConsumer",
+    "scheduled",
+    "firehoseProcessor",
+    "snsSubscriber",
+    "s3Consumer",
+    "appsyncResolver"
+  ],
+  "external_integrations": [
+    "Privacy Core (Kafka)",
+    "VF Users Service (HTTP)",
+    "VF Entries Service (HTTP)",
+    "VF Campaigns Service (HTTP)",
+    "DynamoDB (verificationTable, demandTable, acctFanscoreTable, fanIdentityTable)",
+    "MongoDB",
+    "SQS Queues",
+    "AWS Secrets Manager",
+    "CloudWatch Logs",
+    "OpenTelemetry Collector",
+    "Slack"
+  ],
+  "total_source_files": 123,
+  "primary_language": "JavaScript",
+  "secondary_languages": ["TypeScript"],
+  "test_framework": "Cucumber (BDD)",
+  "infrastructure": "Terraform + AWS Lambda + SQS",
+  "configuration_format": "YAML (environment-specific)",
+  "key_patterns": [
+    "Middleware Pipeline",
+    "Dependency Injection",
+    "Strategy (Middleware Selection)",
+    "Adapter (Input Transformers)",
+    "Factory (Service Initialization)",
+    "Template Method (Worker Structure)",
+    "Router (Request Processor)",
+    "Chain of Responsibility (Data Retrieval)"
+  ]
+}

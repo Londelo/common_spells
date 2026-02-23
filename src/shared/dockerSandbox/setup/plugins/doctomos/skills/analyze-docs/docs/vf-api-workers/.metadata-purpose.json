@@ -1,0 +1,40 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:48:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      "kinesis:scoresStream",
+      "kinesis:campaignDataStream",
+      "sqs:verdictReporterQueue",
+      "slack:slackScrubbedChannel"
+    ],
+    "consumes_events": [
+      "s3:ObjectCreated:scoringBucket:scrubbed/*",
+      "s3:ObjectCreated:scoringBucket:fanlist/scored/*",
+      "kinesis:scoresStream",
+      "dynamodb:stream:demandTable",
+      "sqs:verdictReporterQueue"
+    ],
+    "depends_on_repos": [
+      "campaign-pipeline/workers (processScoredFiles)",
+      "campaign-service",
+      "entry-service"
+    ],
+    "integrates_with": [
+      "DynamoDB demandTable",
+      "Kinesis scoresStream",
+      "Kinesis campaignDataStream",
+      "S3 scoringBucket",
+      "SQS verdictReporterQueue",
+      "Slack API",
+      "Campaign Service API",
+      "Entry Service API"
+    ]
+  }
+}

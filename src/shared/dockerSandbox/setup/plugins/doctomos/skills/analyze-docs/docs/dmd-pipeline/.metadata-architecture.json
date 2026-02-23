@@ -1,0 +1,80 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "timestamp": "2026-02-13T18:30:00Z",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Serverless Event-Driven Pipeline",
+  "architecture_patterns": [
+    "Strategy Pattern (format encoders)",
+    "Repository Pattern (storage abstraction)",
+    "Dependency Injection",
+    "Result Type (railway-oriented programming)",
+    "Batch Processing with Grouping",
+    "Builder Pattern (domain models)",
+    "Schema Registry Pattern"
+  ],
+  "entry_points": [
+    "src/lambda/deliveryWorker/index.ts",
+    "src/services.ts",
+    "src/core/deliverDemandRecords.ts",
+    "src/tasks/backfill.ts",
+    "src/tasks/console.ts"
+  ],
+  "key_directories": [
+    "src/lambda/",
+    "src/core/",
+    "src/delivery/",
+    "src/format/",
+    "src/demand/",
+    "src/athena/",
+    "src/util/",
+    "src/tasks/",
+    "test/",
+    "terraform/",
+    "config/"
+  ],
+  "technology_stack": {
+    "language": "TypeScript",
+    "runtime": "Node.js 18.x",
+    "framework": "@ticketmaster/lambda",
+    "data_formats": ["Avro", "Parquet"],
+    "aws_services": [
+      "Lambda",
+      "Kinesis Data Streams",
+      "DynamoDB Streams",
+      "S3",
+      "Athena",
+      "Glue Catalog",
+      "CloudWatch Logs",
+      "IAM"
+    ],
+    "testing": ["Jest", "ts-jest"],
+    "build": ["TypeScript Compiler", "esbuild", "Yarn"],
+    "infrastructure": ["Terraform"]
+  },
+  "data_flow_summary": "DynamoDB Streams → Kinesis → Lambda → Parse & Validate → Group by Type & Date → Encode (Avro/Parquet) → S3 (Partitioned) → Athena",
+  "record_types": [
+    "demand",
+    "notification",
+    "event",
+    "sale"
+  ],
+  "layer_separation": [
+    "Infrastructure Layer (Lambda, S3Storage, AWS SDK)",
+    "Application Layer (Core business logic)",
+    "Domain Layer (DemandRecord models)",
+    "Technical Services Layer (Format encoders, utilities)"
+  ],
+  "configuration_strategy": "Multi-environment with runtime config loading",
+  "environments": [
+    "dev1",
+    "qa1",
+    "preprod1",
+    "prod1",
+    "test"
+  ]
+}

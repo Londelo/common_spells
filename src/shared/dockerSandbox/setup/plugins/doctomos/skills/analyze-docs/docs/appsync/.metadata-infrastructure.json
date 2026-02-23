@@ -1,0 +1,56 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "raw_connections": {
+    "appsync_api": "aws_appsync_graphql_api.appsync",
+    "dynamodb_tables": [
+      "prd2011-{env}-us-east-1-acct-fanscore-table",
+      "prd2011-{env}-us-east-1-fan-identity-table",
+      "prd2011-{env}-us-east-1-verification-table",
+      "prd3292-{env}-us-east-1-demand-table"
+    ],
+    "lambda_functions": [
+      "prd2011-{env}-proxy-cmp-srvc",
+      "prd3292-{env}-prxy-acct",
+      "prd3292-{env}-evnt-dtls",
+      "prd2011-{env}-api-phone-scr",
+      "prd2011-{env}-acct-scrng-get-arm",
+      "prd2011-{env}-idv-event",
+      "prd2011-{env}-idv-liveness",
+      "prd2011-{env}-reg-eligibility",
+      "prd2011-{env}-fanid-auth-token"
+    ],
+    "eventbridge": [
+      "default"
+    ],
+    "http_endpoints": [
+      "https://loyalty-user.staging.livenationapi.com",
+      "https://loyalty-user.livenationapi.com"
+    ],
+    "custom_domains": [
+      "appsync-{env}.fanid.nonprod-tmaws.io",
+      "appsync-{env}.fanid.pub-tmaws.io"
+    ],
+    "cloudwatch_log_groups": [
+      "/aws/appsync/apis/{appsync_api_id}"
+    ],
+    "iam_roles": [
+      "{product_code}.{env}.{region}.tmaws-appsync",
+      "{product_code}.{env}.{region}.tmaws-log-appsync"
+    ]
+  },
+  "iac_tool": "terraform",
+  "deployment_tool": "terramisu",
+  "ci_cd_platform": "gitlab-ci",
+  "environments": {
+    "nonprod": ["qa1", "qa2", "dev1"],
+    "prod": ["preprod1", "prod1"]
+  },
+  "aws_regions": ["us-east-1"],
+  "product_codes": ["PRD2011", "PRD3292"]
+}

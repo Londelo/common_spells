@@ -1,0 +1,89 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "timestamp": "2026-02-16T10:08:00Z",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Serverless + Event-Driven + Functional",
+  "entry_points": [
+    "shared/entryFiles/lambda.js",
+    "shared/appResolver/index.js"
+  ],
+  "key_directories": [
+    "apps/",
+    "shared/",
+    "configs/",
+    "features/",
+    "terraform/",
+    "tools/"
+  ],
+  "worker_domains": [
+    "auth",
+    "botornot",
+    "clustering",
+    "idv",
+    "scoring"
+  ],
+  "event_sources": [
+    "Kafka",
+    "Kinesis",
+    "DynamoDB Streams",
+    "SQS",
+    "AppSync",
+    "EventBridge",
+    "S3",
+    "SNS"
+  ],
+  "middleware_types": [
+    "KINESIS_CONSUMER",
+    "DYNAMODB_CONSUMER",
+    "DYNAMODB_KINESIS_CONSUMER",
+    "SQS_CONSUMER",
+    "KAFKA_CONSUMER",
+    "S3_CONSUMER",
+    "SNS_SUBSCRIBER",
+    "FIREHOSE_PROCESSOR",
+    "APPSYNC_RESOLVER",
+    "APPSYNC_AUTHORIZER",
+    "SCHEDULED",
+    "SDK_INVOKED",
+    "FANOUT_CONTROLLER"
+  ],
+  "service_integrations": [
+    "DynamoDB",
+    "SQS",
+    "Redis",
+    "TM Accounts API",
+    "Identity Service",
+    "Scoring Model API",
+    "Unleash Feature Flags",
+    "CloudWatch",
+    "OpenTelemetry"
+  ],
+  "design_patterns": [
+    "Middleware Pipeline",
+    "Dependency Injection",
+    "Factory Pattern",
+    "Strategy Pattern",
+    "Queue Manager Pattern",
+    "Adapter Pattern",
+    "Configuration Management Pattern",
+    "Type-Safe Worker Pattern"
+  ],
+  "languages": [
+    "TypeScript",
+    "JavaScript"
+  ],
+  "build_tools": [
+    "Webpack",
+    "Babel",
+    "TypeScript Compiler"
+  ],
+  "test_frameworks": [
+    "Jest",
+    "Cucumber"
+  ]
+}

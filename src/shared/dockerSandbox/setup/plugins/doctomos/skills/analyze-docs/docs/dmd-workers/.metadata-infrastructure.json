@@ -1,0 +1,75 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T21:48:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "iac_tool": "terraform",
+  "deployment_platform": "gitlab-ci",
+  "runtime": "nodejs18.x",
+  "raw_connections": {
+    "lambda_functions": [
+      "notificationScheduler",
+      "notificationGenerator",
+      "notificationSend",
+      "demandStreamToSqs",
+      "shortenEventUrl",
+      "smsStatusConsumer",
+      "proxyTmAccountService",
+      "eventDetails"
+    ],
+    "dynamodb_tables": [
+      "prd3292-{env}-us-east-1-demand-table"
+    ],
+    "sqs_queues": [
+      "prd3292-{env}-us-east-1-event-short-url"
+    ],
+    "kinesis_streams": [
+      "dmnd-table-stream",
+      "{product_code}-{env}-logs"
+    ],
+    "elasticache_clusters": [
+      "prd3292-{env}-dmnd",
+      "prd3292-{env}-dmnd-ro"
+    ],
+    "s3_buckets": [],
+    "cloudwatch_log_groups": [
+      "/aws/lambda/{function-name}"
+    ],
+    "iam_roles": [
+      "lambda_role",
+      "cw_log_lambda_role"
+    ],
+    "vpc_config": {
+      "subnets": "app-tier",
+      "security_groups": "web-tier"
+    }
+  },
+  "terraform_modules": {
+    "naming": "git::https://git.tmaws.io/AWS/terraform-module-naming.git?ref=v1.3.3",
+    "account": "git::https://git.tmaws.io/AWS/terraform-module-account.git?ref=v1.1.2",
+    "web_networks": "git::https://git.tmaws.io/AWS/terraform-module-networks.git?ref=v3.2.3",
+    "app_networks": "git::https://git.tmaws.io/AWS/terraform-module-networks.git?ref=v3.2.3",
+    "log_stream_arn": "git::https://git.tmaws.io/verifiedfan/terraform-modules/log-stream-arn?ref=v1.0.0",
+    "event_stream_arn": "./modules/event_stream_arn"
+  },
+  "environments": [
+    "qa1",
+    "dev1",
+    "preprod1",
+    "prod1"
+  ],
+  "aws_accounts": {
+    "nonprod": "tm-nonprod",
+    "prod": "tm-prod"
+  },
+  "product_info": {
+    "product_code": "PRD3292",
+    "product_name": "demand-capture",
+    "product_acronym": "dmnd",
+    "repository": "git.tmaws.io/demand_capture/workers"
+  }
+}

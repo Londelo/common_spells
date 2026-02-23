@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const shelljs = require\\(''shelljs''\\); console.log\\(Object.keys\\(shelljs\\).filter\\(k => k.includes\\(''test''\\) || k.includes\\(''ls''\\) || k.includes\\(''cd''\\) || k.includes\\(''pwd''\\) || k.includes\\(''find''\\)\\).join\\('', ''\\)\\)\")",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(npm run build:*)"
+    ]
+  }
+}

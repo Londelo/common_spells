@@ -1,0 +1,90 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "kubernetes",
+  "iac_tools": [
+    "helm",
+    "docker",
+    "docker-compose"
+  ],
+  "cloud_provider": "aws",
+  "regions": [
+    "us-east-1"
+  ],
+  "environments": [
+    "testing",
+    "qa",
+    "dev",
+    "preprod",
+    "production"
+  ],
+  "clusters": {
+    "nonprod": "nonprod9.us-east-1",
+    "preprod": "preprod9.us-east-1",
+    "production": "prod9.us-east-1"
+  },
+  "raw_connections": {
+    "kubernetes_clusters": [
+      "nonprod9.us-east-1",
+      "preprod9.us-east-1",
+      "prod9.us-east-1"
+    ],
+    "ecr_repositories": [
+      "889199535989.dkr.ecr.us-east-1.amazonaws.com/titan/admin-ui-next"
+    ],
+    "load_balancers": [
+      "aws-alb-ingress"
+    ],
+    "monitoring_tools": [
+      "prometheus",
+      "jaeger",
+      "fluentd",
+      "elasticsearch"
+    ],
+    "iam_roles": [
+      "arn:aws:iam::343550350117:role/prd1541.titan.us-east-1.qa1.iam-kube-default",
+      "arn:aws:iam::343550350117:role/prd1541.titan.us-east-1.dev1.iam-kube-default",
+      "arn:aws:iam::889199535989:role/prd1541.titan.us-east-1.preprod1.iam-kube-default",
+      "arn:aws:iam::889199535989:role/prd1541.titan.us-east-1.prod1.iam-kube-default"
+    ],
+    "acm_certificates": [
+      "arn:aws:acm:us-east-1:234212695392:certificate/182d62fa-7cd8-4625-b6b5-86a2d4bea0dd",
+      "arn:aws:acm:us-east-1:109494285962:certificate/00edae63-0fd8-4b70-af9c-7c9b76d843aa",
+      "arn:aws:acm:us-east-1:667096744268:certificate/2e5e6799-0ea6-48ce-b560-56bc8398e768"
+    ],
+    "elasticsearch_endpoints": [
+      "http://verifiedfan-logs.qa1.us-east-1.nonprod-tmaws.io",
+      "http://verifiedfan-logs.dev1.us-east-1.nonprod-tmaws.io",
+      "http://verifiedfan-logs.preprod1.us-east-1.prod-tmaws.io",
+      "http://verifiedfan-logs.prod1.us-east-1.prod-tmaws.io"
+    ]
+  },
+  "deployment": {
+    "ci_cd_platform": "gitlab",
+    "helm_chart": "tm/webservice",
+    "chart_version": "11.6.0",
+    "namespace": "prd1541",
+    "product_code": "prd1541"
+  },
+  "production_domains": [
+    "admin.registration.ticketmaster.com",
+    "admin.verifiedfan.ticketmaster.com"
+  ],
+  "scaling": {
+    "min_replicas_prod": 4,
+    "max_replicas_prod": 12,
+    "autoscaling_metric": "cpu",
+    "target_cpu_utilization": "60%"
+  },
+  "health_checks": {
+    "liveness_path": "/heartbeat",
+    "readiness_path": "/heartbeat",
+    "metrics_path": "/metrics"
+  }
+}

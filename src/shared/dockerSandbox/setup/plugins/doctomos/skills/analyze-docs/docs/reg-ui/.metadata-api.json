@@ -1,0 +1,79 @@
+{
+  "agent": "api",
+  "status": "success",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_types": [
+    "graphql",
+    "rest"
+  ],
+  "graphql": {
+    "schema_location": "graphql/schema.graphql",
+    "operations_location": "graphql/operations/*.gql",
+    "queries_count": 9,
+    "mutations_count": 10,
+    "subscriptions_count": 1,
+    "types_count": 45,
+    "authentication": "AWS AppSync (API Key + SOTC Token)"
+  },
+  "rest": {
+    "endpoints_count": 6,
+    "endpoints": [
+      {
+        "path": "/heartbeat",
+        "method": "GET",
+        "purpose": "Health check"
+      },
+      {
+        "path": "/metrics",
+        "method": "GET",
+        "purpose": "Prometheus metrics"
+      },
+      {
+        "path": "/api/log",
+        "method": "POST",
+        "purpose": "Client-side logging"
+      },
+      {
+        "path": "/api/og",
+        "method": "GET",
+        "purpose": "Open Graph image generation"
+      },
+      {
+        "path": "/graphql",
+        "method": "GET,POST",
+        "purpose": "GraphQL proxy to AppSync"
+      },
+      {
+        "path": "/api/graphql",
+        "method": "GET,POST",
+        "purpose": "Mock GraphQL server (dev only)"
+      }
+    ]
+  },
+  "documentation_highlights": [
+    "Complete GraphQL schema with AWS AppSync directives",
+    "Authentication via SOTC (Session of the Customer) cookies",
+    "REST endpoints for health, metrics, logging, and images",
+    "Mock GraphQL server for local development",
+    "Redis caching strategy with 8-hour TTL",
+    "Liveness verification and identity validation support",
+    "Verified Fan campaign management",
+    "Demand notification system",
+    "Phone verification and scoring"
+  ],
+  "key_features": [
+    "GraphQL API (primary)",
+    "REST API (supporting)",
+    "Mock server for local development",
+    "Real-time subscriptions (liveness updates)",
+    "Client-side logging aggregation",
+    "Prometheus metrics export",
+    "Open Graph image generation",
+    "Campaign entry management",
+    "Fan verification and scoring",
+    "LNAA (Live Nation Audience Alliance) integration"
+  ]
+}

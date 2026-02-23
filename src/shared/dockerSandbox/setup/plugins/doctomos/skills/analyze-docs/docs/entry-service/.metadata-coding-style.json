@@ -1,0 +1,122 @@
+{
+  "agent": "coding-style",
+  "status": "success",
+  "generated_at": "2026-02-13",
+  "files_written": [
+    "dynamic/style-conventions.md",
+    "dynamic/style-complexity.md"
+  ],
+  "coding_style": {
+    "language": "JavaScript (ES6+)",
+    "framework": "Koa.js",
+    "paradigm": "Functional Programming",
+    "library": "Ramda",
+    "naming_convention": {
+      "variables": "camelCase",
+      "functions": "camelCase",
+      "higher_order_functions": "PascalCase",
+      "files": "camelCase",
+      "constants": "SCREAMING_SNAKE_CASE"
+    },
+    "formatting": {
+      "indentation": "2 spaces",
+      "quotes": "single",
+      "semicolons": "required",
+      "trailing_commas": "never",
+      "max_line_length": 120,
+      "brace_style": "stroustrup"
+    },
+    "key_linting_rules": [
+      "fp/no-class",
+      "fp/no-let",
+      "fp/no-loops",
+      "fp/no-mutation",
+      "complexity: 7",
+      "max-depth: 2",
+      "max-lines: 200",
+      "prefer-const",
+      "no-var",
+      "eqeqeq"
+    ],
+    "complexity_metrics": {
+      "total_source_files": 203,
+      "avg_function_length_lines": 25,
+      "max_nesting_depth": 2,
+      "max_cyclomatic_complexity": 7,
+      "avg_file_size_lines": 58,
+      "max_file_length": 200,
+      "largest_file_lines": 382,
+      "largest_file": "app/router/index.js"
+    },
+    "readability": {
+      "overall_rating": "Excellent",
+      "intention_revealing_names": "Excellent",
+      "narrative_flow": "Excellent",
+      "abstraction_consistency": "Excellent",
+      "self_documentation": "Excellent",
+      "notes": "Strict functional programming style with Ramda, descriptive names at domain level, clear separation of concerns"
+    },
+    "top_principles": [
+      {
+        "principle": "DRY",
+        "adherence": "Strong",
+        "evidence": "Extensive shared utilities, selectors, normalizers across modules"
+      },
+      {
+        "principle": "KISS",
+        "adherence": "Strong",
+        "evidence": "Functions avg 20-30 lines, max complexity 7, max nesting 2"
+      },
+      {
+        "principle": "YAGNI",
+        "adherence": "Strong",
+        "evidence": "No speculative code, focused domain logic"
+      },
+      {
+        "principle": "Single Responsibility",
+        "adherence": "Strong",
+        "evidence": "Focused modules (validators/, normalizers/, managers/), each with single purpose"
+      },
+      {
+        "principle": "Functional Programming",
+        "adherence": "Excellent",
+        "evidence": "Pure functions, immutability, composition, higher-order functions, Ramda throughout"
+      },
+      {
+        "principle": "Interface Segregation",
+        "adherence": "Strong",
+        "evidence": "Focused function signatures, destructured parameters"
+      }
+    ],
+    "prohibited_constructs": [
+      "classes",
+      "let keyword",
+      "var keyword",
+      "for/while loops",
+      "switch statements",
+      "delete operator",
+      "mutations (with exceptions for ctx)"
+    ],
+    "strengths": [
+      "Strict functional programming discipline",
+      "Enforced complexity limits via ESLint",
+      "Ramda-based transformations reduce imperative complexity",
+      "Small, focused functions and files",
+      "Excellent code readability",
+      "Consistent patterns throughout",
+      "No classes, immutable data"
+    ],
+    "complexity_notes": {
+      "managed_areas": [
+        "Entry upsert logic - inherent business complexity, well-organized",
+        "Async validation patterns - advanced but readable",
+        "Database aggregations - complex but encapsulated"
+      ],
+      "potential_optimizations": [
+        "Router file could use abstraction to reduce repetition (low priority)",
+        "Async validation utility could be extracted for reuse (low priority)"
+      ],
+      "assessment": "Code complexity is well-managed. Strict ESLint rules enforce low complexity, and functional programming reduces typical sources of complexity."
+    }
+  }
+}

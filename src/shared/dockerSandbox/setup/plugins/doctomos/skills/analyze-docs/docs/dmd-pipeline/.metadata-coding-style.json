@@ -1,0 +1,113 @@
+{
+  "agent": "coding-style",
+  "status": "success",
+  "timestamp": "2026-02-13T22:00:00.000Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/demand-capture/data-pipeline",
+  "repo_name": "dmd-pipeline",
+  "classification": "pipeline",
+  "files_written": [
+    "dynamic/style-conventions.md",
+    "dynamic/style-complexity.md"
+  ],
+  "coding_style": {
+    "language": "TypeScript",
+    "naming_convention": {
+      "variables": "camelCase",
+      "functions": "camelCase",
+      "classes": "PascalCase",
+      "types_interfaces": "PascalCase",
+      "files": "camelCase or PascalCase",
+      "constants": "camelCase (const preferred over SCREAMING_SNAKE)"
+    },
+    "formatting": {
+      "indentation": "2 spaces",
+      "quotes": "single",
+      "semicolons": "never",
+      "trailing_commas": "never",
+      "line_length": 100,
+      "object_curly_spacing": "always"
+    },
+    "key_linting_rules": [
+      "quotes: error, single",
+      "semi: off",
+      "@typescript-eslint/semi: error, never",
+      "comma-dangle: error, never",
+      "object-curly-spacing: error, always",
+      "id-length: error, min 2",
+      "indent: error, 2",
+      "max-len: error, 100",
+      "import/order: error (external, builtin, internal, sibling, parent, index)"
+    ],
+    "typescript_config": {
+      "target": "es2022",
+      "module": "node16",
+      "strict": true,
+      "experimentalDecorators": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "complexity": {
+      "total_source_files": 24,
+      "total_lines_of_code": 1068,
+      "avg_file_size_lines": 56,
+      "avg_function_length_lines": 25,
+      "max_nesting_depth": 3,
+      "largest_file": "DemandRecord.ts (142 lines)",
+      "files_over_100_lines": 3,
+      "cyclomatic_complexity": "low (85% of functions have CC < 5)"
+    },
+    "readability": {
+      "overall_rating": "Excellent",
+      "intention_revealing_names": "Excellent",
+      "narrative_flow": "Excellent",
+      "abstraction_consistency": "Excellent",
+      "self_documentation": "Excellent",
+      "notes": "Code reads like well-written prose with clear intent at every level"
+    },
+    "engineering_principles": {
+      "top_principles": [
+        "DRY",
+        "KISS",
+        "Single Responsibility",
+        "Dependency Inversion",
+        "Interface Segregation"
+      ],
+      "adherence_summary": {
+        "DRY": "Strong - Shared utilities, single source of truth for schemas",
+        "KISS": "Strong - Functions avg 20-30 lines, clear single purposes",
+        "YAGNI": "Strong - Focused feature set, no speculative code",
+        "Single_Responsibility": "Strong - Each module has clear purpose",
+        "Open_Closed": "Moderate - Format and Storage interfaces allow extensions",
+        "Liskov_Substitution": "Strong - Format implementations (avro/parquet) truly substitutable",
+        "Interface_Segregation": "Strong - Small, focused interfaces",
+        "Dependency_Inversion": "Strong - Depends on abstractions (Format, Storage)",
+        "WET": "Not Observed - No significant code duplication",
+        "AHA": "Moderate - Abstractions created when patterns emerged"
+      }
+    },
+    "consistency_assessment": "High consistency across all modules. ESLint rules strictly followed. TypeScript strict mode enabled. No style violations detected.",
+    "testing": {
+      "framework": "Jest",
+      "test_files": "Co-located with source (*.test.ts)",
+      "test_structure": "describe/it blocks with clear test names",
+      "test_utilities": "test/support/ for shared test helpers and fixtures"
+    },
+    "import_organization": {
+      "order": [
+        "external",
+        "builtin",
+        "internal",
+        "sibling",
+        "parent",
+        "index"
+      ],
+      "enforced_by": "eslint-plugin-import"
+    },
+    "recommendations": [
+      "Continue maintaining current practices - excellent code quality",
+      "Keep functions small (< 40 lines) - current avg of 20-30 is ideal",
+      "Maintain strict TypeScript configuration",
+      "Continue using Result type pattern for explicit error handling",
+      "Optional: Consider extracting complex switch cases in backfill.ts for easier testing"
+    ]
+  }
+}

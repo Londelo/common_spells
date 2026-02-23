@@ -1,0 +1,35 @@
+{
+  "agent": "testing",
+  "status": "success",
+  "files_written": [
+    "static/testing-strategy.md",
+    "static/testing-coverage.md"
+  ],
+  "test_framework": "jest",
+  "test_file_count": 34,
+  "has_integration_tests": true,
+  "has_e2e_tests": true,
+  "integration_test_framework": "cucumber",
+  "integration_test_count": 8,
+  "additional_frameworks": [
+    "cucumber",
+    "chai",
+    "babel-jest"
+  ],
+  "test_locations": {
+    "unit_tests": "shared/**/*.spec.js",
+    "integration_tests": "features/integrationTests/*.feature",
+    "e2e_tests": "features/e2eTests/ (external pipeline)"
+  },
+  "ci_config_found": true,
+  "coverage_tracking": false,
+  "notes": [
+    "Unit tests use Jest framework with JavaScript (.spec.js)",
+    "Integration tests use Cucumber (BDD) with Gherkin feature files",
+    "E2E tests run in external pipeline (verifiedfan/e2e-tests/pipelines)",
+    "Tests run in CI at multiple stages (pre-bundle, per-environment)",
+    "No coverage tracking configured in CI or locally",
+    "Tests are co-located with source code in shared/ directory",
+    "Mock data flag used in integration tests: SHOULD_MOCK_TEST_DATA=true"
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T22:00:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [],
+    "consumes_events": [],
+    "depends_on_repos": [],
+    "integrations": {
+      "outbound": [
+        {
+          "target": "S3 (exportsS3 bucket)",
+          "purpose": "Store entry, code, waitlist, reminder email, and opt-in exports",
+          "trigger": "Export completion"
+        },
+        {
+          "target": "S3 (scoringS3 bucket)",
+          "purpose": "Store scoring exports with bucket-owner-full-control ACL",
+          "trigger": "Scoring export completion"
+        },
+        {
+          "target": "S3 (vfScoringS3 bucket)",
+          "purpose": "Store verified entries and code waves exports",
+          "trigger": "Verified entries/code waves export completion"
+        },
+        {
+          "target": "S3 (sfmcS3 bucket)",
+          "purpose": "Store auto reminder email exports for SFMC automation",
+          "trigger": "Auto reminder email export completion"
+        },
+        {
+          "target": "Salesforce Marketing Cloud (SFMC)",
+          "purpose": "Consumes reminder email CSV exports for presale email campaigns",
+          "trigger": "Export file uploaded to sfmcS3"
+        }
+      ],
+      "inbound": [
+        {
+          "source": "API clients (campaign admins, integrations)",
+          "event": "POST /campaigns/:campaignId/exports",
+          "action": "Queue new export",
+          "timing": "Immediate (returns 202 with export ID)"
+        },
+        {
+          "source": "API clients",
+          "event": "GET /campaigns/:campaignId/exports/:exportId",
+          "action": "Return export status and metadata",
+          "timing": "Real-time"
+        },
+        {
+          "source": "API clients",
+          "event": "GET /campaigns/:campaignId/exports",
+          "action": "List all exports for campaign",
+          "timing": "Real-time"
+        },
+        {
+          "source": "Compliance systems",
+          "event": "DELETE /ccpa/users/:userId",
+          "action": "Delete user export files from S3",
+          "timing": "Real-time (within seconds)"
+        },
+        {
+          "source": "Internal queue processor",
+          "event": "Polling interval timer",
+          "action": "Process oldest PENDING export",
+          "timing": "Every pollingInterval (default: 1000ms)"
+        }
+      ],
+      "databases": [
+        {
+          "name": "MongoDB",
+          "collections": [
+            "campaigns",
+            "entries",
+            "markets",
+            "exports",
+            "scoring",
+            "users",
+            "codes"
+          ],
+          "purpose": "Primary data source for all export types"
+        }
+      ]
+    },
+    "export_types": [
+      "entries",
+      "codes",
+      "scoring",
+      "codeAssignments",
+      "artistOptIn",
+      "artistSmsOptIn",
+      "livenationOptIn",
+      "verifiedEntries",
+      "codeWaves",
+      "fanlist",
+      "waitlist",
+      "reminderEmail",
+      "reminderEmailSample",
+      "autoReminderEmail",
+      "promoterEmailOptIn"
+    ],
+    "s3_buckets": [
+      "exportsS3",
+      "scoringS3",
+      "vfScoringS3",
+      "sfmcS3"
+    ],
+    "api_endpoints": [
+      "POST /campaigns/:campaignId/exports",
+      "GET /campaigns/:campaignId/exports/:exportId",
+      "GET /campaigns/:campaignId/exports",
+      "DELETE /ccpa/users/:userId",
+      "GET /heartbeat",
+      "GET /metrics"
+    ]
+  }
+}

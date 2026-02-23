@@ -1,0 +1,62 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:43:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [],
+    "consumes_events": [],
+    "depends_on_repos": [
+      "campaign-service",
+      "entry-service",
+      "user-service",
+      "code-service",
+      "upload-service",
+      "export-service"
+    ],
+    "integrates_with": [
+      "Ticketmaster Identity/OAuth",
+      "Discovery Service (via Campaign Service)",
+      "S3 Storage",
+      "Slack API (notifications)"
+    ]
+  },
+  "analysis_sources": {
+    "primary": [
+      "schema.graphql",
+      "app/graphql/schema/resolvers/",
+      "lib/clients/campaigns/index.js",
+      "lib/clients/entries/index.js",
+      "lib/clients/users/index.js",
+      "app/index.js"
+    ],
+    "secondary": [
+      "README.md",
+      "package.json"
+    ]
+  },
+  "key_findings": {
+    "primary_purpose": "GraphQL API gateway orchestrating Ticketmaster Verified Fan presale registration system",
+    "business_domain": "Ticketing, Fan Engagement, Presale Management",
+    "technical_pattern": "GraphQL BFF (Backend for Frontend) with Koa.js server, Apollo GraphQL, DataLoader caching",
+    "key_capabilities": [
+      "Campaign management (CRUD)",
+      "Fan registration & entry tracking",
+      "Eligibility calculation & selection algorithms",
+      "Presale code inventory & distribution",
+      "Multi-locale content management",
+      "Market & venue allocation",
+      "Admin permissions & authentication",
+      "Data export & analytics"
+    ],
+    "user_types": [
+      "Fans (end-users registering for presales)",
+      "Campaign Administrators (marketing/event teams)",
+      "Frontend Applications (web/mobile clients)"
+    ]
+  }
+}

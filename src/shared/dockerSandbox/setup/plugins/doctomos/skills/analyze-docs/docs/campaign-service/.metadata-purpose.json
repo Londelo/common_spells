@@ -1,0 +1,140 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "generated_at": "2026-02-13T21:47:00Z",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      {
+        "type": "kinesis",
+        "stream": "Campaign Data Stream",
+        "event_type": "eventMapping",
+        "trigger": "campaign or market created/updated",
+        "payload": "campaign event mapping data (campaignId, eventIds)"
+      },
+      {
+        "type": "sqs",
+        "queue": "Data Pipeline Queue",
+        "event_type": "market_data",
+        "trigger": "market created/updated/deleted",
+        "payload": "full market document"
+      },
+      {
+        "type": "sqs",
+        "queue": "Refresh Selections Queue",
+        "event_type": "presale_date_change",
+        "trigger": "market presale date/time updated",
+        "payload": "market update notification"
+      }
+    ],
+    "consumes_events": [
+      {
+        "type": "http",
+        "source": "admin_trigger",
+        "endpoint": "POST /campaigns/refresh",
+        "action": "auto-open/close/deactivate campaigns based on dates"
+      },
+      {
+        "type": "http",
+        "source": "scheduled_job",
+        "endpoint": "POST /campaigns/refresh",
+        "action": "periodic status refresh trigger"
+      }
+    ],
+    "depends_on_repos": [
+      "ticketmaster-discovery-api",
+      "redis",
+      "fastly-cdn",
+      "aws-kinesis",
+      "aws-sqs",
+      "mongodb",
+      "gitlab-api"
+    ],
+    "service_integrations": {
+      "discovery": {
+        "purpose": "Fetch artist and venue metadata from Ticketmaster",
+        "operations": [
+          "lookupArtistByDiscoveryId",
+          "lookupVenueByDiscoveryId",
+          "searchArtists",
+          "searchVenues"
+        ]
+      },
+      "redis": {
+        "purpose": "Cache campaign data for fast lookups",
+        "operations": [
+          "cacheCampaign",
+          "deleteCachedCampaign",
+          "read replica support for HA"
+        ]
+      },
+      "fastly": {
+        "purpose": "Purge CDN cache when campaign domains change",
+        "operations": [
+          "purge cache on domain updates",
+          "purge cache on content updates"
+        ]
+      },
+      "campaignDataStream": {
+        "purpose": "Stream campaign event mappings to data pipeline",
+        "operations": [
+          "saveOne (putMany to Kinesis)"
+        ]
+      },
+      "queue": {
+        "purpose": "SQS queues for async operations",
+        "queues": [
+          "refreshSelectionsQueue",
+          "dataPipelineQueue"
+        ]
+      },
+      "gitlab": {
+        "purpose": "Update artist extensions (likely for deployment/config)",
+        "operations": [
+          "MaybeCreateArtistExtension",
+          "updateArtistExtension"
+        ]
+      }
+    }
+  },
+  "key_entities": [
+    "Campaign",
+    "Market",
+    "Artist",
+    "Venue",
+    "Promoter",
+    "Contact",
+    "Event"
+  ],
+  "key_operations": [
+    "create campaign",
+    "update campaign",
+    "auto-open campaigns",
+    "auto-close campaigns",
+    "auto-deactivate campaigns",
+    "create market",
+    "update market",
+    "delete market",
+    "query campaigns by domain",
+    "query campaigns by event ID",
+    "query campaigns by permission",
+    "schedule market notifications",
+    "update campaign FAQs/terms by locale",
+    "lookup artists/venues in Discovery API"
+  ],
+  "lifecycle_statuses": [
+    "DRAFT",
+    "PREVIEW",
+    "OPEN",
+    "CLOSED",
+    "INACTIVE"
+  ],
+  "campaign_types": [
+    "registration",
+    "fanlist"
+  ]
+}

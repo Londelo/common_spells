@@ -1,0 +1,60 @@
+{
+  "agent": "coding-style",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00.000Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/demand-capture/workers",
+  "repo_name": "dmd-workers",
+  "classification": "worker",
+  "files_written": [
+    "dynamic/style-conventions.md",
+    "dynamic/style-complexity.md"
+  ],
+  "coding_style": {
+    "naming_convention": "camelCase (functions/vars), PascalCase (factories), SCREAMING_SNAKE_CASE (enums)",
+    "avg_function_length": 15,
+    "avg_file_size": 70,
+    "max_nesting_depth": 2,
+    "max_cyclomatic_complexity": 6,
+    "max_file_size_enforced": 200,
+    "key_linting_rules": [
+      "fp/no-let",
+      "fp/no-loops",
+      "fp/no-mutation",
+      "fp/no-class",
+      "complexity (max: 6)",
+      "max-depth (max: 2)",
+      "max-lines (max: 200)",
+      "prefer-const",
+      "no-var",
+      "prefer-arrow-callback"
+    ],
+    "readability": {
+      "overall_rating": "Good",
+      "intention_revealing_names": "Excellent",
+      "narrative_flow": "Good",
+      "abstraction_consistency": "Fair",
+      "self_documentation": "Good"
+    },
+    "top_principles": [
+      "Functional Programming (Very Strong)",
+      "Composition over Inheritance (Very Strong)",
+      "DRY (Strong)",
+      "KISS (Strong)",
+      "Single Responsibility (Strong)",
+      "Dependency Inversion (Strong)"
+    ],
+    "paradigm": "Functional",
+    "key_libraries": [
+      "ramda",
+      "moment-timezone",
+      "@verifiedfan/* (internal utilities)"
+    ],
+    "complexity_hot_spots": [
+      "shared/GetAndCacheEventDetails/normalizeEventDetails.js (194 lines)",
+      "apps/notificationScheduler/index.js (113 lines)",
+      "apps/notificationGenerator/GenerateNotifications.js (132 lines)"
+    ],
+    "total_source_files": 189,
+    "language_mix": "JavaScript (primary), TypeScript (gradual migration)"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "agent": "dependencies",
+  "status": "success",
+  "timestamp": "2026-02-13T21:49:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/vf/registration/workers",
+  "repo_name": "reg-workers",
+  "classification": "worker",
+  "files_written": [
+    "dynamic/dependencies-external.md",
+    "dynamic/dependencies-internal.md",
+    "dynamic/dependencies-analysis.md"
+  ],
+  "raw_connections": {
+    "libraries_internal": {
+      "@verifiedfan/aws": "2.12.1",
+      "@verifiedfan/batch-fn": "1.2.1",
+      "@verifiedfan/cloudwatch-stdout": "2.1.0",
+      "@verifiedfan/configs": "1.2.4",
+      "@verifiedfan/crypto": "1.0.1",
+      "@verifiedfan/date": "1.2.1",
+      "@verifiedfan/delay": "1.2.6",
+      "@verifiedfan/kafka": "4.0.0",
+      "@verifiedfan/log": "1.4.1",
+      "@verifiedfan/map-utils": "1.5.0",
+      "@verifiedfan/mongodb": "2.1.0",
+      "@verifiedfan/normalizers": "1.5.4",
+      "@verifiedfan/pager-duty": "1.1.0",
+      "@verifiedfan/redis": "2.0.2",
+      "@verifiedfan/request": "3.6.0",
+      "@verifiedfan/schemas": "1.3.1",
+      "@verifiedfan/slack": "2.0.0",
+      "@verifiedfan/tracing": "3.0.1",
+      "@verifiedfan/yaml": "1.2.1"
+    },
+    "libraries_internal_dev": {
+      "@verifiedfan/cucumber-features": "1.3.0",
+      "@verifiedfan/test-utils": "3.7.0",
+      "@verifiedfan/tm-accounts": "2.0.11"
+    },
+    "libraries_external": {
+      "@opentelemetry/api": "1.8.0",
+      "ajv": "8.17.1",
+      "async-retry": "1.3.3",
+      "awaity": "1.0.0",
+      "date-fns": "3.6.0",
+      "debug": "4.1.0",
+      "i18n": "0.15.1",
+      "jsonwebtoken": "9.0.3",
+      "node-cache": "5.1.2",
+      "ramda": "0.27.0",
+      "remove-accents": "0.5.0",
+      "ts-node": "10.9.1",
+      "typescript": "5.2.2",
+      "utf8": "3.0.0",
+      "uuid": "3.2.1"
+    },
+    "libraries_external_dev": {
+      "@babel/cli": "7.13.0",
+      "@babel/core": "7.13.0",
+      "@babel/register": "7.13.0",
+      "@babel/preset-env": "7.13.0",
+      "@babel/preset-typescript": "7.23.0",
+      "babel-loader": "8.0.0",
+      "webpack": "5.0.0",
+      "webpack-cli": "5.0.0",
+      "jest": "25.1.0",
+      "babel-jest": "25.1.0",
+      "chai": "4.1.2",
+      "cucumber": "6.0.5",
+      "eslint": "7.26.0",
+      "@typescript-eslint/eslint-plugin": "6.7.5",
+      "@typescript-eslint/parser": "6.7.5",
+      "husky": "9.1.7",
+      "runjs": "4.3.2"
+    }
+  },
+  "statistics": {
+    "total_dependencies": 43,
+    "total_dev_dependencies": 55,
+    "internal_dependencies": 19,
+    "internal_dev_dependencies": 3,
+    "external_dependencies": 15,
+    "external_dev_dependencies": 39,
+    "critical_updates_needed": 1,
+    "high_priority_updates": 5,
+    "medium_priority_updates": 4
+  },
+  "risk_summary": {
+    "critical_issues": [
+      "uuid@3.2.1 is 8 major versions behind (current: 11.0.4)"
+    ],
+    "high_priority_issues": [
+      "ramda@0.27.0 is 3 years behind (current: 0.30.1)",
+      "jest@25.1.0 is 4 major versions behind (current: 29.7.0)",
+      "babel-jest@25.1.0 must match Jest version",
+      "cucumber@6.0.5 is 5 major versions behind (current: 11.1.0)",
+      "Babel ecosystem packages are 4 years old (7.13.0 vs 7.26.x)"
+    ],
+    "security_concerns": [
+      "uuid@3.2.1 may have known vulnerabilities",
+      "Old test framework versions may have unpatched security issues",
+      "Internal @verifiedfan/* packages need dependency confusion protection"
+    ],
+    "bundle_size_concerns": [
+      "ramda (~80 KB) - verify tree-shaking",
+      "date-fns (~70 KB) - verify tree-shaking",
+      "ajv (~120 KB) - necessary for validation"
+    ],
+    "coupling_concerns": [
+      "High coupling to @verifiedfan/aws, @verifiedfan/tracing, @verifiedfan/configs",
+      "Changes to internal packages require coordinated updates",
+      "Consider monorepo structure or versioned API contracts"
+    ]
+  },
+  "recommendations": {
+    "immediate": [
+      "Update uuid from 3.2.1 to 11.x or use Node.js crypto.randomUUID()",
+      "Update Jest and babel-jest to 29.x",
+      "Run yarn audit for security vulnerabilities"
+    ],
+    "short_term": [
+      "Update Babel ecosystem to 7.26.x",
+      "Update ESLint and TypeScript tooling",
+      "Update Cucumber to 11.x"
+    ],
+    "long_term": [
+      "Audit and remove unused dependencies (immutable, ls, copy-paste)",
+      "Consolidate date utilities (date-fns vs @verifiedfan/date)",
+      "Optimize bundle size with webpack-bundle-analyzer",
+      "Establish quarterly dependency update policy"
+    ]
+  }
+}

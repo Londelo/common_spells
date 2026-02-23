@@ -1,0 +1,102 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "generated_at": "2026-02-13T21:48:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/vf/ccpa/workers",
+  "repo_name": "ccpa-workers",
+  "classification": "worker",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      "privacy_response_completed",
+      "privacy_response_failed",
+      "disclosure_data",
+      "data_dictionary_update"
+    ],
+    "consumes_events": [
+      "privacy_request_get_info",
+      "privacy_request_erase",
+      "privacy_request_do_not_sell",
+      "privacy_request_unsubscribe",
+      "privacy_request_erase_preflight_check",
+      "s3_campaign_disclosure_file_uploaded"
+    ],
+    "publishes_to_kafka_topics": [
+      "privacyRequestUpdateKakfaTopic",
+      "disclosureDataKafkaTopic",
+      "dataDictionaryKafkaTopic"
+    ],
+    "consumes_from_queues": [
+      "processRequestQueue",
+      "fanInfoQueue",
+      "deleteFanQueue",
+      "keepPrivateQueue",
+      "optOutQueue"
+    ],
+    "depends_on_services": [
+      "privacy-core-kafka",
+      "user-service",
+      "entries-service",
+      "campaigns-service",
+      "aws-dynamodb",
+      "aws-secrets-manager",
+      "aws-sqs",
+      "aws-s3",
+      "mongodb"
+    ],
+    "depends_on_repos": [
+      "privacy-core",
+      "user-service",
+      "entries-service",
+      "campaigns-service"
+    ]
+  },
+  "key_business_capabilities": [
+    "CCPA privacy request processing",
+    "Personal data access (GET_INFO)",
+    "Right to erasure (ERASE)",
+    "Marketing opt-out (DO_NOT_SELL)",
+    "Communication unsubscribe (UNSUBSCRIBE)",
+    "Data disclosure tracking",
+    "Compliance audit trail"
+  ],
+  "primary_request_types": [
+    "GET_INFO",
+    "ERASE",
+    "DO_NOT_SELL",
+    "UNSUBSCRIBE",
+    "ERASE_PREFLIGHT_CHECK"
+  ],
+  "worker_lambdas": [
+    "processRequest",
+    "fanInfo",
+    "deleteFan",
+    "keepPrivate",
+    "optOut",
+    "saveDisclosures",
+    "updateDictionary"
+  ],
+  "data_stores": [
+    "dynamodb-verification-table",
+    "dynamodb-demand-table",
+    "dynamodb-identity-table",
+    "mongodb-account-fanscore",
+    "user-service-database",
+    "entries-service-database"
+  ],
+  "compliance_framework": "CCPA (California Consumer Privacy Act)",
+  "product_code": "VF",
+  "notes": [
+    "System processes CCPA privacy requests from Ticketmaster's Privacy Core platform",
+    "All communications with Privacy Core use Kafka with Avro schema and mutual TLS",
+    "Fan identity resolution spans multiple systems (User Service, DynamoDB, MongoDB)",
+    "Deletion operations cascade across distributed data stores",
+    "Disclosure tracking records when fan PII shared with third parties",
+    "Certificate rotation required every ~365 days with 30-day warning threshold",
+    "Campaigns service currently mocked with hardcoded data"
+  ]
+}

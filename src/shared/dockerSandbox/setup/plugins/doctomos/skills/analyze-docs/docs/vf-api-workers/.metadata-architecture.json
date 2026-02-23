@@ -1,0 +1,79 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Serverless Event-Driven with Middleware Pipeline Pattern",
+  "entry_points": [
+    "shared/entryFiles/lambda.js",
+    "shared/appResolver/index.js",
+    "apps/loadScoresToDynamoDB/index.js",
+    "apps/loadScoresToStream/index.js",
+    "apps/lookupPhoneScore/index.js",
+    "apps/processSavedScores/index.js",
+    "apps/proxyCampaignService/index.js",
+    "apps/saveEntryScoring/index.js",
+    "apps/saveFanlistScores/index.js",
+    "apps/verdictReporter/index.js"
+  ],
+  "key_directories": [
+    "apps/",
+    "shared/",
+    "shared/middlewares/",
+    "shared/services/",
+    "configs/",
+    "terraform/",
+    "features/",
+    "tools/"
+  ],
+  "middleware_types": [
+    "kinesisConsumer",
+    "dynamodbKinesisConsumer",
+    "sqsConsumer",
+    "s3Consumer",
+    "appsyncResolver",
+    "scheduled",
+    "kafkaConsumer",
+    "firehoseProcessor",
+    "snsSubscriber",
+    "sdkInvoked",
+    "fanoutController"
+  ],
+  "workers": [
+    "loadScoresToDynamoDB",
+    "loadScoresToStream",
+    "lookupPhoneScore",
+    "processSavedScores",
+    "proxyCampaignService",
+    "saveEntryScoring",
+    "saveFanlistScores",
+    "verdictReporter"
+  ],
+  "design_patterns": [
+    "Middleware Pipeline Pattern",
+    "Dependency Injection",
+    "Strategy Pattern (Event Transformers)",
+    "Factory Pattern (Service Clients)",
+    "Repository Pattern (AWS Abstractions)",
+    "Correlation ID Pattern",
+    "Configuration as Code",
+    "Result Handler (Error Boundary)"
+  ],
+  "event_sources": [
+    "Kinesis (scoresStream, campaignDataStream)",
+    "DynamoDB Stream (demandTable)",
+    "SQS (verdictReporterQueue)",
+    "S3 (scoringBucket)",
+    "AppSync (GraphQL API)"
+  ],
+  "external_integrations": [
+    "Campaign Service (HTTP)",
+    "Entry Service (HTTP)",
+    "User Service (HTTP)",
+    "Slack (Webhook)",
+    "TeleSign (HTTP API)"
+  ]
+}

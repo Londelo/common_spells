@@ -3,7 +3,8 @@ import { echo } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { execute } from '../../shared/shell'
-import { green, yellow } from '../../shared/colors'
+import { green, yellow, cyan } from '../../shared/colors'
+import setup from '../../shared/dockerSandbox/setup'
 
 type Classification = 'service' | 'worker' | 'frontend' | 'library' | 'infrastructure' | 'pipeline'
 
@@ -17,6 +18,8 @@ type RepoConfig = {
 const CLASSIFICATIONS: Classification[] = ['service', 'worker', 'frontend', 'library', 'infrastructure', 'pipeline']
 
 const EXCLUDED_PATTERNS = ['node_modules', 'vendor', '.venv', '/.']
+
+const DOCTOMOS_PLUGIN = 'doctomos'
 
 const extractDirName = (repoPath: string): string => repoPath.split('/').filter(Boolean).pop() || 'unknown'
 
@@ -112,24 +115,12 @@ const buildOsascript = (terminalCommand: string, mode: LaunchMode): string =>
       ].join(' ')
     : `osascript -e 'tell application "Terminal" to do script "${terminalCommand}"'`
 
-const launchTerminalSession = async (config: RepoConfig, mode: LaunchMode): Promise<void> => {
-  const parentDir = config.path.split('/').slice(0, -1).join('/')
-  const prompt = buildPrompt(config)
-  const escapedPrompt = prompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-  const terminalCommand = `cd \\"${parentDir}\\" && claude --model haiku --permission-mode acceptEdits \\"${escapedPrompt}\\"`
-
-  const osascript = buildOsascript(terminalCommand, mode)
-
-  echo(yellow(`Launching session for ${config.name}...`))
-  await execute(osascript, `Failed to launch Terminal for ${config.name}`)
-}
-
 const selectLaunchMode = async (): Promise<LaunchMode> => {
   const { mode } = await inquirer.prompt([
     {
       type: 'list',
       name: 'mode',
-      message: 'Open sessions in:',
+      message: 'Open sandboxes in:',
       choices: [
         { name: 'Tabs (in one window)', value: 'tabs' },
         { name: 'Separate windows', value: 'windows' },
@@ -139,18 +130,43 @@ const selectLaunchMode = async (): Promise<LaunchMode> => {
   return mode
 }
 
-const launchAllSessions = async (configs: RepoConfig[]): Promise<void> => {
-  const mode = await selectLaunchMode()
-  echo(yellow('\nLaunching Terminal.app sessions...'))
-  await Promise.all(configs.map((config) => launchTerminalSession(config, mode)))
+const launchDockerSandboxInTerminal = async (config: RepoConfig, mode: LaunchMode): Promise<void> => {
+  const sandboxName = config.dirName
+  const prompt = buildPrompt(config)
+  const escapedPrompt = prompt.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+
+  // Build the docker sandbox command
+  const dockerCommand = `docker sandbox run --name "${sandboxName}" -t docker-sandbox:latest claude "${config.path}" -- --print "${escapedPrompt}"`
+  const terminalCommand = dockerCommand.replace(/"/g, '\\"')
+
+  const osascript = buildOsascript(terminalCommand, mode)
+
+  echo(cyan(`Launching sandbox for ${config.name} in new ${mode === 'tabs' ? 'tab' : 'window'}...`))
+  await execute(osascript, `Failed to launch Terminal for ${config.name}`)
 }
 
-const reportSuccess = (configs: RepoConfig[]): void => {
-  echo(green(`\n✓ Launched ${configs.length} documentation session(s):`))
+const launchAllDockerSandboxes = async (configs: RepoConfig[]): Promise<void> => {
+  // Step 1: Run ds-setup with doctomos plugin
+  echo(cyan('\n=== Setting up Docker Sandbox with doctomos plugin ===\n'))
+  await setup(DOCTOMOS_PLUGIN)
+
+  // Step 2: Ask user how to open sandboxes
+  const mode = await selectLaunchMode()
+
+  // Step 3: Launch sandboxes in terminal windows/tabs
+  echo(cyan('\n=== Launching Docker Sandboxes ===\n'))
+
+  // Launch all sandboxes in parallel (they run in separate terminals)
+  await Promise.all(
+    configs.map((config) => launchDockerSandboxInTerminal(config, mode))
+  )
+
+  echo(green('\n=== All sandboxes launched ===\n'))
+  echo(green(`✓ Launched ${configs.length} repository documentation session(s):`))
   configs.forEach((config, index) => {
     echo(green(`  ${index + 1}. ${config.name} (${config.classification}) — ${config.path}`))
   })
-  echo(yellow('\nCheck Terminal.app for the running Claude sessions'))
+  echo(yellow('\nCheck Terminal.app for the running Docker sandboxes'))
 }
 
 const errorMessage = 'Error in document-repos'
@@ -172,9 +188,7 @@ const document_repos = async () => {
 
   const configs = await configureRepos(selectedPaths)
 
-  await launchAllSessions(configs)
-
-  reportSuccess(configs)
+  await launchAllDockerSandboxes(configs)
 }
 
 ;(async () => await errorHandlerWrapper(document_repos, errorMessage))()

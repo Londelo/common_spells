@@ -1,0 +1,167 @@
+{
+  "agent": "dependencies",
+  "repo_name": "vf-api-workers",
+  "classification": "worker",
+  "status": "success",
+  "generated_at": "2026-02-13T21:48:00Z",
+  "files_written": [
+    "dynamic/dependencies-external.md",
+    "dynamic/dependencies-internal.md",
+    "dynamic/dependencies-analysis.md"
+  ],
+  "summary": {
+    "total_dependencies": 53,
+    "production_dependencies": 11,
+    "dev_dependencies": 25,
+    "internal_dependencies": 17,
+    "high_priority_updates": 6,
+    "medium_priority_updates": 8,
+    "unused_dependencies": 0
+  },
+  "raw_connections": {
+    "libraries_internal": {
+      "@verifiedfan/aws": "2.11.1",
+      "@verifiedfan/batch-fn": "1.2.1",
+      "@verifiedfan/batch-transform-stream": "0.3.1",
+      "@verifiedfan/cloudwatch-stdout": "2.0.0",
+      "@verifiedfan/configs": "1.2.4",
+      "@verifiedfan/date": "1.2.1",
+      "@verifiedfan/delay": "1.2.6",
+      "@verifiedfan/kafka": "1.1.3",
+      "@verifiedfan/log": "1.4.1",
+      "@verifiedfan/map-utils": "1.3.1",
+      "@verifiedfan/normalizers": "1.4.0",
+      "@verifiedfan/request": "3.5.1",
+      "@verifiedfan/schemas": "1.3.1",
+      "@verifiedfan/slack": "1.1.0",
+      "@verifiedfan/titan-request": "2.0.21",
+      "@verifiedfan/tracing": "3.0.1",
+      "@verifiedfan/yaml": "1.2.1"
+    },
+    "libraries_internal_dev": {
+      "@verifiedfan/cucumber-features": "0.45.0",
+      "@verifiedfan/test-utils": "2.10.0"
+    },
+    "libraries_external": {
+      "@babel/eslint-parser": "7.26.8",
+      "@opentelemetry/api": "1.8.0",
+      "async-retry": "1.3.3",
+      "awaity": "1.0.0",
+      "csv-parse": "4.8.6",
+      "debug": "4.1.0",
+      "moment": "2.24.0",
+      "ramda": "0.27.0",
+      "ts-node": "10.9.1",
+      "typescript": "5.2.2",
+      "uuid": "3.2.1"
+    },
+    "libraries_external_dev": {
+      "@babel/cli": "7.13.0",
+      "@babel/core": "7.13.0",
+      "@babel/plugin-proposal-do-expressions": "7.13.0",
+      "@babel/plugin-proposal-object-rest-spread": "7.13.0",
+      "@babel/plugin-transform-nullish-coalescing-operator": "7.23.4",
+      "@babel/plugin-transform-optional-chaining": "7.23.4",
+      "@babel/plugin-transform-runtime": "7.13.0",
+      "@babel/preset-env": "7.13.0",
+      "@babel/preset-typescript": "7.23.0",
+      "@babel/register": "7.13.0",
+      "@types/aws-lambda": "8.10.124",
+      "@types/debug": "4.1.9",
+      "@types/jest": "29.5.5",
+      "@types/ramda": "0.29.6",
+      "@typescript-eslint/eslint-plugin": "6.7.5",
+      "@typescript-eslint/parser": "6.7.5",
+      "babel-eslint": "10.1.0",
+      "babel-jest": "25.1.0",
+      "babel-loader": "8.0.0",
+      "babel-plugin-inline-import": "2.0.6",
+      "chai": "4.1.2",
+      "chai-json-schema-ajv": "2.0.0",
+      "chai-match": "1.1.1",
+      "chai-subset": "1.6.0",
+      "colors": "1.1.2",
+      "cucumber": "6.0.5",
+      "cucumber-html-reporter": "5.1.0",
+      "cucumber-pretty": "6.0.0",
+      "eslint": "7.26.0",
+      "eslint-import-resolver-typescript": "3.6.1",
+      "eslint-plugin-fp": "2.3.0",
+      "eslint-plugin-import": "2.23.3",
+      "immutable": "4.3.4",
+      "jest": "25.1.0",
+      "js-yaml-loader": "1.0.1",
+      "ls": "0.2.1",
+      "prettier-eslint-cli": "4.7.1",
+      "runjs": "4.3.2",
+      "source-map-support": "0.5.9",
+      "webpack": "4.47.0",
+      "webpack-cli": "4.10.0"
+    }
+  },
+  "usage_statistics": {
+    "high_usage": [
+      "ramda (57+ imports)",
+      "debug (18+ imports)",
+      "@verifiedfan/map-utils (5+ imports)",
+      "@verifiedfan/date (5+ imports)",
+      "@verifiedfan/cloudwatch-stdout (5+ imports)"
+    ],
+    "medium_usage": [
+      "@verifiedfan/batch-fn (4+ imports)",
+      "@verifiedfan/delay (3+ imports)",
+      "@verifiedfan/request (3+ imports)"
+    ],
+    "low_usage": [
+      "uuid (1 import)",
+      "async-retry (2 imports)",
+      "@verifiedfan/slack (1 import)"
+    ]
+  },
+  "risk_flags": {
+    "outdated_major": [
+      "moment (2.24.0 -> 2.30.1)",
+      "uuid (3.2.1 -> 11.0.3, 8 majors behind)",
+      "webpack (4.47.0 -> 5.97.1, EOL'd)",
+      "jest (25.1.0 -> 29.7.0)",
+      "cucumber (6.0.5, deprecated package)"
+    ],
+    "pinned_versions": [
+      "csv-parse (4.8.6, no caret)",
+      "@verifiedfan/tracing (3.0.1, no caret)"
+    ],
+    "deprecated_packages": [
+      "babel-eslint (use @babel/eslint-parser)",
+      "cucumber (use @cucumber/cucumber)"
+    ],
+    "security_concerns": [
+      "webpack 4 (EOL 2020)",
+      "moment (maintenance mode)",
+      "uuid (ancient version)"
+    ]
+  },
+  "recommendations": {
+    "immediate": [
+      "Run yarn audit for vulnerabilities",
+      "Upgrade uuid to v11",
+      "Remove babel-eslint duplicate",
+      "Add caret to csv-parse version"
+    ],
+    "short_term": [
+      "Upgrade webpack 4 -> 5",
+      "Upgrade jest 25 -> 29",
+      "Align Babel packages to v7.26",
+      "Upgrade TypeScript ESLint to v8"
+    ],
+    "medium_term": [
+      "Plan moment migration to date-fns or @verifiedfan/date",
+      "Migrate cucumber to @cucumber/cucumber",
+      "Establish dependency update policy"
+    ],
+    "long_term": [
+      "Monitor @verifiedfan/* package updates",
+      "Investigate @verifiedfan/tracing pinning reason",
+      "Consider automated dependency management"
+    ]
+  }
+}

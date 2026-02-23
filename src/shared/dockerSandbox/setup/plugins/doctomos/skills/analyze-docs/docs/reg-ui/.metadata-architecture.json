@@ -1,0 +1,73 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Hybrid: Next.js App Router + Component-Based Frontend + Functional Programming",
+  "entry_points": [
+    "app/layout.tsx",
+    "app/[...path]/page.tsx",
+    "app/[...path]/View.tsx",
+    "middleware.ts",
+    "i18n.ts",
+    "lib/store/index.ts",
+    "lib/cache.ts",
+    "graphql/client.ts"
+  ],
+  "key_directories": [
+    "app/",
+    "app/[...path]/",
+    "app/api/graphql/",
+    "components/",
+    "components/SignupForm/",
+    "components/Pages/",
+    "lib/",
+    "lib/config/",
+    "lib/store/",
+    "lib/utils/campaign/",
+    "lib/mocks/",
+    "lib/types/",
+    "graphql/",
+    "graphql/operations/",
+    "hooks/",
+    "configs/",
+    "messages/"
+  ],
+  "patterns": [
+    "Server-Side Rendering (SSR) with React Server Components",
+    "Repository Pattern (Redis Cache)",
+    "Global State Management (Zustand)",
+    "Provider Pattern (React Context)",
+    "Custom Hook Pattern",
+    "Facade Pattern (GraphQL Client)",
+    "Strategy Pattern (Campaign Transformation)",
+    "Dependency Injection (Configuration)",
+    "Mock Object Pattern (Local Development)",
+    "Middleware Pattern"
+  ],
+  "tech_stack": {
+    "framework": "Next.js 14 (App Router)",
+    "language": "TypeScript",
+    "ui": "React 18",
+    "styling": "styled-components",
+    "state": "Zustand",
+    "data_fetching": "SWR",
+    "graphql": "graphql-request",
+    "cache": "Redis (@verifiedfan/redis)",
+    "i18n": "next-intl",
+    "testing": "Jest",
+    "functional": "Ramda"
+  },
+  "constraints": {
+    "no_classes": true,
+    "no_loops": true,
+    "no_let": true,
+    "no_mutation": true,
+    "max_complexity": 6,
+    "max_depth": 2,
+    "max_lines": 200
+  }
+}

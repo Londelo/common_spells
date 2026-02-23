@@ -1,0 +1,51 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T22:00:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/vf/lib",
+  "repo_name": "vf-lib",
+  "classification": "library",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "ci_cd_only",
+  "notes": "Library repository with npm package publishing, no cloud resources",
+  "ci_cd_platform": "gitlab",
+  "deployment_targets": {
+    "npm_registry": "npmjs.org",
+    "package_scope": "@verifiedfan",
+    "monorepo_tool": "lerna",
+    "version_strategy": "independent"
+  },
+  "raw_connections": {
+    "cloud_resources": [],
+    "npm_packages": 48,
+    "ci_cd_stages": ["install", "test", "release"],
+    "test_frameworks": ["jest", "eslint"],
+    "build_tools": ["lerna", "babel", "typescript"],
+    "version_management": ["semantic-release", "conventional-commits"]
+  },
+  "pipeline_details": {
+    "platform": "GitLab CI",
+    "base_image": "tmhub.io/verifiedfan/node-builder:16.16.0-latest",
+    "stages": ["install", "test", "release"],
+    "jobs": ["dependencies", "eslint", "unit tests", "integration tests", "release"],
+    "runner_tags": ["tm-prod cicd build", "tm-prod-preprod cicd test"],
+    "release_branch": "master",
+    "artifacts_retention": "1 day"
+  },
+  "monitoring": {
+    "ci_pipeline": "GitLab CI UI",
+    "npm_registry": "npmjs.org",
+    "application_monitoring": "none - handled by consumers",
+    "logging": "GitLab CI job logs only",
+    "alerting": "GitLab notifications"
+  },
+  "secrets_required": [
+    "NPM_TOKEN",
+    "SSH_PRIVATE_KEY",
+    "MONGO_USERNAME"
+  ]
+}

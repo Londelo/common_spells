@@ -1,0 +1,67 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T22:00:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/titan/entry-service",
+  "repo_name": "entry-service",
+  "classification": "service",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      "kinesis:campaignDataStream - entry registration data",
+      "sqs:retryScoresQueue - scoring retry requests",
+      "email:sendReceipt - registration confirmation emails"
+    ],
+    "consumes_events": [
+      "http:POST:/:campaignId/entries - fan registration",
+      "http:POST:/:campaignId/entries/confirm - phone confirmation",
+      "http:POST:/:campaignId/entries/scoring - scoring upload",
+      "http:POST:/:campaignId/entries/transfer - market transfer",
+      "http:GET:/:campaignId/entries/eligibility - eligibility query",
+      "http:GET:/:campaignId/entries/scoring - eligible fans query"
+    ],
+    "depends_on_repos": [
+      "campaign-service - campaign configuration, markets, gates",
+      "user-service - fan accounts, linked accounts, codes",
+      "mongodb - entries and scoring collections",
+      "kinesis - campaignDataStream for event publishing",
+      "sqs - retryScoresQueue for scoring retries",
+      "nudetect - fraud detection scoring",
+      "appsync - GraphQL real-time updates",
+      "sfmc - email service for receipts"
+    ],
+    "data_stores": [
+      "mongodb:entries - fan registration records",
+      "mongodb:scoring - eligibility/ranking records",
+      "mongodb:stats - campaign statistics",
+      "mongodb:invites - invite codes"
+    ]
+  },
+  "analysis_notes": {
+    "primary_business_capability": "Fan registration and eligibility management for Verified Fan campaigns",
+    "key_integrations": [
+      "Kinesis stream for downstream analytics/scoring systems",
+      "Campaign service for configuration and market data",
+      "User service for account validation and linked accounts",
+      "Nudetect for fraud detection",
+      "Email service for confirmations"
+    ],
+    "critical_business_rules": [
+      "Phone uniqueness per campaign after confirmation",
+      "Gate-based eligibility (invite, linked account, card)",
+      "Market preference ranking (up to 4 markets)",
+      "Scoring-based selection eligibility",
+      "Entry transfer preserving preference structure"
+    ],
+    "data_transformations": [
+      "Entry creation: form data → validated entry → enriched with scores → published to Kinesis",
+      "Scoring upload: CSV records → matched to entries → enriched documents → bulk upsert",
+      "Eligibility query: criteria → filtered scoring records → paginated fan list",
+      "Market transfer: source/target markets → bulk updates → preference array transformations"
+    ]
+  }
+}

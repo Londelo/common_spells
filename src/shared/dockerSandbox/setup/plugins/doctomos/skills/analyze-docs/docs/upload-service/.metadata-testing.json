@@ -1,0 +1,67 @@
+{
+  "agent": "testing",
+  "status": "success",
+  "files_written": [
+    "static/testing-strategy.md",
+    "static/testing-coverage.md"
+  ],
+  "test_framework": "jest",
+  "secondary_framework": "cucumber",
+  "test_file_count": 3,
+  "feature_file_count": 7,
+  "has_integration_tests": false,
+  "has_e2e_tests": true,
+  "has_coverage_config": false,
+  "ci_test_stages": [
+    "eslint",
+    "yaml lint",
+    "server-uts",
+    "lib-uts",
+    "features"
+  ],
+  "test_types": {
+    "unit": {
+      "framework": "jest",
+      "count": 3,
+      "locations": [
+        "lib/config.spec.js",
+        "lib/featureUtils.spec.js",
+        "lib/middlewares/validators/ValidatorMiddleware.spec.js"
+      ]
+    },
+    "e2e": {
+      "framework": "cucumber",
+      "count": 7,
+      "location": "features/scenarios/",
+      "tags": [
+        "@fileUpload",
+        "@files",
+        "@filesDelete",
+        "@infrastructure"
+      ]
+    }
+  },
+  "test_commands": {
+    "server_tests": "npx run server:test",
+    "lib_tests": "npx run lib:test",
+    "features": "npx run docker:features reports/all",
+    "infrastructure_features": "npx run docker:features reports/infrastructure \"--tags @infrastructure\"",
+    "lint": "npx run eslint '-f table'",
+    "yaml_lint": "yamllint -c yamllint.config.yml ."
+  },
+  "coverage_gaps": [
+    "No coverage reporting enabled",
+    "Only 3 unit test files",
+    "No integration test layer",
+    "AWS service wrappers not unit tested",
+    "Manager layer not unit tested",
+    "Middleware (beyond ValidatorMiddleware) not tested"
+  ],
+  "recommendations": [
+    "Enable Jest coverage reporting",
+    "Add coverage thresholds to CI",
+    "Expand unit tests for managers and AWS wrappers",
+    "Add integration test layer",
+    "Test middleware functions individually"
+  ]
+}

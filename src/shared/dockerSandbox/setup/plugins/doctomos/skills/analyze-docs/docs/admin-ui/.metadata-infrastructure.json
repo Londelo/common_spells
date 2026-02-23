@@ -1,0 +1,132 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "hybrid",
+  "deployment_platforms": [
+    "terraform-ec2-elb",
+    "kubernetes-helm"
+  ],
+  "raw_connections": {
+    "compute": {
+      "ec2_instances": ["m3.medium CoreOS instances via Auto Scaling Group"],
+      "kubernetes_deployments": ["admin", "admin-dev", "admin-qa", "admin-tests-*"],
+      "container_registry": "889199535989.dkr.ecr.us-east-1.amazonaws.com/titan/admin"
+    },
+    "load_balancers": {
+      "elb_classic": ["titan-admin ELB (legacy)"],
+      "alb_kubernetes": [
+        "admin-dev.vf.nonprod9.us-east-1.tktm.io",
+        "admin-qa.vf.nonprod9.us-east-1.tktm.io",
+        "admin.vf.preprod9.us-east-1.pub-tktm.io",
+        "admin.vf.prod9.us-east-1.pub-tktm.io"
+      ]
+    },
+    "kubernetes": {
+      "namespaces": ["prd1541"],
+      "clusters": ["nonprod9.us-east-1", "preprod9.us-east-1", "prod9.us-east-1"],
+      "helm_chart": "tm/webservice:11.6.0"
+    },
+    "logging": {
+      "fluentd": true,
+      "elasticsearch_endpoints": [
+        "verifiedfan-logs.dev1.us-east-1.nonprod-tmaws.io",
+        "verifiedfan-logs.prod1.us-east-1.prod-tmaws.io"
+      ]
+    },
+    "monitoring": {
+      "prometheus": true,
+      "prometheus_ports": [8080, 9100],
+      "cadvisor": true,
+      "node_exporter": true,
+      "health_check_path": "/heartbeat"
+    },
+    "iam": {
+      "ec2_role": "AmazonEC2ContainerRegistryReadOnly",
+      "kubernetes_roles": [
+        "arn:aws:iam::343550350117:role/prd1541.titan.us-east-1.dev1.iam-kube-default",
+        "arn:aws:iam::889199535989:role/prd1541.titan.us-east-1.prod1.iam-kube-default"
+      ]
+    },
+    "dns": {
+      "route53_zones": ["nonprod-tmaws.io", "pub-tmaws.io"],
+      "public_domains": [
+        "admin.registration.ticketmaster.com",
+        "admin.verifiedfan.ticketmaster.com"
+      ]
+    },
+    "external_dependencies": {
+      "graphql_api": "https://registration.ticketmaster.com/graphql",
+      "fan_ui": "https://fan-ui-dev.vf.nonprod9.us-east-1.tktm.io/",
+      "reg_ui": "https://reg-ui-dev.vf.nonprod9.us-east-1.tktm.io/"
+    }
+  },
+  "environments": {
+    "kubernetes": {
+      "dev": {
+        "cluster": "nonprod9.us-east-1",
+        "namespace": "prd1541",
+        "fqdn": "admin-dev.vf.nonprod9.us-east-1.tktm.io",
+        "replicas": "1-1"
+      },
+      "qa": {
+        "cluster": "nonprod9.us-east-1",
+        "namespace": "prd1541",
+        "fqdn": "admin-qa.vf.nonprod9.us-east-1.tktm.io",
+        "replicas": "1-1"
+      },
+      "preprod": {
+        "cluster": "preprod9.us-east-1",
+        "namespace": "prd1541",
+        "fqdn": "admin.vf.preprod9.us-east-1.pub-tktm.io",
+        "replicas": "1-1"
+      },
+      "prod": {
+        "cluster": "prod9.us-east-1",
+        "namespace": "prd1541",
+        "fqdn": "admin.vf.prod9.us-east-1.pub-tktm.io",
+        "replicas": "2-4"
+      }
+    },
+    "terraform_legacy": {
+      "dev1": {
+        "vpc": "dev",
+        "instance_type": "m3.medium",
+        "min_instances": 1,
+        "max_instances": 1
+      },
+      "prod1": {
+        "vpc": "prod",
+        "instance_type": "m3.medium",
+        "min_instances": 1,
+        "max_instances": 1
+      }
+    }
+  },
+  "ci_cd": {
+    "platform": "gitlab-ci",
+    "runners": ["tm-nonprod terraformer", "tm-prod terraformer", "kubernetes"],
+    "stages": [
+      "destroy",
+      "install",
+      "test",
+      "bundle",
+      "dockerize",
+      "qa environments",
+      "features",
+      "infrastructure",
+      "features breakdown",
+      "dev deploy",
+      "preprod deploy",
+      "prod kick-off",
+      "prod deploy"
+    ],
+    "auto_deploy_branches": ["develop"],
+    "manual_approval_required": ["prod"]
+  }
+}

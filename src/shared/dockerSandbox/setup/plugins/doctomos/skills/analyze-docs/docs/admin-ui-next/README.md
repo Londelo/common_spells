@@ -1,0 +1,94 @@
+# admin-ui-next
+
+**Generated:** 2026-02-13
+**Source Repository:** /Users/Brodie.Balser/Documents/TM/titan/admin-ui-next
+**Classification:** frontend
+
+---
+
+## Overview
+
+Admin UI Next is a web-based administrative interface for managing Verified Fan campaigns, events, and promoters. It provides internal staff and administrators with tools to configure, monitor, and manage fan registration campaigns for concert tours and ticketing events.
+
+Verified Fan is Ticketmaster's fan verification platform that helps artists and promoters ensure that real fans get access to presale tickets rather than bots and scalpers. This admin interface exists to give campaign managers and internal operations teams the ability to create and configure these fan verification campaigns, link them to Ticketmaster events, and manage the associated promoter information.
+
+---
+
+## Documentation Index
+
+### Core Documentation
+
+- **[Purpose & Overview](dynamic/purpose-overview.md)** - What this system does and why it exists
+- **[Architecture Structure](static/architecture-structure.md)** - Directory layout and code organization
+- **[Dependencies - External](dynamic/dependencies-external.md)** - External npm packages and versions
+
+### Technical Documentation
+
+- **[API Contracts](dynamic/api-contracts.md)** - GraphQL schema, queries, mutations, REST endpoints
+- **[API Usage](dynamic/api-usage.md)** - Authentication, request examples, error handling
+- **[Type Definitions](dynamic/types-definitions.md)** - All GraphQL and TypeScript types with relationships
+- **[Type Usage Patterns](dynamic/types-usage.md)** - Function signatures, validation schemas, transformation flows
+- **[Infrastructure Resources](static/infrastructure-resources.md)** - Kubernetes, Docker, AWS resources
+- **[Infrastructure Deployment](static/infrastructure-deployment.md)** - CI/CD pipeline, deployment process
+- **[Infrastructure Operations](static/infrastructure-operations.md)** - Monitoring, troubleshooting, runbooks
+- **[Testing Strategy](static/testing-strategy.md)** - Test frameworks, organization, patterns
+- **[Testing Coverage](static/testing-coverage.md)** - Coverage metrics, gaps, recommendations
+
+### Development Documentation
+
+- **[Architecture Patterns](static/architecture-patterns.md)** - Design patterns and architecture style
+- **[Architecture Data Flow](static/architecture-dataflow.md)** - How data moves through the system
+- **[Dependencies - Internal](dynamic/dependencies-internal.md)** - Internal @verifiedfan, @tm1, @ticketmaster packages
+- **[Dependencies Analysis](dynamic/dependencies-analysis.md)** - Risk assessment, outdated packages, recommendations
+- **[Style Conventions](dynamic/style-conventions.md)** - Naming, formatting, linting, engineering principles
+- **[Style Complexity](dynamic/style-complexity.md)** - Code complexity metrics and analysis
+- **[Purpose Use Cases](dynamic/purpose-usecases.md)** - User workflows and business scenarios
+- **[Purpose Domain](dynamic/purpose-domain.md)** - Domain concepts, business rules, terminology
+
+---
+
+## Agent Status
+
+| Agent | Status | Files Generated |
+|-------|--------|----------------|
+| Architecture | ✅ Success | architecture-structure.md, architecture-patterns.md, architecture-dataflow.md |
+| Dependencies | ✅ Success | dependencies-external.md, dependencies-internal.md, dependencies-analysis.md |
+| Infrastructure | ✅ Success | infrastructure-resources.md, infrastructure-deployment.md, infrastructure-operations.md |
+| API | ✅ Success | api-contracts.md, api-usage.md |
+| Purpose | ✅ Success | purpose-overview.md, purpose-usecases.md, purpose-domain.md |
+| Testing | ✅ Success | testing-strategy.md, testing-coverage.md |
+| Coding Style | ✅ Success | style-conventions.md, style-complexity.md |
+| Types | ✅ Success | types-definitions.md, types-usage.md |
+
+**Total:** 8/8 agents succeeded
+**Files Generated:** 20 markdown documents + 8 metadata files
+
+---
+
+## Quick Reference
+
+### Technology Stack
+- **Framework:** Next.js 15 (App Router), React 18, TypeScript 5
+- **Data Layer:** Apollo Client, GraphQL (monoql API)
+- **UI Libraries:** @tm1/design-system-react, Material-UI, Ramda
+- **Forms:** React Hook Form, Zod validation
+- **State:** Zustand
+- **Infrastructure:** Kubernetes (EKS), Docker, GitLab CI/CD
+
+### Key Features
+- Campaign management (view, search, monitor Verified Fan campaigns)
+- Event configuration (link Ticketmaster events to campaigns)
+- Promoter administration (CRUD with localized privacy URLs)
+- Multi-locale support for international campaigns
+- Admin-only authentication via Ticketmaster Identity
+
+### Environments
+- **Testing:** testing.admin.registration-qa.tmdev.io
+- **QA:** qa.admin.registration-qa.tmdev.io
+- **Dev:** dev.admin.registration-qa.tmdev.io
+- **Preprod:** preprod.admin.registration.ticketmaster.com
+- **Production:** admin.registration.ticketmaster.com, admin.verifiedfan.ticketmaster.com
+
+---
+
+*Generated by TM Repository Documentation System*

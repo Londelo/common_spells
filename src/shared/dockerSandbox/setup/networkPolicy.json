@@ -1,0 +1,50 @@
+  {
+    "policy": {
+      "default": "deny",
+      "logBlocked": true,
+      "logAllowed": false
+    },
+    "network": {
+      "allowedDomains": [
+        "bedrock-runtime.*.amazonaws.com:443",
+        "*.bedrock-runtime.*.amazonaws.com:443",
+        "bedrock.*.amazonaws.com:443",
+        "*.bedrock.*.amazonaws.com:443",
+        "sts.amazonaws.com:443",
+        "sts.*.amazonaws.com:443",
+        "*.amazonaws.com:443",
+        "hub.docker.com:443",
+        "*.docker.com:443",
+        "registry.docker.io:443",
+        "*.docker.io:443",
+        "registry.npmjs.org:443",
+        "registry.npmjs.com:443",
+        "*.npmjs.org:443",
+        "*.npmjs.com:443"
+      ],
+      "blockedDomains": [
+        "metadata.azure.internal",
+        "metadata.google.internal",
+        "kube-dns.kube-system.svc.cluster.local",
+
+        "github.com",
+        "*.github.com",
+        "gitlab.com",
+        "*.gitlab.com",
+        "bitbucket.org",
+        "*.bitbucket.org"
+      ],
+      "blockedCIDRs": [
+        "10.0.0.0/8",
+        "127.0.0.0/8",
+        "169.254.0.0/16",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "::1/128",
+        "fc00::/7",
+        "fe80::/10"
+      ],
+      "bypassDomains": [],
+      "bypassCIDRs": []
+    }
+  }

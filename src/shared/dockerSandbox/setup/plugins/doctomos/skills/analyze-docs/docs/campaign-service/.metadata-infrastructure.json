@@ -1,0 +1,45 @@
+{
+  "agent": "infrastructure",
+  "status": "success",
+  "generated_at": "2026-02-13T21:46:00Z",
+  "files_written": [
+    "static/infrastructure-resources.md",
+    "static/infrastructure-deployment.md",
+    "static/infrastructure-operations.md"
+  ],
+  "infrastructure_type": "kubernetes",
+  "deployment_tool": "helm",
+  "ci_cd_platform": "gitlab",
+  "raw_connections": {
+    "kubernetes_clusters": [
+      "nonprod9.us-east-1",
+      "preprod9.us-east-1",
+      "prod9.us-east-1",
+      "prod10.us-west-2"
+    ],
+    "mongodb_clusters": [
+      "VF-prod-shard-0"
+    ],
+    "redis_clusters": [
+      "prd3292-prod1-dmnd"
+    ],
+    "kinesis_streams": [
+      "prd2011-prod1-vf1-input-stream"
+    ],
+    "sqs_queues": [
+      "prd2011-prod1-us-east-1-reg-sel-refresh-selection",
+      "prd2011-prod1-us-east-1-reg-data"
+    ],
+    "external_apis": [
+      "ticketmaster-discovery",
+      "ticketmaster-publish",
+      "gitlab",
+      "fastly"
+    ],
+    "monitoring": {
+      "metrics": "prometheus",
+      "logging": "elasticsearch",
+      "tracing": "opentelemetry"
+    }
+  }
+}

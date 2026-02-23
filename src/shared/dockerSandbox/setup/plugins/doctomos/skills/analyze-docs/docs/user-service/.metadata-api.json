@@ -1,0 +1,49 @@
+{
+  "agent": "api",
+  "status": "success",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "rest",
+  "framework": "koa",
+  "endpoints_count": 20,
+  "authentication": "jwt",
+  "analysis_date": "2026-02-13",
+  "endpoints": {
+    "root": 1,
+    "auth": 2,
+    "me": 4,
+    "users": 5,
+    "campaigns": 3,
+    "supremes": 2,
+    "health": 2
+  },
+  "features": [
+    "User authentication with Ticketmaster integration",
+    "Worker/service authentication",
+    "User profile management",
+    "Campaign permission management",
+    "Supreme user administration",
+    "Third-party integrations (Facebook, Twitter, Tumblr, YouTube)",
+    "Fan wallet integration",
+    "User ID mapping and lookup",
+    "Contact management",
+    "Prometheus metrics",
+    "OpenTelemetry tracing",
+    "JWT-based authentication"
+  ],
+  "middleware": [
+    "compression",
+    "tracing",
+    "body-parser",
+    "prometheus",
+    "context",
+    "correlation",
+    "access-log",
+    "error-formatter",
+    "path",
+    "response-formatter",
+    "jwt"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T22:00:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/titan/admin-ui-next",
+  "repo_name": "admin-ui-next",
+  "classification": "frontend",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [],
+    "consumes_events": [],
+    "depends_on_services": [
+      "monoql (GraphQL API)",
+      "identity.tktm.io (Ticketmaster Identity)",
+      "reg-ui (Registration UI)"
+    ],
+    "queries": [
+      "admin_campaignsList",
+      "admin_campaign",
+      "admin_initApp",
+      "getPromoters",
+      "searchVenues"
+    ],
+    "mutations": [
+      "upsertMarket",
+      "deleteMarket",
+      "upsertPromoter",
+      "deletePromoter"
+    ]
+  },
+  "key_technologies": [
+    "Next.js 15",
+    "React 18",
+    "Apollo Client",
+    "GraphQL",
+    "Styled Components",
+    "Zustand",
+    "TypeScript"
+  ],
+  "primary_business_purpose": "Administrative interface for managing Verified Fan registration campaigns, events, and promoters",
+  "target_users": "Internal Ticketmaster admin staff, campaign managers, operations teams",
+  "deployment_environments": [
+    "dev",
+    "qa",
+    "preprod",
+    "prod"
+  ]
+}

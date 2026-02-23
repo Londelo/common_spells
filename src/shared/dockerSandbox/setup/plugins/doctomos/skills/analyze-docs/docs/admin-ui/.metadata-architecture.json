@@ -1,0 +1,65 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Monolithic React/Redux SPA with SSR",
+  "entry_points": [
+    "frontend/src/index.jsx",
+    "frontend/src/App.jsx",
+    "frontend/src/getStore.js",
+    "server/src/index.js"
+  ],
+  "key_directories": [
+    "frontend/src/components/",
+    "frontend/src/sagas/",
+    "frontend/src/graphql/",
+    "frontend/src/actions/",
+    "frontend/src/reducers/",
+    "frontend/src/selectors/",
+    "server/src/",
+    "lib/"
+  ],
+  "patterns": [
+    "Redux Architecture",
+    "Redux-Saga Side Effects",
+    "Selector Pattern",
+    "Component Composition",
+    "GraphQL Client",
+    "Middleware Chain (Koa)",
+    "Server-Side Rendering"
+  ],
+  "technology_stack": {
+    "frontend": [
+      "React",
+      "Redux",
+      "Redux-Saga",
+      "ImmutableJS",
+      "React Router",
+      "Apollo Client (GraphQL)",
+      "Styled Components"
+    ],
+    "backend": [
+      "Koa.js",
+      "Node.js"
+    ],
+    "build": [
+      "Webpack",
+      "Babel"
+    ],
+    "testing": [
+      "Jest",
+      "Cucumber (E2E)"
+    ]
+  },
+  "external_integrations": [
+    "GraphQL API (primary backend)",
+    "Identity Service (authentication)",
+    "File Storage (S3)",
+    "Metrics Service",
+    "Logging Service"
+  ]
+}

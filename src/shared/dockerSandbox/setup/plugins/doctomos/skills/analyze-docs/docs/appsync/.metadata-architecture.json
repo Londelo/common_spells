@@ -1,0 +1,42 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Serverless + Event-Driven + Pipeline Architecture",
+  "entry_points": [
+    "app/src/resolvers/*.ts",
+    "app/src/functions/*.ts",
+    "terraform/resolvers.tf",
+    "terraform/functions.tf",
+    "terraform/datasources.tf"
+  ],
+  "key_directories": [
+    "app/src/resolvers/",
+    "app/src/functions/",
+    "app/schema/types/",
+    "terraform/",
+    "features/"
+  ],
+  "primary_technologies": [
+    "AWS AppSync",
+    "GraphQL",
+    "TypeScript",
+    "Terraform",
+    "DynamoDB",
+    "Lambda",
+    "EventBridge"
+  ],
+  "domains": [
+    "api",
+    "demand",
+    "phone",
+    "liveness",
+    "fan",
+    "registration",
+    "lnaa"
+  ]
+}

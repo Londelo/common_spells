@@ -46,11 +46,42 @@ const displayCommands = async () => {
   echo('\t- Auto-generates documentation for local git repos using Claude AI sessions.')
   echo('\t- Run from a parent directory containing the repos you want to document.')
 
+  echo(yellow('\ncmon').underline + '  ->  cmon [workspace2:ro] [workspace3] ...')
+  echo('\t- Launches CodeMon, an elite SWE agent in a Docker sandbox for the current project.')
+  echo('\t- Uses current directory name and git branch to name the sandbox.')
+  echo('\t- Primary workspace is current directory (./). Additional workspaces can be passed as arguments.')
+  echo('\t- Use :ro suffix for read-only mounts (e.g., cmon /shared-libs:ro /docs:ro).')
+
   echo(yellow('\nrepos').underline + '  ->  repos [--config | --open]')
   echo('\t- Manages shell aliases for quick cd + IDE open into git repositories.')
   echo('\t- Default: Shows all configured repo aliases from ~/.repo_aliases')
   echo('\t- --config: Scans for git repos, prompts for alias names and IDE command, writes to ~/.repo_aliases')
   echo('\t- --open: Opens ~/.repo_aliases in VS Code for manual editing')
+
+  echo(yellow('\nds-setup').underline)
+  echo('\t- Validates environment for Docker Claude Code sandboxes.')
+  echo('\t- Checks TechPass version, Claude settings, AWS credentials, Docker sandbox support, and Bedrock config.')
+
+  echo(yellow('\nds-run').underline + '  ->  ds-run [options] <workspace1> [workspace2:ro] ...')
+  echo('\t- Run Claude Code in a Docker sandbox with one or more workspaces.')
+  echo('\t- Options: -n (name), -p (prompt), -f (prompt file)')
+  echo('\t- Supports multiple workspaces: ds-run /project1 /project2:ro')
+  echo('\t- Use :ro suffix for read-only mounts (e.g., /shared-libs:ro)')
+
+  echo(yellow('\nds-cleanup').underline + '  ->  ds-cleanup [sandbox|--all]')
+  echo('\t- Remove sandboxes and temporary files.')
+  echo('\t- Default: removes all dockerSandbox sandboxes. Pass sandbox name to remove specific one, or --all to clean everything.')
+
+  echo(yellow('\nds-status').underline)
+  echo('\t- Show running sandboxes, recent logs, and worktrees.')
+
+  echo(yellow('\nds-open').underline)
+  echo('\t- Opens ~/.dockerSandbox directory in VS Code.')
+
+  echo(yellow('\nds-connect').underline + '  ->  ds-connect [sandbox-name]')
+  echo('\t- Connect to a running Docker sandbox.')
+  echo('\t- Default: Lists running sandboxes and lets you select one to connect to.')
+  echo('\t- With sandbox name: Directly connects to the specified sandbox.')
 }
 
 (async () => await errorHandlerWrapper(displayCommands, errorMessage))();

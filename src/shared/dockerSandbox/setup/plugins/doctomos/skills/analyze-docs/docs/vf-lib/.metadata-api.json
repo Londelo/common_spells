@@ -1,0 +1,36 @@
+{
+  "agent": "api",
+  "status": "success",
+  "timestamp": "2026-02-13T21:48:00.000Z",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "library",
+  "packages_documented": 85,
+  "main_exports_count": 39,
+  "key_services": [
+    "AWS (S3, DynamoDB, Kinesis, SQS, SNS, Lambda, etc.)",
+    "Kafka with Schema Registry",
+    "MongoDB",
+    "Redis",
+    "HTTP Request Client",
+    "JWT Authentication",
+    "Logging (Winston)",
+    "OpenTelemetry Tracing",
+    "Data Normalization",
+    "Date/Time Utilities",
+    "Crypto Utilities",
+    "Express/Fastify Middlewares",
+    "Test Utilities",
+    "Third-party API Clients (Spotify, Facebook, Apple Music, etc.)"
+  ],
+  "notes": [
+    "This is a monorepo library with 85+ packages",
+    "Main exports are aggregated in @verifiedfan/lib",
+    "Individual packages can be installed separately",
+    "Comprehensive AWS SDK wrappers included",
+    "Built-in retry logic for resilient operations",
+    "TypeScript support in multiple packages"
+  ]
+}

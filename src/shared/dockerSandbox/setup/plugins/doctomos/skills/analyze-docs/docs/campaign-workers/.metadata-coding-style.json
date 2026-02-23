@@ -1,0 +1,111 @@
+{
+  "agent": "coding-style",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/vf/campaign-pipeline/workers",
+  "repo_name": "campaign-workers",
+  "classification": "worker",
+  "files_written": [
+    "dynamic/style-conventions.md",
+    "dynamic/style-complexity.md"
+  ],
+  "coding_style": {
+    "naming_convention": "camelCase",
+    "naming_details": {
+      "variables": "camelCase",
+      "functions": "camelCase",
+      "classes": "PascalCase",
+      "files": "camelCase",
+      "constants": "SCREAMING_SNAKE",
+      "enums": "SCREAMING_SNAKE"
+    },
+    "formatting": {
+      "indentation": "2 spaces",
+      "quotes": "single",
+      "semicolons": "required",
+      "trailing_commas": "never",
+      "line_length": 120,
+      "brace_style": "stroustrup"
+    },
+    "avg_function_length": 25,
+    "max_nesting_depth": 2,
+    "max_cyclomatic_complexity": 6,
+    "max_file_lines_enforced": 200,
+    "key_linting_rules": [
+      "fp/no-class",
+      "fp/no-let",
+      "fp/no-loops",
+      "fp/no-mutation",
+      "complexity (max 6)",
+      "max-depth (max 2)",
+      "max-lines (max 200)",
+      "no-var",
+      "prefer-const",
+      "eqeqeq"
+    ],
+    "readability": {
+      "overall_rating": "Good",
+      "intention_revealing_names": "Excellent",
+      "narrative_flow": "Good",
+      "abstraction_consistency": "Good",
+      "self_documentation": "Excellent"
+    },
+    "top_principles": [
+      "Functional Purity",
+      "DRY",
+      "Single Responsibility",
+      "KISS",
+      "YAGNI",
+      "Composition over Inheritance"
+    ],
+    "principle_adherence": {
+      "DRY": "Strong",
+      "KISS": "Strong",
+      "YAGNI": "Strong",
+      "Single Responsibility": "Strong",
+      "Open/Closed": "Moderate",
+      "Interface Segregation": "Strong",
+      "Dependency Inversion": "Moderate",
+      "Functional Purity": "Excellent",
+      "Composition over Inheritance": "Excellent"
+    },
+    "file_statistics": {
+      "total_files": 327,
+      "avg_file_size_lines": 56,
+      "max_file_size_lines": 473,
+      "largest_file": "apps/processSmsWaveFiles/selectEligibleFans/selectSingleMarketFans.spec.js"
+    },
+    "complexity_rating": "Low-Medium",
+    "key_patterns": [
+      "Ramda-first functional programming",
+      "No ES6 classes (banned by ESLint)",
+      "No let/var (only const)",
+      "No for/while loops (use map/filter/reduce)",
+      "Heavy function composition (R.pipe, R.pipeP)",
+      "Higher-order functions for dependency injection",
+      "Middleware composition pattern",
+      "Debug logging via debug package"
+    ],
+    "consistency_assessment": {
+      "strengths": [
+        "Highly consistent functional programming adherence",
+        "Uniform import ordering (external → internal → local)",
+        "Consistent file naming (camelCase)",
+        "Strong naming conventions",
+        "Heavy Ramda usage across all modules"
+      ],
+      "inconsistencies": [
+        "Mix of .js and .ts files (partial TypeScript adoption)",
+        "Some ESLint rule violations in data/test files",
+        "Test files exempt from fp/no-let and fp/no-mutation"
+      ]
+    },
+    "areas_for_improvement": [
+      "Refactor recursive retry logic to generic utility",
+      "Split large setup files (setupWorker/index.js) into smaller modules",
+      "Refactor imperative crypto code (decryptMemberId) to functional style",
+      "Complete TypeScript migration for type safety",
+      "Consolidate large test files (200+ lines)"
+    ]
+  }
+}

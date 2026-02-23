@@ -1,0 +1,78 @@
+{
+  "agent": "coding-style",
+  "status": "success",
+  "timestamp": "2026-02-13T00:00:00Z",
+  "files_written": [
+    "dynamic/style-conventions.md",
+    "dynamic/style-complexity.md"
+  ],
+  "coding_style": {
+    "language": "JavaScript (ES6+)",
+    "naming_convention": "camelCase (variables/functions), SCREAMING_SNAKE_CASE (constants)",
+    "avg_function_length": 27,
+    "avg_file_size": 109,
+    "max_nesting_depth": 2,
+    "max_file_size": 200,
+    "cyclomatic_complexity_limit": 7,
+    "indentation": "2 spaces",
+    "quotes": "single",
+    "semicolons": "required",
+    "line_length": 120,
+    "key_linting_rules": [
+      "fp/no-class",
+      "fp/no-let",
+      "fp/no-loops",
+      "fp/no-mutation",
+      "no-console",
+      "prefer-const",
+      "complexity: 7",
+      "max-depth: 2",
+      "max-lines: 200"
+    ],
+    "readability": {
+      "overall_rating": "Good",
+      "intention_revealing_names": "Excellent",
+      "narrative_flow": "Good",
+      "abstraction_consistency": "Good",
+      "self_documentation": "Good"
+    },
+    "top_principles": [
+      "DRY",
+      "Single Responsibility",
+      "YAGNI",
+      "Functional Composition",
+      "Immutability"
+    ],
+    "functional_programming": {
+      "enabled": true,
+      "library": "Ramda",
+      "enforcement": "strict (eslint-plugin-fp)",
+      "exceptions": "Koa context, async iteration, counters"
+    },
+    "statistics": {
+      "total_source_files": 75,
+      "total_test_files": 15,
+      "test_coverage_percentage": 20,
+      "largest_file_lines": 195,
+      "files_exceeding_limit": 0
+    },
+    "complex_areas": [
+      "managers/exports/formatReminderEmailData/formatEmailRow.js (50+ selector functions)",
+      "managers/exports/index.js (export routing and orchestration)",
+      "managers/exports/exportEntries.js (nested async iteration)",
+      "managers/queue/process.js (state machine logic)"
+    ],
+    "simple_areas": [
+      "datastore modules (CRUD operations)",
+      "service configuration modules",
+      "error definitions",
+      "small utility modules"
+    ],
+    "performance_patterns": [
+      "Stream-based processing for memory efficiency",
+      "MongoDB aggregation to avoid N+1 queries",
+      "Pagination for large datasets",
+      "Parallel operations with Promise.all"
+    ]
+  }
+}

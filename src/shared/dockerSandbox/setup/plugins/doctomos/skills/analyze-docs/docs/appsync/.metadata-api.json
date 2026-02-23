@@ -1,0 +1,68 @@
+{
+  "agent": "api",
+  "status": "success",
+  "timestamp": "2026-02-13T22:00:00Z",
+  "files_written": [
+    "dynamic/api-contracts.md",
+    "dynamic/api-usage.md"
+  ],
+  "api_type": "graphql",
+  "graphql_schema_files": 10,
+  "queries": 3,
+  "mutations": 5,
+  "subscriptions": 1,
+  "types_documented": 45,
+  "authentication_methods": [
+    "AWS_IAM",
+    "API_KEY",
+    "AWS_LAMBDA"
+  ],
+  "data_sources": [
+    "DynamoDB",
+    "Lambda",
+    "HTTP",
+    "NONE"
+  ],
+  "endpoints_analyzed": {
+    "queries": {
+      "api": [
+        "accountFanscore",
+        "campaigns",
+        "verificationStatus",
+        "cluster"
+      ],
+      "phone": [
+        "info",
+        "score"
+      ],
+      "demand": [
+        "eventDetails",
+        "fan.demandRecords"
+      ],
+      "fan": [
+        "entryRecord",
+        "livenessSession"
+      ]
+    },
+    "mutations": [
+      "demandRecordSave",
+      "demandRecordDelete",
+      "livenessStatus",
+      "checkLiveness",
+      "upsertEntry",
+      "activateLNAA"
+    ],
+    "subscriptions": [
+      "livenessStatusUpdate"
+    ]
+  },
+  "schema_location": "app/schema/types/*.graphql",
+  "feature_tests_location": "features/lib/graphql/",
+  "deployment_environments": [
+    "qa1",
+    "qa2",
+    "dev1",
+    "preprod1",
+    "prod1"
+  ]
+}

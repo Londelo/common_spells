@@ -534,6 +534,37 @@ Format:
 - Use specific workflows
 - Require VPN/internal network access
 
+### Docker Sandbox Commands (ds-*)
+
+Docker Sandbox commands allow running Claude Code in isolated Docker containers.
+
+**Testing Docker Sandbox Commands:**
+
+1. **First, build and link the project:**
+   ```bash
+   npm run local:install
+   ```
+
+2. **Then run any ds-* command:**
+   ```bash
+   ds-setup              # Validate environment and build Docker template
+   ds-run <workspace>    # Run Claude Code in a Docker sandbox
+   ds-status             # Show running sandboxes
+   ds-connect [name]     # Connect to a running sandbox
+   ds-cleanup [--all]    # Remove sandboxes
+   ds-open               # Open ~/.dockerSandbox in VS Code
+   ```
+
+**Prerequisites:**
+- Docker Desktop v29+ (with sandbox support)
+- TechPass v5.3.0+ (for Bedrock authentication)
+- AWS credentials configured
+
+**Key Files:**
+- `src/spells/dockerSandbox/` - CLI command entry points
+- `src/shared/dockerSandbox/` - Shared utilities and types
+- `src/shared/dockerSandbox/setup/` - Setup logic and Dockerfile generation
+
 ---
 
 ## When Modifying This Project
@@ -566,8 +597,6 @@ Format:
 ### Build & Install
 ```bash
 npm run local:install    # Full rebuild + link
-npm run build           # Build only
-npm run link            # Link only
 ```
 
 ### Key Files

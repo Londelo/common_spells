@@ -1,0 +1,85 @@
+{
+  "agent": "architecture",
+  "status": "success",
+  "files_written": [
+    "static/architecture-structure.md",
+    "static/architecture-patterns.md",
+    "static/architecture-dataflow.md"
+  ],
+  "architecture_style": "Serverless Event-Driven Microservices with Domain-Driven Design",
+  "entry_points": [
+    "apps/registration/checkEligibility/index.ts",
+    "apps/registration/upsertUsers/index.ts",
+    "apps/replication/enqueueEntries/index.ts",
+    "apps/replication/saveEntries/index.ts",
+    "apps/replication/retryScore/index.ts",
+    "apps/selection/enqueueMarketSelections/index.ts",
+    "apps/selection/saveSelections/index.ts",
+    "apps/selection/refreshSelections/index.ts",
+    "apps/selection/markAssignedCodes/index.ts",
+    "apps/dataPipeline/processData/index.ts",
+    "apps/dataPipeline/sendData/index.ts",
+    "apps/notification/notificationGenerator/index.ts",
+    "apps/notification/planSends/index.ts",
+    "apps/notification/triggerReminderEmail/index.ts",
+    "apps/notification/getMarketsToNotify/index.ts"
+  ],
+  "key_directories": [
+    "apps/",
+    "shared/",
+    "configs/",
+    "features/",
+    "terraform/",
+    "tools/",
+    "shared/middlewares/",
+    "shared/services/",
+    "shared/types/",
+    "shared/util/"
+  ],
+  "primary_patterns": [
+    "Middleware Pipeline Pattern",
+    "Dependency Injection Pattern",
+    "Worker Registry Pattern",
+    "Result Monad Pattern",
+    "Service Client Pattern",
+    "Change Data Capture Pattern",
+    "Fan-Out Pattern",
+    "Batch Processing Pattern",
+    "Cache-Aside Pattern"
+  ],
+  "event_sources": [
+    "AppSync",
+    "DynamoDB Streams",
+    "SQS",
+    "EventBridge",
+    "Step Functions"
+  ],
+  "external_services": [
+    "Campaign Service",
+    "Entry Service",
+    "User Service",
+    "Code Service",
+    "Export Service",
+    "DynamoDB",
+    "Redis",
+    "MongoDB",
+    "Kafka"
+  ],
+  "domains": [
+    "registration",
+    "replication",
+    "selection",
+    "dataPipeline",
+    "notification"
+  ],
+  "technology_stack": {
+    "runtime": "Node.js 18.18.2",
+    "language": "TypeScript 5.2.2",
+    "cloud": "AWS Lambda",
+    "databases": ["DynamoDB", "MongoDB", "Redis"],
+    "messaging": ["SQS", "SNS", "Kafka"],
+    "infrastructure": "Terraform",
+    "testing": ["Jest", "Cucumber"],
+    "bundler": "Webpack"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "agent": "purpose",
+  "status": "success",
+  "timestamp": "2026-02-13T21:45:00Z",
+  "repo_path": "/Users/Brodie.Balser/Documents/TM/vf/lib",
+  "repo_name": "vf-lib",
+  "classification": "library",
+  "files_written": [
+    "dynamic/purpose-overview.md",
+    "dynamic/purpose-usecases.md",
+    "dynamic/purpose-domain.md"
+  ],
+  "raw_connections": {
+    "publishes_events": [
+      "kafka_topics",
+      "sns_topics",
+      "sqs_messages",
+      "kinesis_streams",
+      "firehose_streams"
+    ],
+    "consumes_events": [
+      "kafka_topics",
+      "sqs_queues"
+    ],
+    "external_apis": [
+      "spotify",
+      "apple_music",
+      "facebook",
+      "bitly",
+      "salesforce_marketing_cloud"
+    ],
+    "ticketmaster_apis": [
+      "tm_accounts_auum",
+      "tm_accounts_acoe",
+      "tm_accounts_arai",
+      "tm_orders",
+      "tm_discovery",
+      "tm_users",
+      "tm_wallet",
+      "tm_sms",
+      "tm_pacman"
+    ],
+    "aws_services": [
+      "s3",
+      "dynamodb",
+      "kinesis",
+      "firehose",
+      "lambda",
+      "cloudwatch",
+      "sqs",
+      "sns",
+      "athena",
+      "step_functions",
+      "secrets_manager"
+    ],
+    "data_stores": [
+      "mongodb",
+      "redis",
+      "snowflake"
+    ],
+    "observability": [
+      "opentelemetry",
+      "prometheus",
+      "pagerduty",
+      "slack"
+    ],
+    "depends_on_repos": [
+      "confluent_schema_registry",
+      "kafka_brokers"
+    ]
+  },
+  "package_count": 48,
+  "key_packages": [
+    "@verifiedfan/aws",
+    "@verifiedfan/kafka",
+    "@verifiedfan/spotify",
+    "@verifiedfan/apple-music",
+    "@verifiedfan/facebook",
+    "@verifiedfan/tm-accounts",
+    "@verifiedfan/tm-orders",
+    "@verifiedfan/tm-discovery",
+    "@verifiedfan/tm-users",
+    "@verifiedfan/tm-wallet",
+    "@verifiedfan/normalizers",
+    "@verifiedfan/jwt",
+    "@verifiedfan/log",
+    "@verifiedfan/redis",
+    "@verifiedfan/mongodb",
+    "@verifiedfan/tracing",
+    "@verifiedfan/request",
+    "@verifiedfan/schemas",
+    "@verifiedfan/cucumber-features"
+  ]
+}
