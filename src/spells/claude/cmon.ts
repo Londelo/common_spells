@@ -3,6 +3,7 @@ import { echo } from 'shelljs'
 import inquirer from 'inquirer'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 import { execute } from '../../shared/shell'
+import { selectCurrentBranch } from '../../shared/selectors'
 import { cyan, green, red, yellow } from '../../shared/colors'
 import setup from '../../shared/dockerSandbox/setup'
 import runSingleAgent from '../../shared/dockerSandbox/runSingleAgent'
@@ -19,8 +20,8 @@ const getCurrentDirName = async (): Promise<string> => {
 
 const getCurrentBranch = async (): Promise<string | null> => {
   try {
-    const branch = await execute('git branch --show-current', 'Failed to get current branch')
-    return branch.trim()
+    const branch = await selectCurrentBranch()
+    return branch
   } catch {
     return null
   }
