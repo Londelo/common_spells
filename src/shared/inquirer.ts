@@ -12,17 +12,6 @@ const input = async (message: string, defaultValue?: string): Promise<string> =>
   return answer.value
 }
 
-const confirm = async (message: string, defaultValue: boolean = true): Promise<boolean> => {
-  const answer = await inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'value',
-      message,
-      default: defaultValue
-    }
-  ])
-  return answer.value
-}
 
 const select = async (message: string, choices: string[]): Promise<string> => {
   const answer = await inquirer.prompt([
