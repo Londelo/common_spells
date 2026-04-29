@@ -19,6 +19,7 @@
     "vars": "./dist/spells/gitlab/getVariable.js",
     "release": "./dist/spells/gitlab/createRelease.js",
     "document-repos": "./dist/spells/claude/documentRepos.js",
+    "Klaude": "./dist/spells/claude/opus-danger.js",
     "repos": "./dist/spells/repos.js"
   },
   "scripts": {

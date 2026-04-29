@@ -46,6 +46,11 @@ const displayCommands = async () => {
   echo('\t- Auto-generates documentation for local git repos using Claude AI sessions.')
   echo('\t- Run from a parent directory containing the repos you want to document.')
 
+  echo(yellow('\nKlaude').underline + '  →  Klaude [...claude flags]')
+  echo('\t- Launches an interactive Claude session with the opus model and permissions skipped.')
+  echo('\t- Runs: "claude --dangerously-skip-permissions --model opus [...extra args]".')
+  echo('\t- Any extra args are forwarded to claude (e.g. "Klaude -c", "Klaude -r <session>").')
+
   echo(yellow('\nrepos').underline + '  ->  repos [--config | --open]')
   echo('\t- Manages shell aliases for quick cd + IDE open into git repositories.')
   echo('\t- Default: Shows all configured repo aliases from ~/.repo_aliases')
