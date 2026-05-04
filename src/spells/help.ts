@@ -51,6 +51,11 @@ const displayCommands = async () => {
   echo('\t- Runs: "claude --dangerously-skip-permissions --model opus [...extra args]".')
   echo('\t- Any extra args are forwarded to claude (e.g. "Klaude -c", "Klaude -r <session>").')
 
+  echo(yellow('\nllaude').underline + '  →  llaude [...claude flags]')
+  echo('\t- Launches a Claude session using an isolated config dir (~/.claude-local) with permissions skipped.')
+  echo('\t- Runs: "CLAUDE_CONFIG_DIR=~/.claude-local claude --dangerously-skip-permissions [...extra args]".')
+  echo('\t- Any extra args are forwarded to claude (e.g. "llaude -c", "llaude --model opus").')
+
   echo(yellow('\nrepos').underline + '  ->  repos [--config | --open]')
   echo('\t- Manages shell aliases for quick cd + IDE open into git repositories.')
   echo('\t- Default: Shows all configured repo aliases from ~/.repo_aliases')
