@@ -9,7 +9,7 @@ import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 
 const errorMessage = 'Failed to launch Calcifer'
 
-const getCalciferConfigDir = (): string => {
+const getSessionSpawnDir = (): string => {
   const currentPath = cwd()
 
   // Check if we're already inside CastleLondelo
@@ -29,14 +29,15 @@ const getCalciferConfigDir = (): string => {
 
 const launchCalcifer = async () => {
   const extraArgs = process.argv.slice(2)
-  const configDir = getCalciferConfigDir()
+  const spawnDir = getSessionSpawnDir()
   const args = ['--dangerously-skip-permissions', '--model', 'calcifer', ...extraArgs]
 
   await new Promise<void>((resolve, reject) => {
     const child = spawn('claude', args, {
       stdio: 'inherit',
       shell: false,
-      env: { ...process.env, CLAUDE_CONFIG_DIR: configDir },
+      cwd: spawnDir,
+      env: { ...process.env, CLAUDE_CONFIG_DIR: join(homedir(), '.claude-local')  },
     })
 
     child.on('error', reject)
