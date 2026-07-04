@@ -20,7 +20,7 @@
     "release": "./dist/spells/gitlab/createRelease.js",
     "document-repos": "./dist/spells/claude/documentRepos.js",
     "Klaude": "./dist/spells/claude/opus-danger.js",
-    "cal": "./dist/spells/claude/calcifer.js",
+    "calcifer": "./dist/spells/claude/calcifer.js",
     "repos": "./dist/spells/repos.js"
   },
   "scripts": {
