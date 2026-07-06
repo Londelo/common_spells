@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "module": "CommonJS",
+    "module": "NodeNext",
     "target": "ES6",
     "allowJs": true,
     "skipLibCheck": true,
@@ -9,11 +9,12 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": false,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "rootDir": "./src"
   },
   "include": [
     "**/*.ts",
