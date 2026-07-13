@@ -18,9 +18,9 @@ const findCastleLondelo = (): string => {
   }
 
   // Fallback: check ~/CastleLondelo (handles cases like /tmp where upward walk can't reach home)
-  const homeCastle = join(homedir(), 'CastleLondelo')
-  if (existsSync(homeCastle)) {
-    return homeCastle
+  const castleLondelo = join(homedir(), 'CastleLondelo')
+  if (existsSync(castleLondelo)) {
+    return castleLondelo
   }
 
   throw new Error(
@@ -31,7 +31,8 @@ const findCastleLondelo = (): string => {
 const launchCalcifer = async () => {
   const extraArgs = process.argv.slice(2)
   const castlePath = findCastleLondelo()
-  const configDir = join(castlePath, '.claudeRootDir')
+  const castleLondelo = join(homedir(), 'CastleLondelo')
+  const configDir = join(castleLondelo, '.claudeRootDir')
 
   if (!existsSync(configDir)) {
     throw new Error(
@@ -41,6 +42,14 @@ const launchCalcifer = async () => {
 
   const args = ['--dangerously-skip-permissions', '--model', 'calcifer', ...extraArgs]
 
+  console.log(
+    {
+      stdio: 'inherit',
+      shell: false,
+      cwd: castlePath,
+      env: { ...process.env, CLAUDE_CONFIG_DIR: configDir },
+    }
+  )
   await new Promise<void>((resolve, reject) => {
     const child = spawn('claude', args, {
       stdio: 'inherit',
