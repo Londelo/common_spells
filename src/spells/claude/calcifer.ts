@@ -42,14 +42,6 @@ const launchCalcifer = async () => {
 
   const args = ['--dangerously-skip-permissions', '--model', 'calcifer', ...extraArgs]
 
-  console.log(
-    {
-      stdio: 'inherit',
-      shell: false,
-      cwd: castlePath,
-      env: { ...process.env, CLAUDE_CONFIG_DIR: configDir },
-    }
-  )
   await new Promise<void>((resolve, reject) => {
     const child = spawn('claude', args, {
       stdio: 'inherit',
