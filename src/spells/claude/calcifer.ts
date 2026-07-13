@@ -9,7 +9,7 @@ import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 
 const errorMessage = 'Failed to launch Calcifer'
 
-const getSessionSpawnDir = (): string => {
+const findCastleLondelo = (): string => {
   const currentPath = cwd()
 
   // Check if we're already inside CastleLondelo
@@ -17,27 +17,36 @@ const getSessionSpawnDir = (): string => {
     return currentPath
   }
 
-  // Try ~/CastleLondelo
-  const castlePath = join(homedir(), 'CastleLondelo')
-  if (existsSync(castlePath)) {
-    return castlePath
+  // Fallback: check ~/CastleLondelo (handles cases like /tmp where upward walk can't reach home)
+  const homeCastle = join(homedir(), 'CastleLondelo')
+  if (existsSync(homeCastle)) {
+    return homeCastle
   }
 
-  // Fall back to ~/.claude-local
-  return join(homedir(), '.claude-local')
+  throw new Error(
+    'CastleLondelo not found. Ensure CastleLondelo exists on your system and run calcifer from within or below it.'
+  )
 }
 
 const launchCalcifer = async () => {
   const extraArgs = process.argv.slice(2)
-  const spawnDir = getSessionSpawnDir()
+  const castlePath = findCastleLondelo()
+  const configDir = join(castlePath, '.claudeRootDir')
+
+  if (!existsSync(configDir)) {
+    throw new Error(
+      `.claudeRootDir not found in ${castlePath}. Ensure .claudeRootDir exists inside your CastleLondelo directory.`
+    )
+  }
+
   const args = ['--dangerously-skip-permissions', '--model', 'calcifer', ...extraArgs]
 
   await new Promise<void>((resolve, reject) => {
     const child = spawn('claude', args, {
       stdio: 'inherit',
       shell: false,
-      cwd: spawnDir,
-      env: { ...process.env, CLAUDE_CONFIG_DIR: join(homedir(), '.claude-local')  },
+      cwd: castlePath,
+      env: { ...process.env, CLAUDE_CONFIG_DIR: configDir },
     })
 
     child.on('error', reject)
@@ -51,4 +60,4 @@ const launchCalcifer = async () => {
   })
 }
 
-(async () => await errorHandlerWrapper(launchCalcifer, errorMessage))();
+;(async () => await errorHandlerWrapper(launchCalcifer, errorMessage))();

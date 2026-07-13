@@ -58,9 +58,10 @@ const displayCommands = async () => {
 
   echo(yellow('\ncalcifer').underline + '  →  cal [...claude flags]')
   echo('\t- Launches a Claude session using the calcifer model with permissions skipped.')
-  echo('\t- Checks if you are in a CastleLondelo repo — if so, uses that as the config dir.')
-  echo('\t- Otherwise falls back to ~/CastleLondelo, then ~/.claude-local.')
-  echo('\t- Runs: "CLAUDE_CONFIG_DIR=<resolved> claude --dangerously-skip-permissions --model calcifer [...extra args]".')
+  echo('\t- Uses CastleLondelo/.claudeRootDir/ as the config directory.')
+  echo('\t- Automatically finds CastleLondelo from anywhere — works from within it at any depth.')
+  echo('\t- Throws an error if CastleLondelo is not found on the system.')
+  echo('\t- Runs: "CLAUDE_CONFIG_DIR=<CastleLondelo>/.claudeRootDir claude --dangerously-skip-permissions --model calcifer [...extra args]".')
 
   echo(yellow('\nrepos').underline + '  ->  repos [--config | --open]')
   echo('\t- Manages shell aliases for quick cd + IDE open into git repositories.')
