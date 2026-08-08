@@ -40,7 +40,7 @@ const launchCalcifer = async () => {
     )
   }
 
-  const args = ['--dangerously-skip-permissions', '--model', 'calcifer', ...extraArgs]
+  const args = ['--dangerously-skip-permissions', '--model', 'calcifer', '--agent', 'londelo', ...extraArgs]
 
   await new Promise<void>((resolve, reject) => {
     const child = spawn('claude', args, {
