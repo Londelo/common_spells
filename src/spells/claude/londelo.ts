@@ -7,7 +7,7 @@ import { existsSync } from 'fs'
 import { cwd } from 'process'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 
-const errorMessage = 'Failed to launch Calcifer'
+const errorMessage = 'Failed to launch Londolo'
 
 const findCastleLondelo = (): string => {
   const currentPath = cwd()
@@ -24,11 +24,11 @@ const findCastleLondelo = (): string => {
   }
 
   throw new Error(
-    'CastleLondelo not found. Ensure CastleLondelo exists on your system and run calcifer from within or below it.'
+    'CastleLondelo not found. Ensure CastleLondelo exists on your system and run londelo from within or below it.'
   )
 }
 
-const launchCalcifer = async () => {
+const launchLondolo = async () => {
   const extraArgs = process.argv.slice(2)
   const castlePath = findCastleLondelo()
   const castleLondelo = join(homedir(), 'CastleLondelo')
@@ -61,4 +61,4 @@ const launchCalcifer = async () => {
   })
 }
 
-;(async () => await errorHandlerWrapper(launchCalcifer, errorMessage))();
+;(async () => await errorHandlerWrapper(launchLondolo, errorMessage))();

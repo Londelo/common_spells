@@ -51,12 +51,7 @@ const displayCommands = async () => {
   echo('\t- Runs: "claude --dangerously-skip-permissions --model opus [...extra args]".')
   echo('\t- Any extra args are forwarded to claude (e.g. "Klaude -c", "Klaude -r <session>").')
 
-  echo(yellow('\nllaude').underline + '  →  llaude [...claude flags]')
-  echo('\t- Launches a Claude session using an isolated config dir (~/.claude-local) with permissions skipped.')
-  echo('\t- Runs: "CLAUDE_CONFIG_DIR=~/.claude-local claude --dangerously-skip-permissions [...extra args]".')
-  echo('\t- Any extra args are forwarded to claude (e.g. "llaude -c", "llaude --model opus").')
-
-  echo(yellow('\ncalcifer').underline + '  →  cal [...claude flags]')
+  echo(yellow('\nlondelo').underline + '  →  londelo [...claude flags]')
   echo('\t- Launches a Claude session using the calcifer model with permissions skipped.')
   echo('\t- Uses CastleLondelo/.claudeRootDir/ as the config directory.')
   echo('\t- Automatically finds CastleLondelo from anywhere — works from within it at any depth.')

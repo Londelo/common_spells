@@ -8,7 +8,7 @@ common_spells is a TypeScript CLI toolkit that provides "magical" command-line u
 - **inquirer** — interactive CLI prompts (lists, inputs, confirms)
 - **colors** — terminal text styling
 - **glab** (external) — GitLab CLI, required for gitlab/* commands (comments, diffs, vars, release)
-- **claude** (external) — Claude Code CLI, used by Klaude/calcifer commands
+- **claude** (external) — Claude Code CLI, used by Klaude/londelo commands
 - **pbcopy** (external) — macOS clipboard, used by copyToClipboard
 
 ## File Structure
@@ -17,7 +17,7 @@ src/
   spells/           # CLI command implementations
     git/            # Git operations (fullCommit, createBranch, checkout, forcePush, fullUpdate)
     gitlab/         # GitLab integrations (getComments, getDiff, getVariable, createRelease)
-    claude/         # Claude session launchers (opus-danger, calcifer)
+    claude/         # Claude session launchers (opus-danger, londelo)
     help.ts         # Main help/docs (spells command)
     install.ts      # Smart npm/yarn installer (nstall)
     repos.ts        # Shell alias manager for repo navigation
