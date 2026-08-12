@@ -3,8 +3,9 @@
 import { spawn } from 'child_process'
 import { homedir } from 'os'
 import { join } from 'path'
-import { existsSync } from 'fs'
+import { existsSync, readFileSync } from 'fs'
 import { cwd } from 'process'
+import { echo } from 'shelljs'
 import errorHandlerWrapper from '../../shared/errorHandlerWrapper'
 
 const errorMessage = 'Failed to launch Londolo'
@@ -40,7 +41,17 @@ const launchLondolo = async () => {
     )
   }
 
-  const args = ['--dangerously-skip-permissions', '--model', 'calcifer', '--agent', 'londelo', ...extraArgs]
+  let args = ['--dangerously-skip-permissions', '--model', 'calcifer']
+
+  // Load system prompt from fixed path if it exists
+  const systemPromptPath = join(homedir(), 'CastleLondelo', '.claudeRootDir', 'systemprompt.md')
+  console.log(existsSync(systemPromptPath), systemPromptPath)
+  if (existsSync(systemPromptPath)) {
+    const systemPrompt = readFileSync(systemPromptPath, 'utf-8')
+    args = [...args, '--system-prompt', systemPrompt]
+  }
+
+  args = [...args, ...extraArgs]
 
   await new Promise<void>((resolve, reject) => {
     const child = spawn('claude', args, {
