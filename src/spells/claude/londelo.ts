@@ -45,7 +45,6 @@ const launchLondolo = async () => {
 
   // Load system prompt from fixed path if it exists
   const systemPromptPath = join(homedir(), 'CastleLondelo', '.claudeRootDir', 'systemprompt.md')
-  console.log(existsSync(systemPromptPath), systemPromptPath)
   if (existsSync(systemPromptPath)) {
     const systemPrompt = readFileSync(systemPromptPath, 'utf-8')
     args = [...args, '--system-prompt', systemPrompt]
